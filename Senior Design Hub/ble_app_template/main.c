@@ -44,15 +44,16 @@
 #include "app_gpiote.h"
 #include "app_button.h"
 #include "ble_debug_assert_handler.h"
+#include "simple_uart.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
 // YOUR_JOB: Define any other buttons to be used by the applications:
 // #define MY_BUTTON_PIN                   NRF6310_BUTTON_1
 
-#define DEVICE_NAME                     "Nordic_Template"                           /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "SensorHub000"                           /**< Name of device. Will be included in the advertising data. */
 
 #define APP_ADV_INTERVAL                64                                          /**< The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
-#define APP_ADV_TIMEOUT_IN_SECONDS      180                                         /**< The advertising timeout (in units of seconds). */
+#define APP_ADV_TIMEOUT_IN_SECONDS      0                                         /**< The advertising timeout (in units of seconds). */
 
 // YOUR_JOB: Modify these according to requirements.
 #define APP_TIMER_PRESCALER             0                                           /**< Value of the RTC1 PRESCALER register. */
@@ -89,6 +90,11 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
 #define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
 
+#define RTS_PIN_NUMBER 0
+#define TXD_PIN_NUMBER 1
+#define CTS_PIN_NUMBER 2
+#define RXD_PIN_NUMBER 3
+#define HWFC false
 
 /**@brief Function for error handling, which is called when an error has occurred. 
  *
@@ -225,7 +231,7 @@ static void advertising_init(void)
 {
     uint32_t      err_code;
     ble_advdata_t advdata;
-    uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_LIMITED_DISC_MODE;
+    uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
     ble_uuid_t adv_uuids[] = {{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE}};
@@ -539,6 +545,14 @@ static void power_manage(void)
     APP_ERROR_CHECK(err_code);
 }
 
+static void uart_init(void){
+	simple_uart_config( RTS_PIN_NUMBER,
+                          TXD_PIN_NUMBER,
+                          CTS_PIN_NUMBER,
+                          RXD_PIN_NUMBER,
+                          HWFC);
+}
+
 
 /**@brief Function for application main entry.
  */
@@ -556,6 +570,7 @@ int main(void)
     services_init();
     conn_params_init();
     sec_params_init();
+		uart_init();
     
     // Start execution
     timers_start();
