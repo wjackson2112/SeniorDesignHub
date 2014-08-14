@@ -421,6 +421,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_srv_common.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -475,6 +480,11 @@
               <FileName>ble_debug_assert_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_debug_assert_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>simple_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -895,6 +905,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_srv_common.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -949,6 +964,11 @@
               <FileName>ble_debug_assert_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_debug_assert_handler.c</FilePath>
+            </File>
+            <File>
+              <FileName>simple_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
             </File>
           </Files>
         </Group>

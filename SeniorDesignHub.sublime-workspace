@@ -1,0 +1,910 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ENABLE",
+				"ENABLE"
+			],
+			[
+				"NRF",
+				"NRF_UART0"
+			],
+			[
+				"string",
+				"string_three"
+			],
+			[
+				"battery",
+				"batteryPercentage"
+			],
+			[
+				"batt",
+				"batt_lvl_in_milli_volts"
+			],
+			[
+				"num",
+				"num_of_elements"
+			],
+			[
+				"DEBUG",
+				"DEBUG_LEVEL"
+			],
+			[
+				"milli",
+				"milliseconds_string"
+			],
+			[
+				"simple_uart",
+				"simple_uart_putstring"
+			],
+			[
+				"application",
+				"application_running_time"
+			],
+			[
+				"DEBU",
+				"DEBUG_UART_RX_PIN"
+			],
+			[
+				"mil",
+				"milliseconds_string"
+			],
+			[
+				"secon",
+				"seconds_string"
+			],
+			[
+				"min",
+				"minutes_string"
+			],
+			[
+				"hour",
+				"hours_string"
+			],
+			[
+				"days",
+				"days_string"
+			],
+			[
+				"applciation_runnin",
+				"application_running_time_in_milliseconds"
+			],
+			[
+				"DEF_BA",
+				"DEF_BAT_BURST_NUMBER"
+			],
+			[
+				"mersen",
+				"mersenne_timer"
+			],
+			[
+				"ms",
+				"ms_elapsed"
+			],
+			[
+				"origi",
+				"original_low_level_passcode"
+			],
+			[
+				"lo",
+				"correct_low_level_passcode"
+			],
+			[
+				"merse",
+				"mersenne_seed"
+			],
+			[
+				"low_le",
+				"low_level_passcode_transmission_four"
+			],
+			[
+				"low",
+				"low_level_passcode_transmission_three"
+			],
+			[
+				"flash",
+				"flash_word_write"
+			],
+			[
+				"scan",
+				"scan_response_content"
+			],
+			[
+				"orig",
+				"original_passcode"
+			],
+			[
+				"meta",
+				"meta_name"
+			],
+			[
+				"scan_",
+				"scan_response_content"
+			],
+			[
+				"ble_",
+				"ble_advdata_t"
+			],
+			[
+				"inclu",
+				"include_appearance"
+			],
+			[
+				"iBeacon",
+				"iBeacon_advert_update"
+			],
+			[
+				"DEF_ME",
+				"DEF_META_NAME"
+			],
+			[
+				"correct",
+				"correct_low_level_passcode"
+			],
+			[
+				"op",
+				"opcode_packet"
+			],
+			[
+				"mersenne",
+				"mersenne_twister"
+			],
+			[
+				"connectability_ti",
+				"connectability_timeout_timer"
+			],
+			[
+				"connectability_manager",
+				"connectability_manager_timeout"
+			],
+			[
+				"connectability_tim",
+				"connectability_timeout"
+			],
+			[
+				"connectability_",
+				"connectability_timeout_timer"
+			],
+			[
+				"conn",
+				"connectability_timeout_timer"
+			],
+			[
+				"coun",
+				"connectability_manager_update"
+			],
+			[
+				"con",
+				"connectability_timeout_timer"
+			],
+			[
+				"connte",
+				"connectability_timeout_timer"
+			],
+			[
+				"tem",
+				"temperature_advert_timer"
+			],
+			[
+				"passcode",
+				"passcode_valid"
+			],
+			[
+				"TWI",
+				"TWI_ENABLE_ENABLE_Pos"
+			],
+			[
+				"TWI_E",
+				"TWI_ENABLE_ENABLE_Disabled"
+			],
+			[
+				"TWI_",
+				"TWI_ENABLE_ENABLE_Disabled"
+			],
+			[
+				"BLE_UU",
+				"BLE_UUID_TYPE_BLE"
+			],
+			[
+				"DEF_M",
+				"DEF_META_NAME"
+			],
+			[
+				"def_",
+				"DEF_META_NAME"
+			],
+			[
+				"timed",
+				"timed_dispatch_reset"
+			],
+			[
+				"updat",
+				"update_iBeacon_advert"
+			],
+			[
+				"operan",
+				"operand_packet"
+			],
+			[
+				"current",
+				"current_state"
+			],
+			[
+				"conne",
+				"connectability_manager_init"
+			],
+			[
+				"measured",
+				"measured_power"
+			],
+			[
+				"advertisement",
+				"advertisement_manager_call_advert_type"
+			],
+			[
+				"IBE",
+				"IBEACON_ADVERT"
+			],
+			[
+				"burst",
+				"burst_number"
+			],
+			[
+				"update",
+				"update_handlers"
+			],
+			[
+				"CONNE",
+				"CONNECTABLE_ADVERT_BURST_NUMBER"
+			],
+			[
+				"timed_dis",
+				"timed_dispatch_rate"
+			],
+			[
+				"T",
+				"TIMED_DISPATCH_RATE"
+			],
+			[
+				"MIL",
+				"MILLISECONDS_PER_TICK"
+			],
+			[
+				"MILLI",
+				"MILLISECONDS_IN_SECOND"
+			],
+			[
+				"list",
+				"list_count"
+			],
+			[
+				"advertisment_manag",
+				"advertisement_manager_run"
+			],
+			[
+				"POWER",
+				"POWER_POFCON_POF_Enabled"
+			],
+			[
+				"temperature_read",
+				"temperature_read_rate"
+			],
+			[
+				"temperature_star",
+				"temperature_startup"
+			],
+			[
+				"temp",
+				"temp_raw"
+			],
+			[
+				"temperature",
+				"temperature_raw"
+			],
+			[
+				"tempe",
+				"temperature_raw"
+			],
+			[
+				"temperatur",
+				"temperature_array"
+			],
+			[
+				"mersenne_",
+				"mersenne_slot_zero_index"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Senior Design Hub/ble_app_template/main.c",
+			"settings":
+			{
+				"buffer_size": 22201,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Will/AppData/Roaming/Sublime Text 3/Packages/User/UV4.sublime-build",
+			"settings":
+			{
+				"buffer_size": 535,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/UV4.sublime-build",
+	"command_palette":
+	{
+		"height": 370.0,
+		"selected_items":
+		[
+			[
+				"",
+				"About"
+			]
+		],
+		"width": 496.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": true,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": true,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Z/iBeacon/Test & Verify/Particle Rev B b013 Measurements/Battery Decay/ADC Comparison Test/Channel6.csv",
+		"/Z/iBeacon/Test & Verify/Particle Rev B b013 Measurements/Battery Decay/ADC Comparison Test/Channel8.csv",
+		"/C/Users/Will/Desktop/Test Files/test1.txt",
+		"/C/Users/Will/Desktop/Test Files/test2.txt",
+		"/C/Users/Will/Desktop/Test Files/test6.txt",
+		"/C/Users/Will/Desktop/Test Files/test8.txt",
+		"/C/Users/Will/Desktop/Test Files/test7.txt",
+		"/C/Users/Will/Desktop/Test Files/test5.txt",
+		"/C/Users/Will/Desktop/Test Files/test4.txt",
+		"/C/Users/Will/Desktop/Test Files/test3.txt",
+		"/C/Users/Will/Desktop/Test Files/test54.txt",
+		"/C/Users/Will/Desktop/Test Files/test51.txt",
+		"/C/Users/Will/Desktop/Test Files/test50.txt",
+		"/C/Users/Will/Desktop/Test Files/test49.txt",
+		"/C/Users/Will/Desktop/test.txt",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__dfu__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__dis__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structnrf__gzll__device__tx__info__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__hids__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__bondmngr__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__dis__pnp__id__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__advdata__conn__int__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__hids__hid__information__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__gap__id__info__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__hids__inp__rep__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__gap__evt__disconnected__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structbootloader__settings__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__dfu__s.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structmaster__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/sdio_8h.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/debug_uart.d",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/debug_uart.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/dir_eb0a8ed50d81eef9189e806d2a702f7b.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/dir_e236687cb3e9ab58e322edac4998c5c8.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/Doxyfile",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/application_running_time.d",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/application_running_time.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/app__button_8h.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/annotated.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_dfu_bootloader/bootloader.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/ble_advdata.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/app_timer.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_battery_advertisement.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__ias__s.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/functions_w.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_dfu_bootloader/arm/bootloader.uvgui.Will",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/twi_master.h",
+		"/C/Users/Will/Desktop/V vs P/New Text Document.txt",
+		"/C/Users/Will/Desktop/V vs P/2014-7-8 Overnight.txt",
+		"/C/Users/Will/Desktop/V vs P/Readme.txt",
+		"/C/Users/Will/AppData/Roaming/Sublime Text 3/Packages/User/SublimeAStyleFormatter.sublime-settings",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_advertisement_manager.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_advertisement_manager.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_connectability_manager.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_connectability_manager.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_temperature_advertisement.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_temperature_advertisement.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/app_common/rtc_manager.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_battery_advertisement.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_iBeacon_advertisement.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/app_common/application_running_time.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/app_common/application_running_time.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_iBeacon_advertisement.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/connectionless_config_state_machine.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/connectionless_config_state_machine.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ble_manager.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ble_manager.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Source/ble/ble_services/ble_ccs.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/index.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/ble__err_8h_source.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/ble__lls_8h.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/simple__uart_8h.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/simple_uart.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/struct_n_r_f___p_u___type.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/search/enums_0.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/globals_eval_l.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structrx__buffer__elem__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/simple_uart.d",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/simple_uart.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Source/simple_uart/simple_uart.c",
+		"/C/Users/Will/Documents/gitTestRepository/MyTextFile.txt",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ext_sensors/stlm75/stlm75.c",
+		"/C/Users/Will/AppData/Roaming/Sublime Text 3/Packages/User/UV4.sublime-build",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/mersenne_twister.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/ble/softdevice/ble_gap.h",
+		"/C/Users/Will/Documents/Jim Rush Questions.txt",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/app_common/rtc_manager.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/rtc_manager.d",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/rtc_manager.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structcmd__response__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/resize.js",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/timed__dispatch_8c.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/structble__tps__init__t.html",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/html/tabs.css",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/JLinkSettings.ini",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_dfu_bootloader/arm/JLinkSettings.ini",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon_nRF51822_S110.dep",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/kst_ble_iBeacon.sublime-project",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon.uvopt",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon.uvproj",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon_uvopt.bak",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon_uvproj.bak",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon.uvgui.Will",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/kst_ble_iBeacon.uvgui_Will.bak",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon_sct.Bak",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.axf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.hex",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.htm",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.lnp",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.map",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.sct",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/kst_ble_iBeacon.tra",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk_old/Include/ble/ble_stack_handler.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk_old/Include/ble/rpc/ble_rpc_pkt_receiver.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_dfu_bootloader/dfu_single_bank.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/JLinkLog.txt",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/twi_master_config.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/common.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/nrf_temp.h",
+		"/C/Users/Will/Desktop/PacketSnifferMega/PacketSnifferMega.ino",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/mersenne_twister.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Source/ext_sensors/sts21/sts21.c",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_sdk_extentions/Include/ext_sensors/sts21.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/nordic_sdk/Include/twi_master_me.h",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/main.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/ble_advertisement_manager.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/ble_battery_advertisement.crf",
+		"/C/Users/Will/Documents/Git/KSTSensorE-iBeacon/Firmware/kst_ble_iBeacon/arm/_build/ble_connectability_manager.crf"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"",
+			"C:\\Keil\\ARM\\Device\\Nordic\\nrf51822",
+			"C:\\Keil\\ARM\\Device\\Nordic\\nrf51822\\Board\\nrf6310",
+			"",
+			"C:\\Keil\\ARM\\Device\\Nordic\\nrf51822",
+			"C:\\Users\\Will\\Desktop\\nRF Temp",
+			"ble_temperature_advertisement.c,C:\\Users\\Will\\Desktop\\nRF Temp",
+			"ble_temperature_advertisement.c"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"simple_uart_putstring",
+			"NONCONN",
+			"scan",
+			"start_scan",
+			"ble_gap_scan_params",
+			"scan",
+			"passive scan",
+			"20",
+			"initialized_generator",
+			"timeout",
+			"20000",
+			"struct dispatch_timer_node",
+			"passcode_valid",
+			"temperature_raw",
+			"getTemperature",
+			"timed_dispatch_rate =",
+			"passcode_valid",
+			"TWI_FREQUENCY_FREQUENCY_K100",
+			"twi_master_init(void)",
+			"twi_master_init()",
+			"TWI_MASTER_CONFIG_DATA_PIN_NUMBER",
+			"TWI_MASTER_DATA_PIN_NUMBER",
+			"type",
+			"measured_power",
+			"iBeacon_advert_update",
+			"update_iBeacon",
+			"countMax",
+			"count_max",
+			"flash_update",
+			"MILLISECONDS_PER_TICK",
+			"MILLISECONDS_IN_SEC",
+			"MILLISECONDS_PER_TICK",
+			"iBeacon_advert_rate",
+			"passcode_valid",
+			"MILLISECONDS_PER_TICK",
+			"(MILLISECONDS_IN_SECOND/TIMED_DISPATCH_TICKS_IN_SECOND)",
+			"TICKS",
+			"1285",
+			"1285/",
+			";\n",
+			"1000/TIMED_DISPATCH_TICKS_IN_SECOND",
+			"1000/TIMED_DISPATCH_TICKS_IN_SECONDS",
+			".countMax",
+			"timer.count",
+			"dispatch_timer_node",
+			"ADC",
+			"POWER",
+			"POFCON",
+			"addReadingWithRawData",
+			"addReadingWith",
+			"battery",
+			"generate",
+			"%",
+			"uuid_rotate",
+			"\\\\"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"debug_uart_putstring",
+			"tx_power",
+			"MILLISECONDS_PER_TICK",
+			"MILLISECONDS_IN_SECOND",
+			"20",
+			"20/",
+			"1285/TIMED_DISPATCH_TICKS_IN_SECOND",
+			"temperature"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Senior Design Hub/ble_app_template/main.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22201,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								21506,
+								21506
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"wrap_width": 0
+						},
+						"translation.x": 0.0,
+						"translation.y": 7397.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/Will/AppData/Roaming/Sublime Text 3/Packages/User/UV4.sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 535,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								180,
+								180
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 243.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "SeniorDesignHub.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"cr2032",
+				"kst_sdk_extentions\\Source\\adc_conversion\\cr2032.c"
+			],
+			[
+				"debug",
+				"kst_sdk_extentions\\Include\\app_common\\debug_uart.h"
+			],
+			[
+				"applica",
+				"kst_sdk_extentions\\Include\\app_common\\application_running_time.h"
+			],
+			[
+				"simple",
+				"nordic_sdk\\Source\\simple_uart\\simple_uart.c"
+			],
+			[
+				"applic",
+				"kst_sdk_extentions\\Source\\app_common\\application_running_time.c"
+			],
+			[
+				"",
+				"kst_ble_iBeacon\\main.c"
+			],
+			[
+				"cr203",
+				"kst_sdk_extentions\\Include\\adc_conversion\\cr2032.h"
+			],
+			[
+				"ibeacon",
+				"kst_sdk_extentions\\Include\\ble_iBeacon_advertisement.h"
+			],
+			[
+				"ble_bat",
+				"kst_sdk_extentions\\Include\\ble_battery_advertisement.h"
+			],
+			[
+				"simpl",
+				"nordic_sdk\\Source\\simple_uart\\simple_uart.c"
+			],
+			[
+				"sim",
+				"nordic_sdk\\Source\\simple_uart\\simple_uart.c"
+			],
+			[
+				"simple_uart",
+				"nordic_sdk\\Source\\simple_uart\\simple_uart.c"
+			],
+			[
+				"rtc",
+				"kst_sdk_extentions\\Source\\app_common\\rtc_manager.c"
+			],
+			[
+				"ble_ad",
+				"kst_sdk_extentions\\Source\\ble_advertisement_manager.c"
+			],
+			[
+				"timed_dispat",
+				"kst_sdk_extentions\\Source\\app_common\\timed_dispatch.c"
+			],
+			[
+				"temp",
+				"kst_sdk_extentions\\Source\\ble_temperature_advertisement.c"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 271.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

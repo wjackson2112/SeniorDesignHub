@@ -45,6 +45,7 @@
 #include "app_button.h"
 #include "ble_debug_assert_handler.h"
 #include "simple_uart.h"
+#include "ble_uart.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
 // YOUR_JOB: Define any other buttons to be used by the applications:
@@ -90,11 +91,13 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
 #define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
 
-#define RTS_PIN_NUMBER 0
-#define TXD_PIN_NUMBER 1
-#define CTS_PIN_NUMBER 2
-#define RXD_PIN_NUMBER 3
+#define RTS_PIN_NUMBER 10
+#define TXD_PIN_NUMBER 0
+#define CTS_PIN_NUMBER 6
+#define RXD_PIN_NUMBER 2
 #define HWFC false
+
+ble_uart_t                                                                        m_uart;
 
 /**@brief Function for error handling, which is called when an error has occurred. 
  *
@@ -256,6 +259,19 @@ static void advertising_init(void)
 static void services_init(void)
 {
     // YOUR_JOB: Add code to initialize the services used by the application.
+	  ble_uart_init_t uart_init;
+
+    // Initialize Connectionless Configuration Service
+    memset(&uart_init, 0, sizeof(uart_init));
+
+    uart_init.evt_handler = NULL;
+    uart_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        uart_init.initial_transmit_state[i] = 0x00;
+    }
+
+    ble_uart_init(&m_uart, &uart_init);
 }
 
 
@@ -361,6 +377,21 @@ static void advertising_start(void)
     nrf_gpio_pin_set(ADVERTISING_LED_PIN_NO);
 }
 
+/**@brief BLE bluetooth on write handler.
+ */
+void on_write(ble_evt_t *p_ble_evt)
+{
+
+    uint16_t *check_handler = &p_ble_evt->evt.gatts_evt.params.hvc.handle;
+
+    if (*check_handler == m_uart.transmit_handles.value_handle) {
+
+        uint8_t * response = m_uart.transmit_packet;
+				simple_uart_put(response[0]);
+        //ble_uart_receive_send(&m_uart, response, 20);
+    }
+}
+
 
 /**@brief Function for handling the Application's BLE Stack events.
  *
@@ -441,6 +472,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
                 err_code = sd_power_system_off();    
             }
             break;
+						
+				case BLE_GATTS_EVT_WRITE:
+					on_write(p_ble_evt);
+					break;
 
         default:
             break;
@@ -459,8 +494,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
  */
 static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
-    on_ble_evt(p_ble_evt);
+    
+		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
+		on_ble_evt(p_ble_evt);
     /* 
     YOUR_JOB: Add service ble_evt handlers calls here, like, for example:
     ble_bas_on_ble_evt(&m_bas, p_ble_evt);
@@ -545,12 +582,52 @@ static void power_manage(void)
     APP_ERROR_CHECK(err_code);
 }
 
+void UART0_IRQHandler(void){
+
+    sd_nvic_DisableIRQ(UART0_IRQn);
+
+    bool receiving = true;
+    int bytesReceived = 0;
+    uint8_t buffer[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+    while(receiving){
+	   //uint8_t next_char = simple_uart_get();
+				
+        receiving = simple_uart_get_with_timeout(5, &buffer[bytesReceived]);
+			
+				if(receiving){
+					bytesReceived++;
+					if(bytesReceived == 20){
+            ble_uart_receive_send(&m_uart, buffer, 20);
+						bytesReceived = 0;
+					}
+				}
+				
+				if(!receiving && bytesReceived == 0){
+					sd_nvic_EnableIRQ(UART0_IRQn);
+					return;
+				}
+    }
+
+	//uint8_t response[1] = {next_char};
+		
+	if(bytesReceived != 1){
+			ble_uart_receive_send(&m_uart, buffer, bytesReceived);  
+	}
+		
+  sd_nvic_EnableIRQ(UART0_IRQn);
+}
+
 static void uart_init(void){
 	simple_uart_config( RTS_PIN_NUMBER,
                           TXD_PIN_NUMBER,
                           CTS_PIN_NUMBER,
                           RXD_PIN_NUMBER,
                           HWFC);
+	
+	NRF_UART0->INTENSET = UART_INTENSET_RXDRDY_Enabled << UART_INTENSET_RXDRDY_Pos;
+  sd_nvic_SetPriority(UART0_IRQn, APP_IRQ_PRIORITY_LOW);
+  sd_nvic_EnableIRQ(UART0_IRQn);
 }
 
 
