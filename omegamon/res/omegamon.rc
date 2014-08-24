@@ -1,0 +1,25 @@
+IDI_ICON1               ICON    DISCARDABLE     "omegamon.ico"
+1 VERSIONINFO
+FILEVERSION     0,0,1,1
+PRODUCTVERSION  0,0,1,1
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Team Omega"
+      VALUE "FileDescription", "Omega Sensor Hub Diagnostic Monitor"
+      VALUE "FileVersion", "0.0.1.1"
+      VALUE "InternalName", "omegamon"
+      VALUE "LegalCopyright", "Copyright (C) 2014 Team Omega"
+      VALUE "OriginalFilename", "omegamon.exe"
+      VALUE "ProductName", "Omega Monitor"
+      VALUE "ProductVersion", "0.0.1 build 1"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
