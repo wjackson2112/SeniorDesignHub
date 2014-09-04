@@ -66,10 +66,15 @@ void setup(){
     pinMode(BLUE, OUTPUT);
 }
 
+int last = 0;
+
 void loop(){
 #ifdef __MK20DX256__
   if(timeElapsed > ANALOG_UPDATE){
-    Serial1.print(analogRead(PHOTORESISTOR));
+    last += 10;
+    if(last > 1023) last = 0;
+    //Serial1.print(analogRead(PHOTORESISTOR));
+    Serial1.print(last);
     timeElapsed -= 1000;
   }
 #else // Stock Arduino
