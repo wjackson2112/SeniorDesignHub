@@ -53,7 +53,7 @@ public class DemoDevice {
 		mName = name;
 		
 		// Connect to the device so we can probe it for services.
-		connect();
+		// connect();
 	}
 	
 	public void connect() {
@@ -223,6 +223,10 @@ public class DemoDevice {
 	}
 	
 	public void readAndNotify() {
+		if(mGatt == null || mGattRX == null) {
+			return;
+		}
+
 		mGatt.readCharacteristic(mGattRX);
 		/*
 		mGatt.setCharacteristicNotification(mGattRX, true);

@@ -50,6 +50,7 @@ public class DeviceActivity extends Activity {
     		for(DemoDevice dev : mService.deviceList()) {
     			if(dev.name().equals(mDeviceName)) {
     				mDevice = dev;
+    				mDevice.connect();
     				break;
     			}
     		}
