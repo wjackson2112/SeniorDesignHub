@@ -11,6 +11,8 @@ public class BluetoothScanRecord {
 
 	private List<UUID> mServices = new ArrayList<UUID>();
 	
+	private String mDeviceName = null;
+	
 	/// Miscellaneous flags.
 	private final static int EIR_TYPE_FLAGS = 0x01;
 	
@@ -19,6 +21,9 @@ public class BluetoothScanRecord {
 	
 	/// Complete list of 16-bit service class UUIDs.
 	private final static int EIR_TYPE_COMPLETE_LIST_UUID16 = 0x03;
+	
+	/// Comple local name for the device.
+	private final static int EIR_TYPE_COMPLETE_LOCAL_NAME = 0x09;
 	
 	/// Manufacturer Specific Data.
 	private final static int EIR_TYPE_MANUFACTURER_DATA = 0xFF;
@@ -34,6 +39,8 @@ public class BluetoothScanRecord {
 	public BluetoothScanRecord(final byte[] scanRecord) throws ParseErrorException {
 		int offset = 0;
 		
+		// Log.d("BluetoothEIR", "Scan Record: " + byteToHexString(scanRecord));
+		
 		while(offset < scanRecord.length)
 			offset = parseRecord(offset, scanRecord);
 	}
@@ -46,15 +53,18 @@ public class BluetoothScanRecord {
 		}
 
 		int recordID = scanRecord[offset + 1] & 0xFF;
-		Log.d("BluetoothEIR", "Record ID: " + String.format("%02x", recordID));
+		// Log.d("BluetoothEIR", "Record ID: " + String.format("%02x", recordID));
 		
 		switch(recordID) {
+			case EIR_TYPE_COMPLETE_LIST_UUID16:
 			case EIR_TYPE_INCOMPLETE_LIST_UUID16:
 			{
 				String uuid = byteToHexString(Arrays.copyOfRange(
-						scanRecord, offset, offset + 16));
+					scanRecord, offset + 2, offset + 2 + 16)).replaceAll(                                            
+						"(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+						"$1-$2-$3-$4-$5");;
 				
-				Log.d("BluetoothEIR", "Service UUID: " + uuid);
+				// Log.d("BluetoothEIR", "Service UUID: " + uuid);
 				
 				mServices.add(UUID.fromString(uuid));
 				
@@ -63,17 +73,32 @@ public class BluetoothScanRecord {
 			case EIR_TYPE_MANUFACTURER_DATA:
 			{
 				String uuid = byteToHexString(Arrays.copyOfRange(
-						scanRecord, offset + 6, offset + 22)).replaceAll(                                            
-								"(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
-								"$1-$2-$3-$4-$5");
+					scanRecord, offset + 6, offset + 22)).replaceAll(                                            
+					"(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+					"$1-$2-$3-$4-$5");
 				
-				Log.d("BluetoothEIR", "Service UUID: " + uuid);
+				// Log.d("BluetoothEIR", "Service UUID: " + uuid);
 				
 				mServices.add(UUID.fromString(uuid));
 				
 				break;
 			}
+			case EIR_TYPE_COMPLETE_LOCAL_NAME:
+			{
+				String name = new String(Arrays.copyOfRange(
+					scanRecord, offset + 2, offset + 1 + recordLength));
+				
+				// Log.d("BluetoothEIR", "Complete device name: " + name);
+				
+				mDeviceName = name;
+				
+				break;
+			}
 			default:
+				/*
+				Log.d("BluetoothEIR", "Unknown record ID: " +
+					String.format("%02x", recordID));
+				 */
 				break;
 		}
 
@@ -91,6 +116,10 @@ public class BluetoothScanRecord {
 	
 	public final List<UUID> serviceUUIDs() {
 		return mServices;
+	}
+	
+	public final String deviceName() {
+		return mDeviceName;
 	}
 
 }

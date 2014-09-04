@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ProgressBar
+	    android:id="@+id/progressBar"
+	    android:layout_marginTop="8dip"
+	    android:layout_height="wrap_content"
+	    android:layout_width="fill_parent"
+	    style="@android:style/Widget.ProgressBar.Horizontal" />
+    <View
+        android:layout_marginTop="8dip"
+        android:layout_marginBottom="8dip"
+        android:layout_width="fill_parent"
+		android:layout_height="2dip"
+		android:background="#FF000000" />
+    <LinearLayout
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+		<Button
+		    android:id="@+id/offButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/offButton"/>
+		<Button
+		    android:id="@+id/redButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/redButton"/>
+		<Button
+		    android:id="@+id/greenButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/greenButton"/>
+		<Button
+		    android:id="@+id/blueButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/blueButton"/>
+	</LinearLayout>
+	<LinearLayout
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+		<Button
+		    android:id="@+id/minButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/minButton"/>
+		<Button
+		    android:id="@+id/maxButton"
+		    android:layout_height="48dp"
+		    android:layout_width="wrap_content"
+		    android:text="@string/maxButton"/>
+	</LinearLayout>
+</LinearLayout>
