@@ -33,7 +33,8 @@ public class ScanActivity extends MainActivity {
 
 	//private String mAuthCode = null;
 
-	private final static UUID[] SERVICE_UUIDS = { UUID.fromString("8aefb031-6c32-486f-825b-e26fa193487d") };
+	private final static UUID[] SERVICE_UUIDS = { UUID.fromString("7b1e3740-1dc8-11e4-8c21-0800200c9a66") };
+
 	private final static long SCAN_PERIOD = 30 * 1000; // 10 seconds.
 	private final static String TAG = "ScanActivity";
 	
@@ -146,6 +147,8 @@ public class ScanActivity extends MainActivity {
 				for(BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
 					Log.d(TAG, " Characteristic: " + characteristic.getUuid());
 					
+					// 3742
+					// 3741
 					if(characteristic.getUuid().toString().equalsIgnoreCase("0000c69b-0000-1000-8000-00805f9b34fb")) {
 						Log.d(TAG, "Write passcode...");
 						characteristic.setValue("");
@@ -189,9 +192,13 @@ public class ScanActivity extends MainActivity {
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					if(!device.getAddress().equalsIgnoreCase("F2:30:5D:58:25:78"))
+					if(!device.getName().matches("^SensorHub[0-9]{3}$"))
 						return;
+					Log.d(TAG, "Found sensor hub: " + device.getName());
 					if(!hasService(SERVICE_UUIDS[0].toString(), scanRecord))
+						return;
+					Log.d(TAG, "Found service on: " + device.getName());
+					if(!device.getAddress().equalsIgnoreCase("F2:30:5D:58:25:78"))
 						return;
 					
 					// Connect w/ GATT to probe the services.

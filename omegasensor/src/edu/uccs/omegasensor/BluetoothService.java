@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import edu.uccs.omegasensor.BluetoothScanRecord.ParseErrorException;
 
@@ -74,9 +75,12 @@ public class BluetoothService extends Service {
 	// Miscellaneous
 	// ------------------------------------------------------------------------
     
+    /// Context for this service.
+    private Context mContext = this;
+    
     /// List of service UUIDs to scan for.
     private final static UUID[] SERVICE_UUIDS = {
-    	UUID.fromString("8aefb031-6c32-486f-825b-e26fa193487d")
+    	UUID.fromString("0f180000-0000-0000-0000-000000000000")
     };
 
     /// Debug tag.
@@ -117,7 +121,7 @@ public class BluetoothService extends Service {
 		Log.d(TAG, "Created service.");
 	
 		// Create the list to store all devices.
-		mDevices = new HashMap<String, ParticleDevice>();
+		mDevices = new HashMap<String, DemoDevice>();
 		
 		// Handler to stop a BLE peripheral scan.
 		mScanHandler = new Handler();
@@ -130,15 +134,18 @@ public class BluetoothService extends Service {
 		mSettings = getSharedPreferences(DEVICE_PREFS_NAME, 0);
 		
 		// Add the devices we know about.
+		/*
 		for(String deviceMAC : mSettings.getStringSet("deviceList",
 				new HashSet<String>())) {
 			// Wrap the BLE device in a ParticleDevice.
-			ParticleDevice dev = new ParticleDevice(this,
+			// TODO: Fix this by storing the name AND mac of the device.
+			DemoDevice dev = new DemoDevice(this,
 				mAdapter.getRemoteDevice(deviceMAC));
 			
 			// Add the device to the list.
 			mDevices.put(deviceMAC, dev);
 		}
+		*/
 
 		super.onCreate();
 	}
@@ -201,23 +208,39 @@ public class BluetoothService extends Service {
 	// Bluetooth Low Energy Scan Callback
 	// ------------------------------------------------------------------------
 	
-	private Map<String, ParticleDevice> mDevices = null;
+	// private Map<String, ParticleDevice> mDevices = null;
+	private Map<String, DemoDevice> mDevices = null;
 	
 	/// Bluetooth Low Energy Scan Callback
 	private BluetoothAdapter.LeScanCallback mScanCallback =
 			new BluetoothAdapter.LeScanCallback() {
 		@Override
 		public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+			/*			
 			if(!device.getAddress().equalsIgnoreCase("F2:30:5D:58:25:78"))
 				return;
+			*/
 			
-			// Only process the device if it is not already in the list.
-			if(mDevices.containsKey(device.getAddress().toUpperCase()))
-				return;
+			// Default name for this device.
+			String deviceName = "SensorHub???";
 			
 			try {
 				// Parse the scan record for service UUIDs.
 				BluetoothScanRecord record = new BluetoothScanRecord(scanRecord);
+
+				// Check the name of the device.
+				if(record.deviceName() == null || !record.deviceName().matches("^SensorHub[0-9]{3}$"))
+					return;
+				
+				// Debug output that we found a sensor hub.
+				Log.d(TAG, "Found sensor hub: " + record.deviceName());
+				
+				// Save the name of the device.
+				deviceName = record.deviceName();
+				
+				// Only process the device if it is not already in the list.
+				if(mDevices.containsKey(deviceName))
+					return;
 
 				int matches = 0;
 				
@@ -250,20 +273,25 @@ public class BluetoothService extends Service {
 			}
 			
 			// Wrap the BLE device into a ParticleDevice.
-			ParticleDevice dev = new ParticleDevice(
-				BluetoothService.this, device);
+			DemoDevice dev = new DemoDevice(
+				BluetoothService.this, device, deviceName);
 			
 			// Add the new particle to the device list.
-			mDevices.put(device.getAddress().toUpperCase(), dev);
+			mDevices.put(deviceName, dev);
 			
 			// Save the device list.
 			SharedPreferences.Editor editor = mSettings.edit();
 			editor.putStringSet("deviceList", mDevices.keySet());
 			editor.commit();
-		}		
+			
+			// Send an intent to the device list.
+			Log.d(TAG, "Sending device to the list.");
+			Intent intent = new Intent(DeviceListActivity.UPDATE_DEVICES);
+			LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+		}
 	};
 	
-	public Collection<ParticleDevice> deviceList() {
+	public Collection<DemoDevice> deviceList() {
 		return mDevices.values();
 	}
 	
@@ -281,15 +309,6 @@ public class BluetoothService extends Service {
 	
 	public void clearStarter(String deviceUUID) {
 		Log.d(TAG, "Releasing the starter.");
-	}
-	
-	public void updateRssi(String deviceUUID) {
-		Log.d(TAG, "Resuming RSSI updates.");
-		
-		ParticleDevice dev = mDevices.get(deviceUUID);
-		if(dev != null) {
-			dev.updateRssi();
-		}
 	}
 
 }
