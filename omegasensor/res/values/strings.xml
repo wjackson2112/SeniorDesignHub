@@ -9,5 +9,7 @@
     <string name="blueButton">Blue</string>
     <string name="minButton">Set Minimum</string>
     <string name="maxButton">Set Maximum</string>
+    <string name="deviceAct">Demo Controls</string>
+    <string name="deviceListAct">Discovered Sensor Hubs</string>
 
 </resources>
