@@ -179,6 +179,11 @@ public class DeviceActivity extends Activity {
 	protected void onStop() {
 		super.onStop();
 
+		// Disconnect the device before the activity goes poof.
+		if (mDevice != null) {
+			mDevice.disconnect();
+		}
+
 		// Unbind from the service
         if (mBound) {
             unbindService(mConnection);
