@@ -24,13 +24,15 @@
         <activity android:name="IgnitionActivity"
             android:label="@string/ignitionTitle"></activity>
         <activity android:name="MainActivity"></activity>
-        <activity android:name="DeviceListActivity">
+        <activity android:name="DeviceListActivity"
+            android:label="@string/deviceListAct">
             <intent-filter>
             	<action android:name="android.intent.action.MAIN" />
             	<category android:name="android.intent.category.LAUNCHER" />
         	</intent-filter>
         </activity>
-        <activity android:name="DeviceActivity"></activity>
+        <activity android:name="DeviceActivity"
+            android:label="@string/deviceAct"></activity>
         <activity android:name="ScanActivity"></activity>
         
         <service android:name=".BluetoothService" />

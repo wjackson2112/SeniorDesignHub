@@ -42,6 +42,7 @@ public class DeviceListActivity extends ListActivity {
             mBound = true;
             
             // Add all the devices to the list.
+            mDevices.clear();
             mDevices.addAll(mService.deviceList());
             mAdapter.notifyDataSetChanged();
             
