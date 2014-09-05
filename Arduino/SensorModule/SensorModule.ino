@@ -1,28 +1,65 @@
-#ifdef __MK20DX256__
-#include <elapsedMillis.h>
+// Copy and paste from the library. Too lazy to "install" it.
+#if ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
-// Serial1: 0 = RX1, 1 = TX1
-int RED = 13; // Teensy LED
-int GREEN = 2;
-int BLUE = 3;
+class elapsedMillis
+{
+private:
+	unsigned long ms;
+public:
+	elapsedMillis(void) { ms = millis(); }
+	elapsedMillis(unsigned long val) { ms = millis() - val; }
+	elapsedMillis(const elapsedMillis &orig) { ms = orig.ms; }
+	operator unsigned long () const { return millis() - ms; }
+	elapsedMillis & operator = (const elapsedMillis &rhs) { ms = rhs.ms; return *this; }
+	elapsedMillis & operator = (unsigned long val) { ms = millis() - val; return *this; }
+	elapsedMillis & operator -= (unsigned long val)      { ms += val ; return *this; }
+	elapsedMillis & operator += (unsigned long val)      { ms -= val ; return *this; }
+	elapsedMillis operator - (int val) const           { elapsedMillis r(*this); r.ms += val; return r; }
+	elapsedMillis operator - (unsigned int val) const  { elapsedMillis r(*this); r.ms += val; return r; }
+	elapsedMillis operator - (long val) const          { elapsedMillis r(*this); r.ms += val; return r; }
+	elapsedMillis operator - (unsigned long val) const { elapsedMillis r(*this); r.ms += val; return r; }
+	elapsedMillis operator + (int val) const           { elapsedMillis r(*this); r.ms -= val; return r; }
+	elapsedMillis operator + (unsigned int val) const  { elapsedMillis r(*this); r.ms -= val; return r; }
+	elapsedMillis operator + (long val) const          { elapsedMillis r(*this); r.ms -= val; return r; }
+	elapsedMillis operator + (unsigned long val) const { elapsedMillis r(*this); r.ms -= val; return r; }
+};
 
-int PHOTORESISTOR = A0;
-#else // Stock Arduino
+class elapsedMicros
+{
+private:
+	unsigned long us;
+public:
+	elapsedMicros(void) { us = micros(); }
+	elapsedMicros(unsigned long val) { us = micros() - val; }
+	elapsedMicros(const elapsedMicros &orig) { us = orig.us; }
+	operator unsigned long () const { return micros() - us; }
+	elapsedMicros & operator = (const elapsedMicros &rhs) { us = rhs.us; return *this; }
+	elapsedMicros & operator = (unsigned long val) { us = micros() - val; return *this; }
+	elapsedMicros & operator -= (unsigned long val)      { us += val ; return *this; }
+	elapsedMicros & operator += (unsigned long val)      { us -= val ; return *this; }
+	elapsedMicros operator - (int val) const           { elapsedMicros r(*this); r.us += val; return r; }
+	elapsedMicros operator - (unsigned int val) const  { elapsedMicros r(*this); r.us += val; return r; }
+	elapsedMicros operator - (long val) const          { elapsedMicros r(*this); r.us += val; return r; }
+	elapsedMicros operator - (unsigned long val) const { elapsedMicros r(*this); r.us += val; return r; }
+	elapsedMicros operator + (int val) const           { elapsedMicros r(*this); r.us -= val; return r; }
+	elapsedMicros operator + (unsigned int val) const  { elapsedMicros r(*this); r.us -= val; return r; }
+	elapsedMicros operator + (long val) const          { elapsedMicros r(*this); r.us -= val; return r; }
+	elapsedMicros operator + (unsigned long val) const { elapsedMicros r(*this); r.us -= val; return r; }
+};
+
 int RED = 5;
 int GREEN = 6;
 int BLUE = 9;
 
 int PHOTORESISTOR = A0;
-#endif // __MK20DX128__
 
 void check_input(){
-#ifdef __MK20DX256__
-    while(Serial1.available() > 0){
-    int character = Serial1.read();
-#else // Stock Arduino
     while(Serial.available() > 0){
     int character = Serial.read();
-#endif // __MK20DX128__
     switch(character){
       case '0':
         digitalWrite(RED, LOW);
@@ -48,38 +85,23 @@ void check_input(){
   }
 }
 
-#ifdef __MK20DX256__
 elapsedMillis timeElapsed;
 
 #define ANALOG_UPDATE (1000) // 1Hz
-#endif // __MK20DX128__
 
 void setup(){
-#ifdef __MK20DX256__
-    Serial1.begin(9600);
-#else // Stock Arduino
     Serial.begin(9600);
-#endif // __MK20DX128__
 
     pinMode(RED, OUTPUT);
     pinMode(GREEN, OUTPUT);
     pinMode(BLUE, OUTPUT);
 }
 
-int last = 0;
-
 void loop(){
-#ifdef __MK20DX256__
   if(timeElapsed > ANALOG_UPDATE){
-    last += 10;
-    if(last > 1023) last = 0;
-    //Serial1.print(analogRead(PHOTORESISTOR));
-    Serial1.print(last);
-    timeElapsed -= 1000;
+    Serial.print(analogRead(PHOTORESISTOR));
+    timeElapsed -= ANALOG_UPDATE;
   }
-#else // Stock Arduino
-  Serial.print(analogRead(PHOTORESISTOR));
-#endif // __MK20DX128__
 
   check_input();
 }
