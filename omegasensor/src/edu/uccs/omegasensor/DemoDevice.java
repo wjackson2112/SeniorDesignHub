@@ -1,7 +1,5 @@
 package edu.uccs.omegasensor;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
@@ -12,7 +10,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
-import android.content.Intent;
 import android.util.Log;
 
 @SuppressLint("DefaultLocale")
@@ -191,6 +188,11 @@ public class DemoDevice {
 		public void onCharacteristicWrite(BluetoothGatt gatt,
 				BluetoothGattCharacteristic characteristic, int status) {
 			super.onCharacteristicWrite(gatt, characteristic, status);
+
+			if(status != BluetoothGatt.GATT_SUCCESS)
+				Log.e(TAG, "Write failed!");
+			else
+				Log.d(TAG, "Wrote: " + characteristic.getStringValue(0));
 		}
 
 		@Override
@@ -222,19 +224,22 @@ public class DemoDevice {
 		mGatt.writeCharacteristic(mGattTX);
 	}
 	
+	protected static final UUID CHARACTERISTIC_UPDATE_NOTIFICATION_DESCRIPTOR_UUID =
+		UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+	
 	public void readAndNotify() {
 		if(mGatt == null || mGattRX == null) {
 			return;
 		}
 
-		mGatt.readCharacteristic(mGattRX);
-		/*
 		mGatt.setCharacteristicNotification(mGattRX, true);
 		BluetoothGattDescriptor descriptor = mGattRX.getDescriptor(
-                UUID.fromString(GattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+			CHARACTERISTIC_UPDATE_NOTIFICATION_DESCRIPTOR_UUID);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE); 
         mGatt.writeDescriptor(descriptor);
-        */
+        
+        // This must come after or the notifications above break.
+        mGatt.readCharacteristic(mGattRX);
 	}
 
 }

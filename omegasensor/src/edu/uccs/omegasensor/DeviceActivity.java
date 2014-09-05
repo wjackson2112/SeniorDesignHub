@@ -1,8 +1,5 @@
 package edu.uccs.omegasensor;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,8 +25,6 @@ public class DeviceActivity extends Activity {
 	private int mMinValue = 0;
 	private int mMaxValue = 1023;
 	private int mValue = 0;
-	
-	private Timer mTimer = null;
 	
 	/** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -151,15 +146,6 @@ public class DeviceActivity extends Activity {
 			}
 	    });
 	    Log.d(TAG, "Created DeviceActivity layout!");
-	    
-	    mTimer = new Timer();
-	    mTimer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				if(mDevice != null)
-					mDevice.readAndNotify();
-			}
-		}, 0, 1000);
 	}
 
 	@Override
