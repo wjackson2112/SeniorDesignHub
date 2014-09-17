@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include "ble.h"
 #include "ble_srv_common.h"
+#include "global_config.h"
 
 /**@brief Connectionles Configuration Service Event Type. */
 typedef enum
@@ -52,11 +53,19 @@ typedef struct ble_uart_s
 	uint16_t 	 	 	 	          			service_handle;
 	ble_gatts_char_handles_t  			transmit_handles;
 	ble_gatts_char_handles_t 				receive_handles;
+	ble_gatts_char_handles_t				config_handles;
 	uint16_t 	 	 	 	          			conn_handle;	
 	uint8_t 	 	 	 	 	 	 						transmit_packet[20];
 	uint8_t													receive_packet[20];
+	uint8_t													config_packet[1];
 	bool 	 	 	 	 	 	 	  						is_notification_supported;
 }ble_uart_t;
+
+extern bool uart_parity_included;
+extern bool uart_hw_flow_control;
+extern uint8_t uart_baud_rate;
+
+extern ble_uart_t m_uart;
 
 /**@brief Function for handling the Application's BLE Stack events.
  *
@@ -102,6 +111,7 @@ uint32_t ble_uart_transmit_send(ble_uart_t * p_uart, uint8_t data[], uint16_t le
  */
 uint32_t ble_uart_receive_send(ble_uart_t * p_uart, uint8_t data[], uint16_t length);
 
+uint32_t ble_uart_config_send(ble_uart_t * p_uart, uint8_t data[], uint16_t length);
 
 #endif
 

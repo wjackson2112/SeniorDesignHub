@@ -46,6 +46,7 @@
 #include "ble_debug_assert_handler.h"
 #include "simple_uart.h"
 #include "ble_uart.h"
+#include "global_config.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
 // YOUR_JOB: Define any other buttons to be used by the applications:
@@ -61,8 +62,8 @@
 #define APP_TIMER_MAX_TIMERS            2                                           /**< Maximum number of simultaneously created timers. */
 #define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)            /**< Minimum acceptable connection interval (0.5 seconds). */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(1000, UNIT_1_25_MS)           /**< Maximum acceptable connection interval (1 second). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(50, UNIT_1_25_MS)            /**< Minimum acceptable connection interval (0.5 seconds). */
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(100, UNIT_1_25_MS)           /**< Maximum acceptable connection interval (1 second). */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)             /**< Connection supervisory timeout (4 seconds). */
 #define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(20000, APP_TIMER_PRESCALER) /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (15 seconds). */
@@ -91,13 +92,7 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
 #define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
 
-#define RTS_PIN_NUMBER 10
-#define TXD_PIN_NUMBER 0
-#define CTS_PIN_NUMBER 6
-#define RXD_PIN_NUMBER 2
-#define HWFC false
-
-ble_uart_t                                                                        m_uart;
+static void uart_reconfig(uint8_t);
 
 /**@brief Function for error handling, which is called when an error has occurred. 
  *
@@ -237,7 +232,7 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
-    ble_uuid_t adv_uuids[] = {{BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE}};
+    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}};
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -390,6 +385,10 @@ void on_write(ble_evt_t *p_ble_evt)
 				simple_uart_put(response[0]);
         //ble_uart_receive_send(&m_uart, response, 20);
     }
+		
+		if (*check_handler == m_uart.config_handles.value_handle){
+				uart_reconfig(m_uart.config_packet[0]);
+		}
 }
 
 
@@ -619,15 +618,125 @@ void UART0_IRQHandler(void){
 }
 
 static void uart_init(void){
-	simple_uart_config( RTS_PIN_NUMBER,
-                          TXD_PIN_NUMBER,
-                          CTS_PIN_NUMBER,
-                          RXD_PIN_NUMBER,
-                          HWFC);
+	simple_uart_config( UART_RTS_PIN_NUMBER,
+                          UART_TXD_PIN_NUMBER,
+                          UART_CTS_PIN_NUMBER,
+                          UART_RXD_PIN_NUMBER,
+                          uart_hw_flow_control,
+													uart_baud_rate,
+													uart_parity_included);
 	
 	NRF_UART0->INTENSET = UART_INTENSET_RXDRDY_Enabled << UART_INTENSET_RXDRDY_Pos;
   sd_nvic_SetPriority(UART0_IRQn, APP_IRQ_PRIORITY_LOW);
   sd_nvic_EnableIRQ(UART0_IRQn);
+}
+
+//Config byte format
+//		bit7   0
+//		bit6   0
+// 		bit5   Include Parity? (Only even parity supported)
+//		bit4   Hardware Flow Control?
+// 		bit3-0 Baud Rate
+//			0000 = 1200
+//			0001 = 2400
+//			0010 = 4800
+//			0011 = 9600
+//			0100 = 14400
+//			0101 = 19200
+//			0110 = 28800
+//			0111 = 38400
+//			1000 = 57600
+//			1001 = 76800
+//			1010 = 115200
+//			1011 = 230400
+//			1100 = 250000
+//			1101 = 460800
+//			1110 = 921600
+//			1111 = 1000000
+static void uart_reconfig(uint8_t config_byte){
+	//Check parity setting
+	if((config_byte & 0x20) == 0){
+		uart_parity_included = false;
+	} else {
+		uart_parity_included = true;
+	}
+	
+	//Check hardware flow control setting
+	if((config_byte & 0x10) == 0){
+		uart_hw_flow_control = false;
+	} else {
+		uart_hw_flow_control = true;
+	}
+	
+	//Check baud rate settings
+	uart_baud_rate = (config_byte & 0x0F);
+	uint32_t baud_rate_decode;
+	
+	switch(uart_baud_rate){
+		case 0:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud1200;
+			break;
+		case 1:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud2400;
+			break;
+		case 2:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud4800;
+			break;
+		case 3:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud9600;
+			break;
+		case 4:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud14400;
+			break;
+		case 5:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud19200;
+			break;
+		case 6:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud28800;
+			break;
+		case 7:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud38400;
+			break;
+		case 8:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud57600;
+			break;
+		case 9:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud76800;
+			break;
+		case 10:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud115200;
+			break;
+		case 11:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud230400;
+			break;
+		case 12:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud250000;
+			break;
+		case 13:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud460800;
+			break;
+		case 14:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud921600;
+			break;
+		case 15:
+			baud_rate_decode = UART_BAUDRATE_BAUDRATE_Baud1M;
+			break;
+		default:
+			break;
+	}
+	
+	NRF_UART0->TASKS_STOPTX    = 1;
+  NRF_UART0->TASKS_STOPRX    = 1;
+	NRF_UART0->ENABLE          = (UART_ENABLE_ENABLE_Disabled << UART_ENABLE_ENABLE_Pos);
+	
+	simple_uart_config( UART_RTS_PIN_NUMBER,
+                          UART_TXD_PIN_NUMBER,
+                          UART_CTS_PIN_NUMBER,
+                          UART_RXD_PIN_NUMBER,
+                          uart_hw_flow_control,
+													baud_rate_decode,
+													uart_parity_included);
+
 }
 
 

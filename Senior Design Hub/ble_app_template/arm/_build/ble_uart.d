@@ -22,6 +22,7 @@
 .\_build\ble_uart.o: C:\Keil\ARM\CMSIS\Include\core_cmFunc.h
 .\_build\ble_uart.o: ..\..\..\NordicSDK\Include\system_nrf51.h
 .\_build\ble_uart.o: ..\..\..\NordicSDK\Include\app_common\app_error.h
+.\_build\ble_uart.o: ..\global_config.h
 .\_build\ble_uart.o: C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h
 .\_build\ble_uart.o: C:\Keil\ARM\ARMCC\bin\..\include\string.h
 .\_build\ble_uart.o: ..\..\..\NordicSDK\Include\nordic_common.h

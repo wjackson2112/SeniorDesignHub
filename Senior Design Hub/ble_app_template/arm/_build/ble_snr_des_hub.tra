@@ -26,7 +26,7 @@
 ### ADS-LD Output File: '.\_build\ble_snr_des_hub.axf'
 ### ADS-LD Command File: '.\_build\ble_snr_des_hub.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile '.\_build\ble_snr_des_hub.lnp', Handle=0x00000D34
+### Creating CmdFile '.\_build\ble_snr_des_hub.lnp', Handle=0x00004FA0
 ### Writing '.lnp' file
 ### ADS-LD Command file '.\_build\ble_snr_des_hub.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.

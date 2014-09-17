@@ -48,3 +48,4 @@
 .\_build\main.o: ..\..\..\NordicSDK\Include\ble\ble_debug_assert_handler.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\simple_uart.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\ble\ble_services\ble_uart.h
+.\_build\main.o: ..\global_config.h

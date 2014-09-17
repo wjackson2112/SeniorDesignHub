@@ -83,7 +83,9 @@ void simple_uart_config(  uint8_t rts_pin_number,
                           uint8_t txd_pin_number,
                           uint8_t cts_pin_number,
                           uint8_t rxd_pin_number,
-                          bool hwfc)
+                          bool hwfc,
+													int baud_rate,
+													bool parity_included)
 {
   nrf_gpio_cfg_output(txd_pin_number);
   nrf_gpio_cfg_input(rxd_pin_number, NRF_GPIO_PIN_NOPULL);  
@@ -97,10 +99,16 @@ void simple_uart_config(  uint8_t rts_pin_number,
     nrf_gpio_cfg_input(cts_pin_number, NRF_GPIO_PIN_NOPULL);
     NRF_UART0->PSELCTS = cts_pin_number;
     NRF_UART0->PSELRTS = rts_pin_number;
-    NRF_UART0->CONFIG  = (UART_CONFIG_HWFC_Enabled << UART_CONFIG_HWFC_Pos);
+    
   }
+	
+	NRF_UART0->CONFIG = 0x00;
+	if(hwfc)
+		NRF_UART0->CONFIG |= (UART_CONFIG_HWFC_Enabled << UART_CONFIG_HWFC_Pos);
+	if(parity_included)
+		NRF_UART0->CONFIG |= (UART_CONFIG_PARITY_Included << UART_CONFIG_PARITY_Pos);
 
-  NRF_UART0->BAUDRATE         = (UART_BAUDRATE_BAUDRATE_Baud9600 << UART_BAUDRATE_BAUDRATE_Pos);
+  NRF_UART0->BAUDRATE         = (baud_rate << UART_BAUDRATE_BAUDRATE_Pos);
   NRF_UART0->ENABLE           = (UART_ENABLE_ENABLE_Enabled << UART_ENABLE_ENABLE_Pos);
   NRF_UART0->TASKS_STARTTX    = 1;
   NRF_UART0->TASKS_STARTRX    = 1;

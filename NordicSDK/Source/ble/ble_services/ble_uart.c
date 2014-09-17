@@ -10,9 +10,11 @@
 #include "app_util.h"
 #include "nrf_gpio.h"
 
+
 #define BLE_UUID_UART_SERVICE	 	 	 	 	    0x3740 
 #define BLE_UUID_UART_RECEIVE_CHAR         0x3741  
 #define BLE_UUID_UART_TRANSMIT_CHAR					0x3742  
+#define BLE_UUID_UART_CONFIG_CHAR						0x3743
 #define UART_UUID_INDEX              				0
 
 /**@brief 128-bit UART UUID base List. */
@@ -23,6 +25,12 @@ static const ble_uuid128_t m_base_uuid128 =
 			 0xE4, 0x11, 0xC8, 0x1D, 0x00, 0x00, 0x1E, 0x7B
 	 }
 };
+
+bool uart_parity_included = UART_PARITY_INCLUDED;
+bool uart_hw_flow_control = UART_HWFC;
+uint8_t uart_baud_rate = UART_BAUD_RATE;
+
+ble_uart_t m_uart;
 
 /**@brief Function for handling the Connect event.
  *
@@ -58,6 +66,7 @@ static void on_write(ble_uart_t * p_uart, ble_evt_t * p_ble_evt)
 	
 		static uint16_t len_transmit_packet = 20;
 		static uint16_t len_receive_packet = 20;
+		static uint16_t len_config_packet = 1;
 
 		if(p_evt_write->handle == p_uart->transmit_handles.value_handle)
 		{
@@ -67,6 +76,11 @@ static void on_write(ble_uart_t * p_uart, ble_evt_t * p_ble_evt)
 		if(p_evt_write->handle == p_uart->receive_handles.value_handle)
 		{
 			sd_ble_gatts_value_get(char_handler, 0, &len_receive_packet, p_uart->receive_packet);
+		}
+		
+		if(p_evt_write->handle == p_uart->config_handles.value_handle)
+		{
+			sd_ble_gatts_value_get(char_handler, 0, &len_config_packet, p_uart->config_packet);
 		}
 		
 }
@@ -175,7 +189,7 @@ static uint32_t uart_transmit_char_add(ble_uart_t * p_uart, const ble_uart_init_
 }
 
 
-/**@brief Function for adding the transmit characteristic.
+/**@brief Function for adding the receive characteristic.
  *
  * @param  p_uart        UART Service structure.
  * @param  p_uart_init   Information needed to initialize the service.
@@ -257,6 +271,69 @@ static uint32_t uart_receive_char_add(ble_uart_t * p_uart, const ble_uart_init_t
 
 }
 
+/**@brief Function for adding the configuration characteristic.
+ *
+ * @param  p_uart        UART Service structure.
+ * @param  p_uart_init   Information needed to initialize the service.
+ *
+ * @return      NRF_SUCCESS on success, otherwise an error code.
+ */
+static uint32_t uart_config_char_add(ble_uart_t * p_uart, const ble_uart_init_t * p_uart_init)
+{
+    ble_gatts_char_md_t char_md;
+    ble_gatts_attr_md_t cccd_md;
+    ble_gatts_attr_t    attr_char_value;
+    ble_uuid_t          ble_uuid;
+    ble_gatts_attr_md_t attr_md;
+    static uint8_t	 	 	 	initial_conf_state[1];
+
+    memset(&cccd_md, 0, sizeof(cccd_md));
+
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.write_perm);
+    cccd_md.vloc = BLE_GATTS_VLOC_STACK;
+	
+    memset(&char_md, 0, sizeof(char_md));
+
+		char_md.char_props.write  = 1;
+    char_md.char_props.read   = 1;
+    char_md.char_props.notify = 0;
+    char_md.p_char_user_desc       = NULL;
+    char_md.p_char_pf              = NULL;
+    char_md.p_user_desc_md         = NULL;
+    char_md.p_cccd_md              = &cccd_md;
+    char_md.p_sccd_md 	 	 	       = NULL;
+
+		BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_UART_CONFIG_CHAR);
+	
+    memset(&attr_md, 0, sizeof(attr_md));
+
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
+
+    attr_md.rd_auth    = 0;
+    attr_md.wr_auth    = 0;
+    attr_md.vlen       = 1;
+	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
+		
+		initial_conf_state[0] = (uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate;
+
+    memset(&attr_char_value, 0, sizeof(attr_char_value));
+
+    attr_char_value.p_uuid       = &ble_uuid;
+    attr_char_value.p_attr_md    = &attr_md;
+    attr_char_value.init_len     = 1;
+    attr_char_value.init_offs    = 0;
+    attr_char_value.max_len      = 1;
+    attr_char_value.p_value      = initial_conf_state;
+
+    return sd_ble_gatts_characteristic_add(p_uart->service_handle,
+											&char_md,
+											&attr_char_value,
+											&p_uart->config_handles);
+
+}
+
 uint32_t ble_uart_init(ble_uart_t * p_uart, const ble_uart_init_t * p_uart_init)
 {
 	uint32_t  err_code;
@@ -277,6 +354,12 @@ uint32_t ble_uart_init(ble_uart_t * p_uart, const ble_uart_init_t * p_uart_init)
 	{
 		return err_code;
 	}
+	 
+	err_code = uart_receive_char_add(p_uart, p_uart_init);
+	if(err_code != NRF_SUCCESS)
+	{
+		return err_code;
+	}
 	
 	err_code = uart_transmit_char_add(p_uart, p_uart_init);
 	if(err_code != NRF_SUCCESS)
@@ -284,7 +367,7 @@ uint32_t ble_uart_init(ble_uart_t * p_uart, const ble_uart_init_t * p_uart_init)
 		return err_code;
 	}
 	
-	err_code = uart_receive_char_add(p_uart, p_uart_init);
+	err_code = uart_config_char_add(p_uart, p_uart_init);
 	if(err_code != NRF_SUCCESS)
 	{
 		return err_code;
@@ -349,6 +432,41 @@ uint32_t ble_uart_receive_send(ble_uart_t * p_uart, uint8_t * data, uint16_t len
 			memset(&hvx_params, 0, sizeof(hvx_params));
 			
 			hvx_params.handle      = p_uart->receive_handles.value_handle;
+			hvx_params.type        = BLE_GATT_HVX_NOTIFICATION;
+			hvx_params.offset 	   = 0;
+			hvx_params.p_len 	     = &length;
+			hvx_params.p_data 	   = data;
+			
+			err_code = sd_ble_gatts_hvx(p_uart->conn_handle, &hvx_params);
+		}
+		else
+		{
+			err_code = NRF_ERROR_INVALID_STATE;
+		}
+	return err_code;
+}
+
+uint32_t ble_uart_config_send(ble_uart_t * p_uart, uint8_t * data, uint16_t length)
+{
+	uint32_t err_code = NRF_SUCCESS;
+		
+		//update database
+		err_code = sd_ble_gatts_value_set(p_uart->config_handles.value_handle,
+																			0,
+																			&length,
+																		  data);
+		if(err_code != NRF_SUCCESS)
+		{
+			return err_code;
+		}
+		//send value if connected and notifying
+		if((p_uart->conn_handle != BLE_CONN_HANDLE_INVALID) && p_uart->is_notification_supported)
+		{
+			ble_gatts_hvx_params_t hvx_params;
+			
+			memset(&hvx_params, 0, sizeof(hvx_params));
+			
+			hvx_params.handle      = p_uart->config_handles.value_handle;
 			hvx_params.type        = BLE_GATT_HVX_NOTIFICATION;
 			hvx_params.offset 	   = 0;
 			hvx_params.p_len 	     = &length;
