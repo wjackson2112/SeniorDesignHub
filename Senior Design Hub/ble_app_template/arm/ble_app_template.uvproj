@@ -350,7 +350,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>NRF51 DEBUG_NRF_USER</Define>
               <Undefine></Undefine>
-              <IncludePath>..;..\..\..\NordicSDK\Include;..\..\..\NordicSDK\Include\app_common;..\..\..\NordicSDK\Include\ble;..\..\..\NordicSDK\Include\ble\ble_services;..\..\..\NordicSDK\Include\ble\softdevice</IncludePath>
+              <IncludePath>..;..\..\..\NordicSDK\Include;..\..\..\NordicSDK\Include\app_common;..\..\..\NordicSDK\Include\ble;..\..\..\NordicSDK\Include\ble\ble_services;..\..\..\NordicSDK\Include\ble\softdevice;..\..\..\CustomSDK\Include\ble\ble_services</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -424,7 +424,12 @@
             <File>
               <FileName>ble_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -485,6 +490,11 @@
               <FileName>simple_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>twi_sw_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -908,7 +918,12 @@
             <File>
               <FileName>ble_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -969,6 +984,11 @@
               <FileName>simple_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>twi_sw_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
             </File>
           </Files>
         </Group>
