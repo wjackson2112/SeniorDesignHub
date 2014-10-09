@@ -46,6 +46,8 @@
 #include "ble_debug_assert_handler.h"
 #include "simple_uart.h"
 #include "ble_uart.h"
+#include "ble_i2c.h"
+#include "twi_master.h"
 #include "global_config.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
@@ -232,7 +234,7 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
-    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}};
+    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}};
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -267,6 +269,21 @@ static void services_init(void)
     }
 
     ble_uart_init(&m_uart, &uart_init);
+		
+		// YOUR_JOB: Add code to initialize the services used by the application.
+	  ble_i2c_init_t i2c_init;
+
+    // Initialize Connectionless Configuration Service
+    memset(&i2c_init, 0, sizeof(i2c_init));
+
+    i2c_init.evt_handler = NULL;
+    i2c_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        i2c_init.initial_transmit_state[i] = 0x00;
+    }
+
+    ble_i2c_init(&m_i2c, &i2c_init);
 }
 
 
@@ -379,6 +396,7 @@ void on_write(ble_evt_t *p_ble_evt)
 
     uint16_t *check_handler = &p_ble_evt->evt.gatts_evt.params.hvc.handle;
 
+		//Check for UART Service Input
     if (*check_handler == m_uart.transmit_handles.value_handle) {
 
         uint8_t * response = m_uart.transmit_packet;
@@ -388,6 +406,33 @@ void on_write(ble_evt_t *p_ble_evt)
 		
 		if (*check_handler == m_uart.config_handles.value_handle){
 				uart_reconfig(m_uart.config_packet[0]);
+		}
+		
+		//Check for I2C Service Input
+		if (*check_handler == m_i2c.transmit_handles.value_handle) {
+				uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
+				uint8_t * value = &(m_i2c.transmit_packet[1]);
+				
+				//Write
+				if(addr_and_r_w % 2 == 0){
+					twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
+				}
+				//Read
+				if(addr_and_r_w % 2 == 1){
+					twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
+					ble_i2c_receive_send(&m_i2c, value, p_ble_evt->evt.gatts_evt.params.write.len - 1);
+				}
+				
+		}
+		
+		//0x00 - No Stop Bit
+		//0x01 - Include Stop Bit
+		if (*check_handler == m_i2c.config_handles.value_handle){
+				if(m_i2c.config_packet[0] % 2 == 0){
+					send_stop_bit = false;
+				} else if(m_i2c.config_packet[1] % 2 == 1){
+					send_stop_bit = true;
+				}
 		}
 }
 
@@ -495,6 +540,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
     
 		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
+		ble_i2c_on_ble_evt(&m_i2c, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
 		on_ble_evt(p_ble_evt);
     /* 
@@ -739,6 +785,10 @@ static void uart_reconfig(uint8_t config_byte){
 
 }
 
+void i2c_init(void){
+	twi_master_init();
+}
+
 
 /**@brief Function for application main entry.
  */
@@ -757,6 +807,7 @@ int main(void)
     conn_params_init();
     sec_params_init();
 		uart_init();
+		i2c_init();
     
     // Start execution
     timers_start();

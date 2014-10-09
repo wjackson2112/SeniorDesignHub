@@ -15,7 +15,7 @@
 #include "twi_master.h"
 #include "nrf_delay.h"
 
-#include "twi_master_config.h"
+#include "global_config.h"
 
 /*lint -e415 -e845 -save "Out of bounds access" */
 #define TWI_SDA_STANDARD0_NODRIVE1() do { \

@@ -1,5 +1,5 @@
-.\_build\ble_uart.o: ..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c
-.\_build\ble_uart.o: ..\..\..\NordicSDK\Include\ble\ble_services\ble_uart.h
+.\_build\ble_uart.o: ..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c
+.\_build\ble_uart.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_uart.h
 .\_build\ble_uart.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
 .\_build\ble_uart.o: C:\Keil\ARM\ARMCC\bin\..\include\stdbool.h
 .\_build\ble_uart.o: ..\..\..\NordicSDK\Include\ble\softdevice\ble.h
