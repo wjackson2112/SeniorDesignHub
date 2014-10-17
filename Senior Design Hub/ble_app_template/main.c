@@ -430,7 +430,7 @@ void on_write(ble_evt_t *p_ble_evt)
 		if (*check_handler == m_i2c.config_handles.value_handle){
 				if(m_i2c.config_packet[0] % 2 == 0){
 					send_stop_bit = false;
-				} else if(m_i2c.config_packet[1] % 2 == 1){
+				} else if(m_i2c.config_packet[0] % 2 == 1){
 					send_stop_bit = true;
 				}
 		}
