@@ -10,7 +10,6 @@ Section Cross References
     arm_startup_nrf51.o(RESET) refers to arm_startup_nrf51.o(STACK) for __initial_sp
     arm_startup_nrf51.o(RESET) refers to arm_startup_nrf51.o(.text) for Reset_Handler
     arm_startup_nrf51.o(RESET) refers to main.o(.text) for UART0_IRQHandler
-    arm_startup_nrf51.o(RESET) refers to app_gpiote.o(.text) for GPIOTE_IRQHandler
     arm_startup_nrf51.o(RESET) refers to app_timer.o(.text) for RTC1_IRQHandler
     arm_startup_nrf51.o(RESET) refers to ble_stack_handler.o(.text) for SWI2_IRQHandler
     arm_startup_nrf51.o(.text) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
@@ -24,22 +23,22 @@ Section Cross References
     main.o(.text) refers to ble_advdata.o(.text) for ble_advdata_set
     main.o(.text) refers to ble_uart.o(.text) for ble_uart_init
     main.o(.text) refers to ble_i2c.o(.text) for ble_i2c_init
+    main.o(.text) refers to ble_dig.o(.text) for ble_dig_init
     main.o(.text) refers to ble_conn_params.o(.text) for ble_conn_params_init
     main.o(.text) refers to main.o(i.__ARM_common_switch8) for __ARM_common_switch8
     main.o(.text) refers to simple_uart.o(.text) for simple_uart_config
-    main.o(.text) refers to twi_sw_master.o(.text) for twi_master_transfer
     main.o(.text) refers to main.o(.bss) for APP_TIMER_BUF
     main.o(.text) refers to main.o(.constdata) for .constdata
     main.o(.text) refers to ble_uart.o(.bss) for m_uart
     main.o(.text) refers to ble_i2c.o(.bss) for m_i2c
+    main.o(.text) refers to ble_dig.o(.bss) for m_dig
     main.o(.text) refers to main.o(.data) for m_sec_params
     main.o(.text) refers to ble_uart.o(.data) for uart_parity_included
-    main.o(.text) refers to ble_i2c.o(.data) for send_stop_bit
+    main.o(.text) refers to twi_sw_master.o(.text) for twi_master_transfer
     main.o(.text) refers to rt_memcpy.o(.text) for __aeabi_memcpy
     main.o(.text) refers to ble_stack_handler.o(.text) for ble_stack_handler_init
     main.o(.text) refers to app_scheduler.o(.text) for app_sched_init
-    main.o(.text) refers to app_gpiote.o(.text) for app_gpiote_init
-    main.o(.text) refers to app_button.o(.text) for app_button_init
+    main.o(.text) refers to ble_i2c.o(.data) for send_stop_bit
     ble_srv_common.o(.text) refers to main.o(.text) for app_error_handler
     ble_srv_common.o(.text) refers to strlen.o(.text) for strlen
     ble_uart.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr4
@@ -52,6 +51,11 @@ Section Cross References
     ble_i2c.o(.text) refers to ble_i2c.o(.bss) for initial_trans_state
     ble_i2c.o(.text) refers to main.o(.text) for app_error_handler
     ble_i2c.o(.text) refers to ble_i2c.o(.constdata) for m_base_uuid128
+    ble_dig.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr4
+    ble_dig.o(.text) refers to ble_dig.o(.bss) for m_dig
+    ble_dig.o(.text) refers to ble_dig.o(.data) for len_dig_transmit_packet
+    ble_dig.o(.text) refers to main.o(.text) for app_error_handler
+    ble_dig.o(.text) refers to ble_dig.o(.constdata) for m_base_uuid128
     ble_error_log.o(.text) refers to rt_memcpy.o(.emb_text) for __aeabi_memcpy4
     ble_error_log.o(.text) refers to strncpy.o(.text) for strncpy
     ble_error_log.o(.text) refers to aeabi_sdiv.o(.text) for __aeabi_uidivmod
@@ -76,12 +80,6 @@ Section Cross References
     ble_conn_params.o(.text) refers to ble_conn_params.o(.bss) for m_conn_params_config
     ble_stack_handler.o(.text) refers to main.o(.text) for assert_nrf_callback
     ble_stack_handler.o(.text) refers to ble_stack_handler.o(.data) for m_evt_buffer
-    app_button.o(.text) refers to main.o(.text) for app_error_handler
-    app_button.o(.text) refers to app_gpiote.o(.text) for app_gpiote_pins_state_get
-    app_button.o(.text) refers to app_timer.o(.text) for app_timer_stop
-    app_button.o(.text) refers to app_button.o(.data) for m_evt_schedule_func
-    app_gpiote.o(.text) refers to rt_memclr.o(.text) for __aeabi_memclr4
-    app_gpiote.o(.text) refers to app_gpiote.o(.data) for mp_users
     ble_debug_assert_handler.o(.text) refers to strncpy.o(.text) for strncpy
     ble_debug_assert_handler.o(.text) refers to ble_error_log.o(.text) for ble_error_log_write
     ble_debug_assert_handler.o(.text) refers to ble_debug_assert_handler.o(.bss) for s_file_name
@@ -210,6 +208,8 @@ Removing Unused input sections from the image.
     Removing ble_uart.o(.revsh_text), (4 bytes).
     Removing ble_i2c.o(.rev16_text), (4 bytes).
     Removing ble_i2c.o(.revsh_text), (4 bytes).
+    Removing ble_dig.o(.rev16_text), (4 bytes).
+    Removing ble_dig.o(.revsh_text), (4 bytes).
     Removing ble_error_log.o(.rev16_text), (4 bytes).
     Removing ble_error_log.o(.revsh_text), (4 bytes).
     Removing ble_error_log.o(.text), (440 bytes).
@@ -229,10 +229,6 @@ Removing Unused input sections from the image.
     Removing ble_conn_params.o(.revsh_text), (4 bytes).
     Removing ble_stack_handler.o(.rev16_text), (4 bytes).
     Removing ble_stack_handler.o(.revsh_text), (4 bytes).
-    Removing app_button.o(.rev16_text), (4 bytes).
-    Removing app_button.o(.revsh_text), (4 bytes).
-    Removing app_gpiote.o(.rev16_text), (4 bytes).
-    Removing app_gpiote.o(.revsh_text), (4 bytes).
     Removing ble_debug_assert_handler.o(.rev16_text), (4 bytes).
     Removing ble_debug_assert_handler.o(.revsh_text), (4 bytes).
     Removing ble_debug_assert_handler.o(.text), (68 bytes).
@@ -243,7 +239,7 @@ Removing Unused input sections from the image.
     Removing twi_sw_master.o(.rev16_text), (4 bytes).
     Removing twi_sw_master.o(.revsh_text), (4 bytes).
 
-43 unused section(s) (total 1894 bytes) removed from the image.
+41 unused section(s) (total 1886 bytes) removed from the image.
 
 ==============================================================================
 
@@ -253,70 +249,69 @@ Image Symbol Table
 
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
+    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
-    ../clib/angel/rt.s                       0x00000000   Number         0  aeabi_idiv0.o ABSOLUTE
-    ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  aeabi_idiv0_sigfpe.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_div0.o ABSOLUTE
+    ../clib/angel/rt.s                       0x00000000   Number         0  aeabi_idiv0.o ABSOLUTE
+    ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatterp.s                 0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  tempstk.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
-    ../clib/division.s                       0x00000000   Number         0  aeabi_sdiv.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
     ../clib/division.s                       0x00000000   Number         0  aeabi_sdiv_div0.o ABSOLUTE
+    ../clib/division.s                       0x00000000   Number         0  aeabi_sdiv.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
-    ../clib/memcpset.c                       0x00000000   Number         0  rt_memcpy.o ABSOLUTE
     ../clib/memcpset.c                       0x00000000   Number         0  rt_memclr.o ABSOLUTE
     ../clib/memcpset.c                       0x00000000   Number         0  rt_memcpy.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
+    ../clib/memcpset.c                       0x00000000   Number         0  rt_memcpy.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_formal.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
-    ../clib/string.c                         0x00000000   Number         0  strlen.o ABSOLUTE
     ../clib/string.c                         0x00000000   Number         0  strncpy.o ABSOLUTE
+    ../clib/string.c                         0x00000000   Number         0  strlen.o ABSOLUTE
     ../fplib/cfplib/fpinit.c                 0x00000000   Number         0  fpinit.o ABSOLUTE
+    ..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c 0x00000000   Number         0  ble_dig.o ABSOLUTE
     ..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c 0x00000000   Number         0  ble_i2c.o ABSOLUTE
     ..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c 0x00000000   Number         0  ble_uart.o ABSOLUTE
-    ..\..\..\NordicSDK\Source\app_common\app_button.c 0x00000000   Number         0  app_button.o ABSOLUTE
-    ..\..\..\NordicSDK\Source\app_common\app_gpiote.c 0x00000000   Number         0  app_gpiote.o ABSOLUTE
     ..\..\..\NordicSDK\Source\app_common\app_scheduler.c 0x00000000   Number         0  app_scheduler.o ABSOLUTE
     ..\..\..\NordicSDK\Source\app_common\app_timer.c 0x00000000   Number         0  app_timer.o ABSOLUTE
     ..\..\..\NordicSDK\Source\ble\ble_advdata.c 0x00000000   Number         0  ble_advdata.o ABSOLUTE
@@ -330,10 +325,9 @@ Image Symbol Table
     ..\..\..\NordicSDK\Source\templates\arm\arm_startup_nrf51.s 0x00000000   Number         0  arm_startup_nrf51.o ABSOLUTE
     ..\..\..\NordicSDK\Source\templates\system_nrf51.c 0x00000000   Number         0  system_nrf51.o ABSOLUTE
     ..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c 0x00000000   Number         0  twi_sw_master.o ABSOLUTE
+    ..\\..\\..\\CustomSDK\\Source\\ble\\ble_services\\ble_dig.c 0x00000000   Number         0  ble_dig.o ABSOLUTE
     ..\\..\\..\\CustomSDK\\Source\\ble\\ble_services\\ble_i2c.c 0x00000000   Number         0  ble_i2c.o ABSOLUTE
     ..\\..\\..\\CustomSDK\\Source\\ble\\ble_services\\ble_uart.c 0x00000000   Number         0  ble_uart.o ABSOLUTE
-    ..\\..\\..\\NordicSDK\\Source\\app_common\\app_button.c 0x00000000   Number         0  app_button.o ABSOLUTE
-    ..\\..\\..\\NordicSDK\\Source\\app_common\\app_gpiote.c 0x00000000   Number         0  app_gpiote.o ABSOLUTE
     ..\\..\\..\\NordicSDK\\Source\\app_common\\app_scheduler.c 0x00000000   Number         0  app_scheduler.o ABSOLUTE
     ..\\..\\..\\NordicSDK\\Source\\app_common\\app_timer.c 0x00000000   Number         0  app_timer.o ABSOLUTE
     ..\\..\\..\\NordicSDK\\Source\\ble\\ble_advdata.c 0x00000000   Number         0  ble_advdata.o ABSOLUTE
@@ -406,133 +400,136 @@ Image Symbol Table
     timers_init                              0x00014383   Thumb Code    48  main.o(.text)
     gap_params_init                          0x000143b3   Thumb Code   118  main.o(.text)
     advertising_init                         0x00014429   Thumb Code    84  main.o(.text)
-    services_init                            0x0001447d   Thumb Code    96  main.o(.text)
-    sec_params_init                          0x000144dd   Thumb Code    66  main.o(.text)
-    on_conn_params_evt                       0x0001451f   Thumb Code    46  main.o(.text)
-    conn_params_error_handler                0x0001454d   Thumb Code    16  main.o(.text)
-    conn_params_init                         0x0001455d   Thumb Code    82  main.o(.text)
-    timers_start                             0x000145af   Thumb Code     2  main.o(.text)
-    advertising_start                        0x000145b1   Thumb Code    72  main.o(.text)
-    uart_reconfig                            0x000145f9   Thumb Code   200  main.o(.text)
-    on_ble_evt                               0x00014827   Thumb Code   242  main.o(.text)
-    ble_evt_dispatch                         0x00014919   Thumb Code    34  main.o(.text)
-    ble_stack_init                           0x0001493b   Thumb Code    48  main.o(.text)
-    scheduler_init                           0x0001496b   Thumb Code    44  main.o(.text)
-    gpiote_init                              0x00014997   Thumb Code    42  main.o(.text)
-    buttons_init                             0x000149c1   Thumb Code    46  main.o(.text)
-    power_manage                             0x000149ef   Thumb Code    32  main.o(.text)
-    uart_init                                0x00014a71   Thumb Code    50  main.o(.text)
-    nrf_gpio_pin_set                         0x00014af3   Thumb Code    10  main.o(.text)
-    nrf_gpio_pin_clear                       0x00014afd   Thumb Code    10  main.o(.text)
-    ble_stack_evt_schedule                   0x00014b07   Thumb Code    14  main.o(.text)
-    app_timer_evt_schedule                   0x00014b15   Thumb Code    22  main.o(.text)
-    app_button_evt_schedule                  0x00014b2b   Thumb Code    22  main.o(.text)
-    ble_stack_evt_get                        0x00014b41   Thumb Code    42  main.o(.text)
-    app_timer_evt_get                        0x00014b6b   Thumb Code    48  main.o(.text)
-    app_button_evt_get                       0x00014b9b   Thumb Code   252  main.o(.text)
-    .text                                    0x00014ccc   Section        0  ble_uart.o(.text)
-    on_connect                               0x00014ccd   Thumb Code     6  ble_uart.o(.text)
-    on_disconnect                            0x00014cd3   Thumb Code     8  ble_uart.o(.text)
-    on_write                                 0x00014cdb   Thumb Code    72  ble_uart.o(.text)
-    uart_transmit_char_add                   0x00014d5d   Thumb Code   400  ble_uart.o(.text)
-    uart_receive_char_add                    0x00014eed   Thumb Code   434  ble_uart.o(.text)
-    uart_config_char_add                     0x0001509f   Thumb Code   372  ble_uart.o(.text)
-    .text                                    0x00015410   Section        0  ble_i2c.o(.text)
-    on_connect                               0x00015411   Thumb Code     6  ble_i2c.o(.text)
-    on_disconnect                            0x00015417   Thumb Code     8  ble_i2c.o(.text)
-    on_write                                 0x0001541f   Thumb Code    72  ble_i2c.o(.text)
-    i2c_transmit_char_add                    0x000154a1   Thumb Code   402  ble_i2c.o(.text)
-    i2c_receive_char_add                     0x00015633   Thumb Code   434  ble_i2c.o(.text)
-    i2c_config_char_add                      0x000157e5   Thumb Code   356  ble_i2c.o(.text)
-    .text                                    0x00015b40   Section        0  ble_advdata.o(.text)
-    name_encode                              0x00015b41   Thumb Code   106  ble_advdata.o(.text)
-    appearance_encode                        0x00015bab   Thumb Code    74  ble_advdata.o(.text)
-    uint8_array_encode                       0x00015bf5   Thumb Code    82  ble_advdata.o(.text)
-    tx_power_level_encode                    0x00015c47   Thumb Code    48  ble_advdata.o(.text)
-    uuid_list_sized_encode                   0x00015c77   Thumb Code   196  ble_advdata.o(.text)
-    uuid_list_encode                         0x00015d3b   Thumb Code    64  ble_advdata.o(.text)
-    conn_int_check                           0x00015d7b   Thumb Code    88  ble_advdata.o(.text)
-    conn_int_encode                          0x00015dd3   Thumb Code    92  ble_advdata.o(.text)
-    manuf_specific_data_encode               0x00015e2f   Thumb Code   106  ble_advdata.o(.text)
-    service_data_encode                      0x00015e99   Thumb Code   140  ble_advdata.o(.text)
-    adv_data_encode                          0x00015f25   Thumb Code   304  ble_advdata.o(.text)
-    advdata_check                            0x00016055   Thumb Code    32  ble_advdata.o(.text)
-    srdata_check                             0x00016075   Thumb Code    16  ble_advdata.o(.text)
-    uint16_encode                            0x000160ff   Thumb Code    18  ble_advdata.o(.text)
-    .text                                    0x00016114   Section        0  app_scheduler.o(.text)
-    app_sched_event_get                      0x00016291   Thumb Code    84  app_scheduler.o(.text)
-    next_index                               0x00016303   Thumb Code    20  app_scheduler.o(.text)
-    .text                                    0x00016374   Section        0  app_timer.o(.text)
-    NVIC_SetPriority                         0x00016375   Thumb Code   110  app_timer.o(.text)
-    rtc1_init                                0x000163e3   Thumb Code    18  app_timer.o(.text)
-    rtc1_start                               0x000163f5   Thumb Code    42  app_timer.o(.text)
-    rtc1_stop                                0x0001641f   Thumb Code    44  app_timer.o(.text)
-    timer_list_insert                        0x0001644b   Thumb Code   206  app_timer.o(.text)
-    timer_list_remove                        0x00016519   Thumb Code   150  app_timer.o(.text)
-    timer_timeouts_check_sched               0x000165af   Thumb Code    10  app_timer.o(.text)
-    timer_list_handler_sched                 0x000165b9   Thumb Code    10  app_timer.o(.text)
-    timeout_handler_exec                     0x000165c3   Thumb Code    60  app_timer.o(.text)
-    timer_timeouts_check                     0x000165ff   Thumb Code   128  app_timer.o(.text)
-    elapsed_ticks_acquire                    0x0001667f   Thumb Code    82  app_timer.o(.text)
-    list_deletions_handler                   0x000166d1   Thumb Code   284  app_timer.o(.text)
-    expired_timers_handler                   0x000167ed   Thumb Code    98  app_timer.o(.text)
-    list_insertions_handler                  0x0001684f   Thumb Code   260  app_timer.o(.text)
-    compare_reg_update                       0x00016953   Thumb Code   124  app_timer.o(.text)
-    timer_list_handler                       0x000169cf   Thumb Code    70  app_timer.o(.text)
-    user_op_enque                            0x00016a15   Thumb Code     4  app_timer.o(.text)
-    user_op_alloc                            0x00016a19   Thumb Code    44  app_timer.o(.text)
-    timer_start_op_schedule                  0x00016a45   Thumb Code    80  app_timer.o(.text)
-    timer_stop_op_schedule                   0x00016a95   Thumb Code    58  app_timer.o(.text)
-    timer_stop_all_op_schedule               0x00016acf   Thumb Code    58  app_timer.o(.text)
-    user_id_get                              0x00016c9d   Thumb Code   108  app_timer.o(.text)
-    NVIC_EnableIRQ                           0x00016de5   Thumb Code    14  app_timer.o(.text)
-    NVIC_SetPendingIRQ                       0x00016df3   Thumb Code    14  app_timer.o(.text)
-    NVIC_ClearPendingIRQ                     0x00016e01   Thumb Code    16  app_timer.o(.text)
-    rtc1_counter_get                         0x00016e11   Thumb Code     6  app_timer.o(.text)
-    ticks_diff_get                           0x00016e17   Thumb Code    10  app_timer.o(.text)
-    .text                                    0x00016e3c   Section        0  ble_conn_params.o(.text)
-    is_conn_params_ok                        0x00016e3d   Thumb Code    30  ble_conn_params.o(.text)
-    update_timeout_handler                   0x00016e5b   Thumb Code   136  ble_conn_params.o(.text)
-    conn_params_negotiation                  0x00016f49   Thumb Code   126  ble_conn_params.o(.text)
-    on_connect                               0x00016fc7   Thumb Code    42  ble_conn_params.o(.text)
-    on_disconnect                            0x00016ff1   Thumb Code    50  ble_conn_params.o(.text)
-    on_write                                 0x00017023   Thumb Code    84  ble_conn_params.o(.text)
-    on_conn_params_update                    0x00017077   Thumb Code    20  ble_conn_params.o(.text)
-    .text                                    0x00017144   Section        0  ble_stack_handler.o(.text)
-    softdevice_assertion_handler             0x00017145   Thumb Code    18  ble_stack_handler.o(.text)
-    .text                                    0x00017260   Section        0  app_button.o(.text)
-    button_handler_execute                   0x00017261   Thumb Code    58  app_button.o(.text)
-    detection_delay_timeout_handler          0x0001729b   Thumb Code   112  app_button.o(.text)
-    gpiote_event_handler                     0x0001730b   Thumb Code    46  app_button.o(.text)
-    .text                                    0x000174ec   Section        0  app_gpiote.o(.text)
-    sense_level_toggle                       0x000174ed   Thumb Code   124  app_gpiote.o(.text)
-    pins_sense_disable                       0x000175d3   Thumb Code    96  app_gpiote.o(.text)
-    NVIC_SetPriority                         0x00017883   Thumb Code   110  app_gpiote.o(.text)
-    .text                                    0x00017918   Section        0  simple_uart.o(.text)
-    nrf_gpio_cfg_output                      0x00017a29   Thumb Code    18  simple_uart.o(.text)
-    nrf_gpio_cfg_input                       0x00017a3b   Thumb Code    20  simple_uart.o(.text)
-    .text                                    0x00017a5c   Section        0  twi_sw_master.o(.text)
-    twi_master_clear_bus                     0x00017a5d   Thumb Code   134  twi_sw_master.o(.text)
-    twi_master_wait_while_scl_low            0x00017b29   Thumb Code    36  twi_sw_master.o(.text)
-    twi_master_issue_stopcondition           0x00017b4d   Thumb Code    52  twi_sw_master.o(.text)
-    twi_master_clock_byte                    0x00017b81   Thumb Code   174  twi_sw_master.o(.text)
-    twi_master_clock_byte_in                 0x00017c2f   Thumb Code   154  twi_sw_master.o(.text)
-    twi_master_issue_startcondition          0x00017cc9   Thumb Code    70  twi_sw_master.o(.text)
-    .text                                    0x00017d94   Section        0  rt_memcpy.o(.text)
-    .text                                    0x00017e16   Section        0  rt_memclr.o(.text)
-    .text                                    0x00017e56   Section        0  heapauxi.o(.text)
-    .text                                    0x00017e5c   Section       62  sys_stackheap_outer.o(.text)
-    .text                                    0x00017e9a   Section        0  exit.o(.text)
-    .text                                    0x00017ea8   Section        8  libspace.o(.text)
-    .text                                    0x00017eb0   Section        0  sys_exit.o(.text)
-    .text                                    0x00017ebc   Section        2  use_no_semi.o(.text)
-    .text                                    0x00017ebe   Section        0  indicate_semi.o(.text)
-    i.__ARM_common_switch8                   0x00017ebe   Section        0  main.o(i.__ARM_common_switch8)
-    .constdata                               0x00017edc   Section        8  main.o(.constdata)
-    .constdata                               0x00017ee4   Section       16  ble_uart.o(.constdata)
-    m_base_uuid128                           0x00017ee4   Data          16  ble_uart.o(.constdata)
-    .constdata                               0x00017ef4   Section       16  ble_i2c.o(.constdata)
-    m_base_uuid128                           0x00017ef4   Data          16  ble_i2c.o(.constdata)
+    services_init                            0x0001447d   Thumb Code   136  main.o(.text)
+    sec_params_init                          0x00014505   Thumb Code    66  main.o(.text)
+    on_conn_params_evt                       0x00014547   Thumb Code    46  main.o(.text)
+    conn_params_error_handler                0x00014575   Thumb Code    16  main.o(.text)
+    conn_params_init                         0x00014585   Thumb Code    82  main.o(.text)
+    timers_start                             0x000145d7   Thumb Code     2  main.o(.text)
+    advertising_start                        0x000145d9   Thumb Code    72  main.o(.text)
+    uart_reconfig                            0x00014621   Thumb Code   200  main.o(.text)
+    on_ble_evt                               0x00014873   Thumb Code   240  main.o(.text)
+    ble_evt_dispatch                         0x00014963   Thumb Code    44  main.o(.text)
+    ble_stack_init                           0x0001498f   Thumb Code    50  main.o(.text)
+    scheduler_init                           0x000149c1   Thumb Code    44  main.o(.text)
+    power_manage                             0x000149ed   Thumb Code    32  main.o(.text)
+    uart_init                                0x00014a6f   Thumb Code    50  main.o(.text)
+    i2c_init                                 0x00014aa1   Thumb Code     8  main.o(.text)
+    gpio_init                                0x00014aa9   Thumb Code    42  main.o(.text)
+    dig_init                                 0x00014b5f   Thumb Code    32  main.o(.text)
+    NVIC_EnableIRQ                           0x00014c1d   Thumb Code    14  main.o(.text)
+    NVIC_DisableIRQ                          0x00014c2b   Thumb Code    16  main.o(.text)
+    NVIC_SetPriority                         0x00014c3b   Thumb Code   110  main.o(.text)
+    nrf_gpio_pin_set                         0x00014ca9   Thumb Code    10  main.o(.text)
+    nrf_gpio_pin_clear                       0x00014cb3   Thumb Code    10  main.o(.text)
+    ble_stack_evt_schedule                   0x00014cbd   Thumb Code    14  main.o(.text)
+    app_timer_evt_schedule                   0x00014ccb   Thumb Code    22  main.o(.text)
+    ble_stack_evt_get                        0x00014ce1   Thumb Code    42  main.o(.text)
+    app_timer_evt_get                        0x00014d0b   Thumb Code    48  main.o(.text)
+    .text                                    0x00014db8   Section        0  ble_uart.o(.text)
+    on_connect                               0x00014db9   Thumb Code     6  ble_uart.o(.text)
+    on_disconnect                            0x00014dbf   Thumb Code     8  ble_uart.o(.text)
+    on_write                                 0x00014dc7   Thumb Code    72  ble_uart.o(.text)
+    uart_transmit_char_add                   0x00014e49   Thumb Code   400  ble_uart.o(.text)
+    uart_receive_char_add                    0x00014fd9   Thumb Code   434  ble_uart.o(.text)
+    uart_config_char_add                     0x0001518b   Thumb Code   372  ble_uart.o(.text)
+    .text                                    0x000154fc   Section        0  ble_i2c.o(.text)
+    on_connect                               0x000154fd   Thumb Code     6  ble_i2c.o(.text)
+    on_disconnect                            0x00015503   Thumb Code     8  ble_i2c.o(.text)
+    on_write                                 0x0001550b   Thumb Code    72  ble_i2c.o(.text)
+    i2c_transmit_char_add                    0x0001558d   Thumb Code   402  ble_i2c.o(.text)
+    i2c_receive_char_add                     0x0001571f   Thumb Code   434  ble_i2c.o(.text)
+    i2c_config_char_add                      0x000158d1   Thumb Code   356  ble_i2c.o(.text)
+    .text                                    0x00015c2c   Section        0  ble_dig.o(.text)
+    on_connect                               0x00015c9d   Thumb Code     6  ble_dig.o(.text)
+    on_disconnect                            0x00015ca3   Thumb Code     8  ble_dig.o(.text)
+    on_write                                 0x00015cab   Thumb Code    72  ble_dig.o(.text)
+    dig_transmit_char_add                    0x00015d2d   Thumb Code   326  ble_dig.o(.text)
+    dig_receive_char_add                     0x00015e73   Thumb Code   332  ble_dig.o(.text)
+    dig_config_char_add                      0x00015fbf   Thumb Code   362  ble_dig.o(.text)
+    .text                                    0x000162bc   Section        0  ble_advdata.o(.text)
+    name_encode                              0x000162bd   Thumb Code   106  ble_advdata.o(.text)
+    appearance_encode                        0x00016327   Thumb Code    74  ble_advdata.o(.text)
+    uint8_array_encode                       0x00016371   Thumb Code    82  ble_advdata.o(.text)
+    tx_power_level_encode                    0x000163c3   Thumb Code    48  ble_advdata.o(.text)
+    uuid_list_sized_encode                   0x000163f3   Thumb Code   196  ble_advdata.o(.text)
+    uuid_list_encode                         0x000164b7   Thumb Code    64  ble_advdata.o(.text)
+    conn_int_check                           0x000164f7   Thumb Code    88  ble_advdata.o(.text)
+    conn_int_encode                          0x0001654f   Thumb Code    92  ble_advdata.o(.text)
+    manuf_specific_data_encode               0x000165ab   Thumb Code   106  ble_advdata.o(.text)
+    service_data_encode                      0x00016615   Thumb Code   140  ble_advdata.o(.text)
+    adv_data_encode                          0x000166a1   Thumb Code   304  ble_advdata.o(.text)
+    advdata_check                            0x000167d1   Thumb Code    32  ble_advdata.o(.text)
+    srdata_check                             0x000167f1   Thumb Code    16  ble_advdata.o(.text)
+    uint16_encode                            0x0001687b   Thumb Code    18  ble_advdata.o(.text)
+    .text                                    0x00016890   Section        0  app_scheduler.o(.text)
+    app_sched_event_get                      0x00016a0d   Thumb Code    84  app_scheduler.o(.text)
+    next_index                               0x00016a7f   Thumb Code    20  app_scheduler.o(.text)
+    .text                                    0x00016af0   Section        0  app_timer.o(.text)
+    NVIC_SetPriority                         0x00016af1   Thumb Code   110  app_timer.o(.text)
+    rtc1_init                                0x00016b5f   Thumb Code    18  app_timer.o(.text)
+    rtc1_start                               0x00016b71   Thumb Code    42  app_timer.o(.text)
+    rtc1_stop                                0x00016b9b   Thumb Code    44  app_timer.o(.text)
+    timer_list_insert                        0x00016bc7   Thumb Code   206  app_timer.o(.text)
+    timer_list_remove                        0x00016c95   Thumb Code   150  app_timer.o(.text)
+    timer_timeouts_check_sched               0x00016d2b   Thumb Code    10  app_timer.o(.text)
+    timer_list_handler_sched                 0x00016d35   Thumb Code    10  app_timer.o(.text)
+    timeout_handler_exec                     0x00016d3f   Thumb Code    60  app_timer.o(.text)
+    timer_timeouts_check                     0x00016d7b   Thumb Code   128  app_timer.o(.text)
+    elapsed_ticks_acquire                    0x00016dfb   Thumb Code    82  app_timer.o(.text)
+    list_deletions_handler                   0x00016e4d   Thumb Code   284  app_timer.o(.text)
+    expired_timers_handler                   0x00016f69   Thumb Code    98  app_timer.o(.text)
+    list_insertions_handler                  0x00016fcb   Thumb Code   260  app_timer.o(.text)
+    compare_reg_update                       0x000170cf   Thumb Code   124  app_timer.o(.text)
+    timer_list_handler                       0x0001714b   Thumb Code    70  app_timer.o(.text)
+    user_op_enque                            0x00017191   Thumb Code     4  app_timer.o(.text)
+    user_op_alloc                            0x00017195   Thumb Code    44  app_timer.o(.text)
+    timer_start_op_schedule                  0x000171c1   Thumb Code    80  app_timer.o(.text)
+    timer_stop_op_schedule                   0x00017211   Thumb Code    58  app_timer.o(.text)
+    timer_stop_all_op_schedule               0x0001724b   Thumb Code    58  app_timer.o(.text)
+    user_id_get                              0x00017419   Thumb Code   108  app_timer.o(.text)
+    NVIC_EnableIRQ                           0x00017561   Thumb Code    14  app_timer.o(.text)
+    NVIC_SetPendingIRQ                       0x0001756f   Thumb Code    14  app_timer.o(.text)
+    NVIC_ClearPendingIRQ                     0x0001757d   Thumb Code    16  app_timer.o(.text)
+    rtc1_counter_get                         0x0001758d   Thumb Code     6  app_timer.o(.text)
+    ticks_diff_get                           0x00017593   Thumb Code    10  app_timer.o(.text)
+    .text                                    0x000175b8   Section        0  ble_conn_params.o(.text)
+    is_conn_params_ok                        0x000175b9   Thumb Code    30  ble_conn_params.o(.text)
+    update_timeout_handler                   0x000175d7   Thumb Code   136  ble_conn_params.o(.text)
+    conn_params_negotiation                  0x000176c5   Thumb Code   126  ble_conn_params.o(.text)
+    on_connect                               0x00017743   Thumb Code    42  ble_conn_params.o(.text)
+    on_disconnect                            0x0001776d   Thumb Code    50  ble_conn_params.o(.text)
+    on_write                                 0x0001779f   Thumb Code    84  ble_conn_params.o(.text)
+    on_conn_params_update                    0x000177f3   Thumb Code    20  ble_conn_params.o(.text)
+    .text                                    0x000178c0   Section        0  ble_stack_handler.o(.text)
+    softdevice_assertion_handler             0x000178c1   Thumb Code    18  ble_stack_handler.o(.text)
+    .text                                    0x000179dc   Section        0  simple_uart.o(.text)
+    nrf_gpio_cfg_output                      0x00017aed   Thumb Code    18  simple_uart.o(.text)
+    nrf_gpio_cfg_input                       0x00017aff   Thumb Code    20  simple_uart.o(.text)
+    .text                                    0x00017b20   Section        0  twi_sw_master.o(.text)
+    twi_master_clear_bus                     0x00017b21   Thumb Code   134  twi_sw_master.o(.text)
+    twi_master_wait_while_scl_low            0x00017bed   Thumb Code    36  twi_sw_master.o(.text)
+    twi_master_issue_stopcondition           0x00017c11   Thumb Code    52  twi_sw_master.o(.text)
+    twi_master_clock_byte                    0x00017c45   Thumb Code   174  twi_sw_master.o(.text)
+    twi_master_clock_byte_in                 0x00017cf3   Thumb Code   154  twi_sw_master.o(.text)
+    twi_master_issue_startcondition          0x00017d8d   Thumb Code    70  twi_sw_master.o(.text)
+    .text                                    0x00017e58   Section        0  rt_memcpy.o(.text)
+    .text                                    0x00017eda   Section        0  rt_memclr.o(.text)
+    .text                                    0x00017f1a   Section        0  heapauxi.o(.text)
+    .text                                    0x00017f20   Section       62  sys_stackheap_outer.o(.text)
+    .text                                    0x00017f5e   Section        0  exit.o(.text)
+    .text                                    0x00017f6c   Section        8  libspace.o(.text)
+    .text                                    0x00017f74   Section        0  sys_exit.o(.text)
+    .text                                    0x00017f80   Section        2  use_no_semi.o(.text)
+    .text                                    0x00017f82   Section        0  indicate_semi.o(.text)
+    i.__ARM_common_switch8                   0x00017f82   Section        0  main.o(i.__ARM_common_switch8)
+    .constdata                               0x00017fa0   Section       12  main.o(.constdata)
+    .constdata                               0x00017fac   Section       16  ble_uart.o(.constdata)
+    m_base_uuid128                           0x00017fac   Data          16  ble_uart.o(.constdata)
+    .constdata                               0x00017fbc   Section       16  ble_i2c.o(.constdata)
+    m_base_uuid128                           0x00017fbc   Data          16  ble_i2c.o(.constdata)
+    .constdata                               0x00017fcc   Section       16  ble_dig.o(.constdata)
+    m_base_uuid128                           0x00017fcc   Data          16  ble_dig.o(.constdata)
     .data                                    0x20002000   Section        4  system_nrf51.o(.data)
     __tagsym$$used                           0x20002000   Number         0  system_nrf51.o(.data)
     .data                                    0x20002004   Section        8  main.o(.data)
@@ -548,71 +545,63 @@ Image Symbol Table
     len_i2c_receive_packet                   0x2000201c   Data           2  ble_i2c.o(.data)
     len_i2c_config_packet                    0x2000201e   Data           2  ble_i2c.o(.data)
     initial_conf_state                       0x20002020   Data           1  ble_i2c.o(.data)
-    .data                                    0x20002024   Section       14  app_scheduler.o(.data)
-    m_queue_event_headers                    0x20002024   Data           4  app_scheduler.o(.data)
-    m_queue_event_data                       0x20002028   Data           4  app_scheduler.o(.data)
-    m_queue_start_index                      0x2000202c   Data           1  app_scheduler.o(.data)
-    m_queue_end_index                        0x2000202d   Data           1  app_scheduler.o(.data)
-    m_queue_event_size                       0x2000202e   Data           2  app_scheduler.o(.data)
-    m_queue_size                             0x20002030   Data           2  app_scheduler.o(.data)
-    .data                                    0x20002034   Section       36  app_timer.o(.data)
-    mp_nodes                                 0x20002034   Data           4  app_timer.o(.data)
-    m_node_array_size                        0x20002038   Data           1  app_timer.o(.data)
-    m_user_array_size                        0x20002039   Data           1  app_timer.o(.data)
-    mp_users                                 0x2000203c   Data           4  app_timer.o(.data)
-    m_timer_id_head                          0x20002040   Data           4  app_timer.o(.data)
-    m_ticks_latest                           0x20002044   Data           4  app_timer.o(.data)
-    m_ticks_elapsed                          0x20002048   Data           8  app_timer.o(.data)
-    m_ticks_elapsed_q_read_ind               0x20002050   Data           1  app_timer.o(.data)
-    m_ticks_elapsed_q_write_ind              0x20002051   Data           1  app_timer.o(.data)
-    m_evt_schedule_func                      0x20002054   Data           4  app_timer.o(.data)
-    .data                                    0x20002058   Section       28  ble_conn_params.o(.data)
-    m_change_param                           0x20002058   Data           1  ble_conn_params.o(.data)
-    m_preferred_conn_params                  0x2000205a   Data           8  ble_conn_params.o(.data)
-    m_update_count                           0x20002062   Data           1  ble_conn_params.o(.data)
-    m_conn_handle                            0x20002064   Data           2  ble_conn_params.o(.data)
-    m_current_conn_params                    0x20002066   Data           8  ble_conn_params.o(.data)
-    m_conn_params_timer_id                   0x20002070   Data           4  ble_conn_params.o(.data)
-    .data                                    0x20002074   Section       14  ble_stack_handler.o(.data)
-    m_evt_handler                            0x20002074   Data           4  ble_stack_handler.o(.data)
-    m_evt_schedule_func                      0x20002078   Data           4  ble_stack_handler.o(.data)
-    m_evt_buffer                             0x2000207c   Data           4  ble_stack_handler.o(.data)
-    m_evt_buffer_size                        0x20002080   Data           2  ble_stack_handler.o(.data)
-    .data                                    0x20002084   Section       32  app_button.o(.data)
-    mp_buttons                               0x20002084   Data           4  app_button.o(.data)
-    m_button_count                           0x20002088   Data           1  app_button.o(.data)
-    m_active_low_states_mask                 0x2000208c   Data           4  app_button.o(.data)
-    m_active_high_states_mask                0x20002090   Data           4  app_button.o(.data)
-    m_detection_delay                        0x20002094   Data           4  app_button.o(.data)
-    m_evt_schedule_func                      0x20002098   Data           4  app_button.o(.data)
-    m_gpiote_user_id                         0x2000209c   Data           1  app_button.o(.data)
-    m_detection_delay_timer_id               0x200020a0   Data           4  app_button.o(.data)
-    .data                                    0x200020a4   Section       10  app_gpiote.o(.data)
-    mp_users                                 0x200020a4   Data           4  app_gpiote.o(.data)
-    m_enabled_users_mask                     0x200020a8   Data           4  app_gpiote.o(.data)
-    m_user_array_size                        0x200020ac   Data           1  app_gpiote.o(.data)
-    m_user_count                             0x200020ad   Data           1  app_gpiote.o(.data)
-    .bss                                     0x200020b0   Section      876  main.o(.bss)
-    APP_TIMER_BUF                            0x200020b0   Data         536  main.o(.bss)
-    m_auth_status                            0x200022c8   Data          50  main.o(.bss)
-    EVT_BUFFER                               0x200022fc   Data          80  main.o(.bss)
-    APP_SCHED_BUF                            0x2000234c   Data         176  main.o(.bss)
-    app_gpiote_buf                           0x200023fc   Data          20  main.o(.bss)
-    buttons                                  0x20002410   Data          12  main.o(.bss)
-    .bss                                     0x2000241c   Section      116  ble_uart.o(.bss)
-    initial_trans_state                      0x2000241c   Data          20  ble_uart.o(.bss)
-    initial_rec_state                        0x20002430   Data          20  ble_uart.o(.bss)
-    .bss                                     0x20002490   Section      116  ble_i2c.o(.bss)
-    initial_trans_state                      0x20002490   Data          20  ble_i2c.o(.bss)
-    initial_rec_state                        0x200024a4   Data          20  ble_i2c.o(.bss)
-    .bss                                     0x20002504   Section       28  ble_conn_params.o(.bss)
-    m_conn_params_config                     0x20002504   Data          28  ble_conn_params.o(.bss)
-    .bss                                     0x20002520   Section       96  libspace.o(.bss)
-    HEAP                                     0x20002580   Section     2048  arm_startup_nrf51.o(HEAP)
-    Heap_Mem                                 0x20002580   Data        2048  arm_startup_nrf51.o(HEAP)
-    STACK                                    0x20002d80   Section     2048  arm_startup_nrf51.o(STACK)
-    Stack_Mem                                0x20002d80   Data        2048  arm_startup_nrf51.o(STACK)
-    __initial_sp                             0x20003580   Data           0  arm_startup_nrf51.o(STACK)
+    .data                                    0x20002022   Section        8  ble_dig.o(.data)
+    len_dig_transmit_packet                  0x20002022   Data           2  ble_dig.o(.data)
+    len_dig_receive_packet                   0x20002024   Data           2  ble_dig.o(.data)
+    len_dig_config_packet                    0x20002026   Data           2  ble_dig.o(.data)
+    initial_rec_state                        0x20002028   Data           1  ble_dig.o(.data)
+    initial_conf_state                       0x20002029   Data           1  ble_dig.o(.data)
+    .data                                    0x2000202c   Section       14  app_scheduler.o(.data)
+    m_queue_event_headers                    0x2000202c   Data           4  app_scheduler.o(.data)
+    m_queue_event_data                       0x20002030   Data           4  app_scheduler.o(.data)
+    m_queue_start_index                      0x20002034   Data           1  app_scheduler.o(.data)
+    m_queue_end_index                        0x20002035   Data           1  app_scheduler.o(.data)
+    m_queue_event_size                       0x20002036   Data           2  app_scheduler.o(.data)
+    m_queue_size                             0x20002038   Data           2  app_scheduler.o(.data)
+    .data                                    0x2000203c   Section       36  app_timer.o(.data)
+    mp_nodes                                 0x2000203c   Data           4  app_timer.o(.data)
+    m_node_array_size                        0x20002040   Data           1  app_timer.o(.data)
+    m_user_array_size                        0x20002041   Data           1  app_timer.o(.data)
+    mp_users                                 0x20002044   Data           4  app_timer.o(.data)
+    m_timer_id_head                          0x20002048   Data           4  app_timer.o(.data)
+    m_ticks_latest                           0x2000204c   Data           4  app_timer.o(.data)
+    m_ticks_elapsed                          0x20002050   Data           8  app_timer.o(.data)
+    m_ticks_elapsed_q_read_ind               0x20002058   Data           1  app_timer.o(.data)
+    m_ticks_elapsed_q_write_ind              0x20002059   Data           1  app_timer.o(.data)
+    m_evt_schedule_func                      0x2000205c   Data           4  app_timer.o(.data)
+    .data                                    0x20002060   Section       28  ble_conn_params.o(.data)
+    m_change_param                           0x20002060   Data           1  ble_conn_params.o(.data)
+    m_preferred_conn_params                  0x20002062   Data           8  ble_conn_params.o(.data)
+    m_update_count                           0x2000206a   Data           1  ble_conn_params.o(.data)
+    m_conn_handle                            0x2000206c   Data           2  ble_conn_params.o(.data)
+    m_current_conn_params                    0x2000206e   Data           8  ble_conn_params.o(.data)
+    m_conn_params_timer_id                   0x20002078   Data           4  ble_conn_params.o(.data)
+    .data                                    0x2000207c   Section       14  ble_stack_handler.o(.data)
+    m_evt_handler                            0x2000207c   Data           4  ble_stack_handler.o(.data)
+    m_evt_schedule_func                      0x20002080   Data           4  ble_stack_handler.o(.data)
+    m_evt_buffer                             0x20002084   Data           4  ble_stack_handler.o(.data)
+    m_evt_buffer_size                        0x20002088   Data           2  ble_stack_handler.o(.data)
+    .bss                                     0x2000208c   Section      844  main.o(.bss)
+    APP_TIMER_BUF                            0x2000208c   Data         536  main.o(.bss)
+    m_auth_status                            0x200022a4   Data          50  main.o(.bss)
+    EVT_BUFFER                               0x200022d8   Data          80  main.o(.bss)
+    APP_SCHED_BUF                            0x20002328   Data         176  main.o(.bss)
+    .bss                                     0x200023d8   Section      116  ble_uart.o(.bss)
+    initial_trans_state                      0x200023d8   Data          20  ble_uart.o(.bss)
+    initial_rec_state                        0x200023ec   Data          20  ble_uart.o(.bss)
+    .bss                                     0x2000244c   Section      116  ble_i2c.o(.bss)
+    initial_trans_state                      0x2000244c   Data          20  ble_i2c.o(.bss)
+    initial_rec_state                        0x20002460   Data          20  ble_i2c.o(.bss)
+    .bss                                     0x200024c0   Section       56  ble_dig.o(.bss)
+    initial_trans_state                      0x200024c0   Data          20  ble_dig.o(.bss)
+    .bss                                     0x200024f8   Section       28  ble_conn_params.o(.bss)
+    m_conn_params_config                     0x200024f8   Data          28  ble_conn_params.o(.bss)
+    .bss                                     0x20002514   Section       96  libspace.o(.bss)
+    HEAP                                     0x20002578   Section     2048  arm_startup_nrf51.o(HEAP)
+    Heap_Mem                                 0x20002578   Data        2048  arm_startup_nrf51.o(HEAP)
+    STACK                                    0x20002d78   Section     2048  arm_startup_nrf51.o(STACK)
+    Stack_Mem                                0x20002d78   Data        2048  arm_startup_nrf51.o(STACK)
+    __initial_sp                             0x20003578   Data           0  arm_startup_nrf51.o(STACK)
 
     Global Symbols
 
@@ -732,90 +721,87 @@ Image Symbol Table
     SystemInit                               0x000142df   Thumb Code    38  system_nrf51.o(.text)
     app_error_handler                        0x00014321   Thumb Code    28  main.o(.text)
     assert_nrf_callback                      0x0001433d   Thumb Code    14  main.o(.text)
-    on_write                                 0x000146c1   Thumb Code   358  main.o(.text)
-    UART0_IRQHandler                         0x00014a0f   Thumb Code    98  main.o(.text)
-    i2c_init                                 0x00014aa3   Thumb Code     8  main.o(.text)
-    main                                     0x00014aab   Thumb Code    72  main.o(.text)
-    ble_uart_on_ble_evt                      0x00014d23   Thumb Code    58  ble_uart.o(.text)
-    ble_uart_init                            0x00015213   Thumb Code   144  ble_uart.o(.text)
-    ble_uart_transmit_send                   0x000152a3   Thumb Code    94  ble_uart.o(.text)
-    ble_uart_receive_send                    0x00015301   Thumb Code    94  ble_uart.o(.text)
-    ble_uart_config_send                     0x0001535f   Thumb Code    94  ble_uart.o(.text)
-    ble_i2c_on_ble_evt                       0x00015467   Thumb Code    58  ble_i2c.o(.text)
-    ble_i2c_init                             0x00015949   Thumb Code   144  ble_i2c.o(.text)
-    ble_i2c_transmit_send                    0x000159d9   Thumb Code    94  ble_i2c.o(.text)
-    ble_i2c_receive_send                     0x00015a37   Thumb Code    94  ble_i2c.o(.text)
-    ble_i2c_config_send                      0x00015a95   Thumb Code    94  ble_i2c.o(.text)
-    ble_advdata_set                          0x00016085   Thumb Code   122  ble_advdata.o(.text)
-    app_sched_init                           0x00016115   Thumb Code    64  app_scheduler.o(.text)
-    app_sched_event_put                      0x00016155   Thumb Code   316  app_scheduler.o(.text)
-    app_sched_execute                        0x000162e5   Thumb Code    30  app_scheduler.o(.text)
-    RTC1_IRQHandler                          0x00016b09   Thumb Code    34  app_timer.o(.text)
-    SWI0_IRQHandler                          0x00016b2b   Thumb Code     8  app_timer.o(.text)
-    app_timer_init                           0x00016b33   Thumb Code   254  app_timer.o(.text)
-    app_timer_create                         0x00016c31   Thumb Code   108  app_timer.o(.text)
-    app_timer_start                          0x00016d09   Thumb Code    98  app_timer.o(.text)
-    app_timer_stop                           0x00016d6b   Thumb Code    60  app_timer.o(.text)
-    app_timer_stop_all                       0x00016da7   Thumb Code    26  app_timer.o(.text)
-    app_timer_cnt_get                        0x00016dc1   Thumb Code    14  app_timer.o(.text)
-    app_timer_cnt_diff_compute               0x00016dcf   Thumb Code    22  app_timer.o(.text)
-    ble_conn_params_init                     0x00016ee3   Thumb Code    90  ble_conn_params.o(.text)
-    ble_conn_params_stop                     0x00016f3d   Thumb Code    12  ble_conn_params.o(.text)
-    ble_conn_params_on_ble_evt               0x0001708b   Thumb Code    62  ble_conn_params.o(.text)
-    ble_conn_params_change_conn_params       0x000170c9   Thumb Code    86  ble_conn_params.o(.text)
-    ble_stack_handler_init                   0x00017157   Thumb Code    82  ble_stack_handler.o(.text)
-    intern_ble_stack_events_execute          0x000171a9   Thumb Code    60  ble_stack_handler.o(.text)
-    SWI2_IRQHandler                          0x000171e5   Thumb Code    50  ble_stack_handler.o(.text)
-    app_button_init                          0x00017339   Thumb Code   188  app_button.o(.text)
-    app_button_enable                        0x000173f5   Thumb Code    24  app_button.o(.text)
-    app_button_disable                       0x0001740d   Thumb Code    42  app_button.o(.text)
-    app_button_is_pushed                     0x00017437   Thumb Code    90  app_button.o(.text)
-    GPIOTE_IRQHandler                        0x00017569   Thumb Code   106  app_gpiote.o(.text)
-    app_gpiote_init                          0x00017633   Thumb Code   114  app_gpiote.o(.text)
-    app_gpiote_user_register                 0x000176a5   Thumb Code   138  app_gpiote.o(.text)
-    app_gpiote_user_enable                   0x0001772f   Thumb Code   222  app_gpiote.o(.text)
-    app_gpiote_user_disable                  0x0001780d   Thumb Code    66  app_gpiote.o(.text)
-    app_gpiote_pins_state_get                0x0001784f   Thumb Code    52  app_gpiote.o(.text)
-    simple_uart_get                          0x00017919   Thumb Code    24  simple_uart.o(.text)
-    simple_uart_get_with_timeout             0x00017931   Thumb Code    62  simple_uart.o(.text)
-    simple_uart_put                          0x0001796f   Thumb Code    22  simple_uart.o(.text)
-    simple_uart_putstring                    0x00017985   Thumb Code    32  simple_uart.o(.text)
-    simple_uart_config                       0x000179a5   Thumb Code   132  simple_uart.o(.text)
-    twi_master_init                          0x00017ae3   Thumb Code    70  twi_sw_master.o(.text)
-    twi_master_transfer                      0x00017d0f   Thumb Code   126  twi_sw_master.o(.text)
-    __aeabi_memcpy                           0x00017d95   Thumb Code   130  rt_memcpy.o(.text)
-    __rt_memcpy                              0x00017d95   Thumb Code     0  rt_memcpy.o(.text)
-    _memset_w                                0x00017e17   Thumb Code    26  rt_memclr.o(.text)
-    _memset                                  0x00017e31   Thumb Code    30  rt_memclr.o(.text)
-    __aeabi_memclr                           0x00017e4f   Thumb Code     4  rt_memclr.o(.text)
-    __rt_memclr                              0x00017e4f   Thumb Code     0  rt_memclr.o(.text)
-    __aeabi_memclr4                          0x00017e53   Thumb Code     0  rt_memclr.o(.text)
-    __aeabi_memclr8                          0x00017e53   Thumb Code     0  rt_memclr.o(.text)
-    __rt_memclr_w                            0x00017e53   Thumb Code     4  rt_memclr.o(.text)
-    __use_two_region_memory                  0x00017e57   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_escrow$2region                 0x00017e59   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_expand$2region                 0x00017e5b   Thumb Code     2  heapauxi.o(.text)
-    __user_setup_stackheap                   0x00017e5d   Thumb Code    62  sys_stackheap_outer.o(.text)
-    exit                                     0x00017e9b   Thumb Code    12  exit.o(.text)
-    __user_libspace                          0x00017ea9   Thumb Code     8  libspace.o(.text)
-    __user_perproc_libspace                  0x00017ea9   Thumb Code     0  libspace.o(.text)
-    __user_perthread_libspace                0x00017ea9   Thumb Code     0  libspace.o(.text)
-    _sys_exit                                0x00017eb1   Thumb Code     8  sys_exit.o(.text)
-    __I$use$semihosting                      0x00017ebd   Thumb Code     0  use_no_semi.o(.text)
-    __use_no_semihosting_swi                 0x00017ebd   Thumb Code     2  use_no_semi.o(.text)
-    __ARM_common_switch8                     0x00017ebf   Thumb Code    28  main.o(i.__ARM_common_switch8)
-    __semihosting_library_function           0x00017ebf   Thumb Code     0  indicate_semi.o(.text)
-    Region$$Table$$Base                      0x00017f04   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00017f24   Number         0  anon$$obj.o(Region$$Table)
+    on_write                                 0x000146e9   Thumb Code   394  main.o(.text)
+    UART0_IRQHandler                         0x00014a0d   Thumb Code    98  main.o(.text)
+    GPIOTE_IRQHandler                        0x00014ad3   Thumb Code   140  main.o(.text)
+    main                                     0x00014b7f   Thumb Code   158  main.o(.text)
+    ble_uart_on_ble_evt                      0x00014e0f   Thumb Code    58  ble_uart.o(.text)
+    ble_uart_init                            0x000152ff   Thumb Code   144  ble_uart.o(.text)
+    ble_uart_transmit_send                   0x0001538f   Thumb Code    94  ble_uart.o(.text)
+    ble_uart_receive_send                    0x000153ed   Thumb Code    94  ble_uart.o(.text)
+    ble_uart_config_send                     0x0001544b   Thumb Code    94  ble_uart.o(.text)
+    ble_i2c_on_ble_evt                       0x00015553   Thumb Code    58  ble_i2c.o(.text)
+    ble_i2c_init                             0x00015a35   Thumb Code   144  ble_i2c.o(.text)
+    ble_i2c_transmit_send                    0x00015ac5   Thumb Code    94  ble_i2c.o(.text)
+    ble_i2c_receive_send                     0x00015b23   Thumb Code    94  ble_i2c.o(.text)
+    ble_i2c_config_send                      0x00015b81   Thumb Code    94  ble_i2c.o(.text)
+    ble_dig_receive_send                     0x00015c2d   Thumb Code    94  ble_dig.o(.text)
+    ble_dig_receive                          0x00015c8b   Thumb Code    18  ble_dig.o(.text)
+    ble_dig_on_ble_evt                       0x00015cf3   Thumb Code    58  ble_dig.o(.text)
+    ble_dig_init                             0x00016129   Thumb Code   144  ble_dig.o(.text)
+    ble_dig_transmit_send                    0x000161b9   Thumb Code    94  ble_dig.o(.text)
+    ble_dig_config_send                      0x00016217   Thumb Code    94  ble_dig.o(.text)
+    ble_advdata_set                          0x00016801   Thumb Code   122  ble_advdata.o(.text)
+    app_sched_init                           0x00016891   Thumb Code    64  app_scheduler.o(.text)
+    app_sched_event_put                      0x000168d1   Thumb Code   316  app_scheduler.o(.text)
+    app_sched_execute                        0x00016a61   Thumb Code    30  app_scheduler.o(.text)
+    RTC1_IRQHandler                          0x00017285   Thumb Code    34  app_timer.o(.text)
+    SWI0_IRQHandler                          0x000172a7   Thumb Code     8  app_timer.o(.text)
+    app_timer_init                           0x000172af   Thumb Code   254  app_timer.o(.text)
+    app_timer_create                         0x000173ad   Thumb Code   108  app_timer.o(.text)
+    app_timer_start                          0x00017485   Thumb Code    98  app_timer.o(.text)
+    app_timer_stop                           0x000174e7   Thumb Code    60  app_timer.o(.text)
+    app_timer_stop_all                       0x00017523   Thumb Code    26  app_timer.o(.text)
+    app_timer_cnt_get                        0x0001753d   Thumb Code    14  app_timer.o(.text)
+    app_timer_cnt_diff_compute               0x0001754b   Thumb Code    22  app_timer.o(.text)
+    ble_conn_params_init                     0x0001765f   Thumb Code    90  ble_conn_params.o(.text)
+    ble_conn_params_stop                     0x000176b9   Thumb Code    12  ble_conn_params.o(.text)
+    ble_conn_params_on_ble_evt               0x00017807   Thumb Code    62  ble_conn_params.o(.text)
+    ble_conn_params_change_conn_params       0x00017845   Thumb Code    86  ble_conn_params.o(.text)
+    ble_stack_handler_init                   0x000178d3   Thumb Code    82  ble_stack_handler.o(.text)
+    intern_ble_stack_events_execute          0x00017925   Thumb Code    60  ble_stack_handler.o(.text)
+    SWI2_IRQHandler                          0x00017961   Thumb Code    50  ble_stack_handler.o(.text)
+    simple_uart_get                          0x000179dd   Thumb Code    24  simple_uart.o(.text)
+    simple_uart_get_with_timeout             0x000179f5   Thumb Code    62  simple_uart.o(.text)
+    simple_uart_put                          0x00017a33   Thumb Code    22  simple_uart.o(.text)
+    simple_uart_putstring                    0x00017a49   Thumb Code    32  simple_uart.o(.text)
+    simple_uart_config                       0x00017a69   Thumb Code   132  simple_uart.o(.text)
+    twi_master_init                          0x00017ba7   Thumb Code    70  twi_sw_master.o(.text)
+    twi_master_transfer                      0x00017dd3   Thumb Code   126  twi_sw_master.o(.text)
+    __aeabi_memcpy                           0x00017e59   Thumb Code   130  rt_memcpy.o(.text)
+    __rt_memcpy                              0x00017e59   Thumb Code     0  rt_memcpy.o(.text)
+    _memset_w                                0x00017edb   Thumb Code    26  rt_memclr.o(.text)
+    _memset                                  0x00017ef5   Thumb Code    30  rt_memclr.o(.text)
+    __aeabi_memclr                           0x00017f13   Thumb Code     4  rt_memclr.o(.text)
+    __rt_memclr                              0x00017f13   Thumb Code     0  rt_memclr.o(.text)
+    __aeabi_memclr4                          0x00017f17   Thumb Code     0  rt_memclr.o(.text)
+    __aeabi_memclr8                          0x00017f17   Thumb Code     0  rt_memclr.o(.text)
+    __rt_memclr_w                            0x00017f17   Thumb Code     4  rt_memclr.o(.text)
+    __use_two_region_memory                  0x00017f1b   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_escrow$2region                 0x00017f1d   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_expand$2region                 0x00017f1f   Thumb Code     2  heapauxi.o(.text)
+    __user_setup_stackheap                   0x00017f21   Thumb Code    62  sys_stackheap_outer.o(.text)
+    exit                                     0x00017f5f   Thumb Code    12  exit.o(.text)
+    __user_libspace                          0x00017f6d   Thumb Code     8  libspace.o(.text)
+    __user_perproc_libspace                  0x00017f6d   Thumb Code     0  libspace.o(.text)
+    __user_perthread_libspace                0x00017f6d   Thumb Code     0  libspace.o(.text)
+    _sys_exit                                0x00017f75   Thumb Code     8  sys_exit.o(.text)
+    __I$use$semihosting                      0x00017f81   Thumb Code     0  use_no_semi.o(.text)
+    __use_no_semihosting_swi                 0x00017f81   Thumb Code     2  use_no_semi.o(.text)
+    __ARM_common_switch8                     0x00017f83   Thumb Code    28  main.o(i.__ARM_common_switch8)
+    __semihosting_library_function           0x00017f83   Thumb Code     0  indicate_semi.o(.text)
+    Region$$Table$$Base                      0x00017fdc   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00017ffc   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20002000   Data           4  system_nrf51.o(.data)
     uart_parity_included                     0x2000200c   Data           1  ble_uart.o(.data)
     uart_hw_flow_control                     0x2000200d   Data           1  ble_uart.o(.data)
     uart_baud_rate                           0x2000200e   Data           1  ble_uart.o(.data)
     send_stop_bit                            0x20002018   Data           1  ble_i2c.o(.data)
-    m_uart                                   0x20002444   Data          76  ble_uart.o(.bss)
-    m_i2c                                    0x200024b8   Data          76  ble_i2c.o(.bss)
-    __libspace_start                         0x20002520   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x20002580   Data           0  libspace.o(.bss)
+    m_uart                                   0x20002400   Data          76  ble_uart.o(.bss)
+    m_i2c                                    0x20002474   Data          76  ble_i2c.o(.bss)
+    m_dig                                    0x200024d4   Data          36  ble_dig.o(.bss)
+    __libspace_start                         0x20002514   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x20002574   Data           0  libspace.o(.bss)
 
 
 
@@ -825,123 +811,124 @@ Memory Map of the image
 
   Image Entry point : 0x000140c1
 
-  Load Region LR_IROM1 (Base: 0x00014000, Size: 0x00003fd4, Max: 0x0002b000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00014000, Size: 0x00004088, Max: 0x0002b000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00014000, Size: 0x00003f24, Max: 0x0002b000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00014000, Size: 0x00003ffc, Max: 0x0002b000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00014000   0x000000c0   Data   RO            3    RESET               arm_startup_nrf51.o
-    0x000140c0   0x00000008   Code   RO          793  * !!!main             c_p.l(__main.o)
-    0x000140c8   0x0000003c   Code   RO          959    !!!scatter          c_p.l(__scatter.o)
-    0x00014104   0x0000001a   Code   RO          961    !!handler_copy      c_p.l(__scatter_copy.o)
+    0x000140c0   0x00000008   Code   RO          751  * !!!main             c_p.l(__main.o)
+    0x000140c8   0x0000003c   Code   RO          917    !!!scatter          c_p.l(__scatter.o)
+    0x00014104   0x0000001a   Code   RO          919    !!handler_copy      c_p.l(__scatter_copy.o)
     0x0001411e   0x00000002   PAD
-    0x00014120   0x0000001c   Code   RO          963    !!handler_zi        c_p.l(__scatter_zi.o)
-    0x0001413c   0x00000002   Code   RO          831    .ARM.Collect$$libinit$$00000000  c_p.l(libinit.o)
-    0x0001413e   0x00000004   Code   RO          844    .ARM.Collect$$libinit$$00000001  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          848    .ARM.Collect$$libinit$$00000008  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          850    .ARM.Collect$$libinit$$0000000A  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          852    .ARM.Collect$$libinit$$0000000C  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          855    .ARM.Collect$$libinit$$0000000F  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          857    .ARM.Collect$$libinit$$00000011  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          859    .ARM.Collect$$libinit$$00000013  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          861    .ARM.Collect$$libinit$$00000015  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          863    .ARM.Collect$$libinit$$00000017  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          865    .ARM.Collect$$libinit$$00000019  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          867    .ARM.Collect$$libinit$$0000001B  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          869    .ARM.Collect$$libinit$$0000001D  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          871    .ARM.Collect$$libinit$$0000001F  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          873    .ARM.Collect$$libinit$$00000021  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          875    .ARM.Collect$$libinit$$00000023  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          879    .ARM.Collect$$libinit$$0000002A  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          881    .ARM.Collect$$libinit$$0000002C  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          883    .ARM.Collect$$libinit$$0000002E  c_p.l(libinit2.o)
-    0x00014142   0x00000000   Code   RO          885    .ARM.Collect$$libinit$$00000030  c_p.l(libinit2.o)
-    0x00014142   0x00000002   Code   RO          886    .ARM.Collect$$libinit$$00000031  c_p.l(libinit2.o)
-    0x00014144   0x00000002   Code   RO          917    .ARM.Collect$$libshutdown$$00000000  c_p.l(libshutdown.o)
-    0x00014146   0x00000000   Code   RO          944    .ARM.Collect$$libshutdown$$00000003  c_p.l(libshutdown2.o)
-    0x00014146   0x00000000   Code   RO          947    .ARM.Collect$$libshutdown$$00000006  c_p.l(libshutdown2.o)
-    0x00014146   0x00000000   Code   RO          950    .ARM.Collect$$libshutdown$$00000009  c_p.l(libshutdown2.o)
-    0x00014146   0x00000000   Code   RO          952    .ARM.Collect$$libshutdown$$0000000B  c_p.l(libshutdown2.o)
-    0x00014146   0x00000000   Code   RO          955    .ARM.Collect$$libshutdown$$0000000E  c_p.l(libshutdown2.o)
-    0x00014146   0x00000002   Code   RO          956    .ARM.Collect$$libshutdown$$0000000F  c_p.l(libshutdown2.o)
-    0x00014148   0x00000000   Code   RO          795    .ARM.Collect$$rtentry$$00000000  c_p.l(rtentry.o)
-    0x00014148   0x00000000   Code   RO          801    .ARM.Collect$$rtentry$$00000002  c_p.l(rtentry2.o)
-    0x00014148   0x00000006   Code   RO          813    .ARM.Collect$$rtentry$$00000004  c_p.l(rtentry4.o)
-    0x0001414e   0x00000000   Code   RO          803    .ARM.Collect$$rtentry$$00000009  c_p.l(rtentry2.o)
-    0x0001414e   0x00000004   Code   RO          804    .ARM.Collect$$rtentry$$0000000A  c_p.l(rtentry2.o)
-    0x00014152   0x00000000   Code   RO          806    .ARM.Collect$$rtentry$$0000000C  c_p.l(rtentry2.o)
-    0x00014152   0x00000008   Code   RO          807    .ARM.Collect$$rtentry$$0000000D  c_p.l(rtentry2.o)
-    0x0001415a   0x00000002   Code   RO          836    .ARM.Collect$$rtexit$$00000000  c_p.l(rtexit.o)
-    0x0001415c   0x00000000   Code   RO          890    .ARM.Collect$$rtexit$$00000002  c_p.l(rtexit2.o)
-    0x0001415c   0x00000004   Code   RO          891    .ARM.Collect$$rtexit$$00000003  c_p.l(rtexit2.o)
-    0x00014160   0x00000006   Code   RO          892    .ARM.Collect$$rtexit$$00000004  c_p.l(rtexit2.o)
+    0x00014120   0x0000001c   Code   RO          921    !!handler_zi        c_p.l(__scatter_zi.o)
+    0x0001413c   0x00000002   Code   RO          789    .ARM.Collect$$libinit$$00000000  c_p.l(libinit.o)
+    0x0001413e   0x00000004   Code   RO          802    .ARM.Collect$$libinit$$00000001  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          806    .ARM.Collect$$libinit$$00000008  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          808    .ARM.Collect$$libinit$$0000000A  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          810    .ARM.Collect$$libinit$$0000000C  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          813    .ARM.Collect$$libinit$$0000000F  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          815    .ARM.Collect$$libinit$$00000011  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          817    .ARM.Collect$$libinit$$00000013  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          819    .ARM.Collect$$libinit$$00000015  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          821    .ARM.Collect$$libinit$$00000017  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          823    .ARM.Collect$$libinit$$00000019  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          825    .ARM.Collect$$libinit$$0000001B  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          827    .ARM.Collect$$libinit$$0000001D  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          829    .ARM.Collect$$libinit$$0000001F  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          831    .ARM.Collect$$libinit$$00000021  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          833    .ARM.Collect$$libinit$$00000023  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          837    .ARM.Collect$$libinit$$0000002A  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          839    .ARM.Collect$$libinit$$0000002C  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          841    .ARM.Collect$$libinit$$0000002E  c_p.l(libinit2.o)
+    0x00014142   0x00000000   Code   RO          843    .ARM.Collect$$libinit$$00000030  c_p.l(libinit2.o)
+    0x00014142   0x00000002   Code   RO          844    .ARM.Collect$$libinit$$00000031  c_p.l(libinit2.o)
+    0x00014144   0x00000002   Code   RO          875    .ARM.Collect$$libshutdown$$00000000  c_p.l(libshutdown.o)
+    0x00014146   0x00000000   Code   RO          902    .ARM.Collect$$libshutdown$$00000003  c_p.l(libshutdown2.o)
+    0x00014146   0x00000000   Code   RO          905    .ARM.Collect$$libshutdown$$00000006  c_p.l(libshutdown2.o)
+    0x00014146   0x00000000   Code   RO          908    .ARM.Collect$$libshutdown$$00000009  c_p.l(libshutdown2.o)
+    0x00014146   0x00000000   Code   RO          910    .ARM.Collect$$libshutdown$$0000000B  c_p.l(libshutdown2.o)
+    0x00014146   0x00000000   Code   RO          913    .ARM.Collect$$libshutdown$$0000000E  c_p.l(libshutdown2.o)
+    0x00014146   0x00000002   Code   RO          914    .ARM.Collect$$libshutdown$$0000000F  c_p.l(libshutdown2.o)
+    0x00014148   0x00000000   Code   RO          753    .ARM.Collect$$rtentry$$00000000  c_p.l(rtentry.o)
+    0x00014148   0x00000000   Code   RO          759    .ARM.Collect$$rtentry$$00000002  c_p.l(rtentry2.o)
+    0x00014148   0x00000006   Code   RO          771    .ARM.Collect$$rtentry$$00000004  c_p.l(rtentry4.o)
+    0x0001414e   0x00000000   Code   RO          761    .ARM.Collect$$rtentry$$00000009  c_p.l(rtentry2.o)
+    0x0001414e   0x00000004   Code   RO          762    .ARM.Collect$$rtentry$$0000000A  c_p.l(rtentry2.o)
+    0x00014152   0x00000000   Code   RO          764    .ARM.Collect$$rtentry$$0000000C  c_p.l(rtentry2.o)
+    0x00014152   0x00000008   Code   RO          765    .ARM.Collect$$rtentry$$0000000D  c_p.l(rtentry2.o)
+    0x0001415a   0x00000002   Code   RO          794    .ARM.Collect$$rtexit$$00000000  c_p.l(rtexit.o)
+    0x0001415c   0x00000000   Code   RO          848    .ARM.Collect$$rtexit$$00000002  c_p.l(rtexit2.o)
+    0x0001415c   0x00000004   Code   RO          849    .ARM.Collect$$rtexit$$00000003  c_p.l(rtexit2.o)
+    0x00014160   0x00000006   Code   RO          850    .ARM.Collect$$rtexit$$00000004  c_p.l(rtexit2.o)
     0x00014166   0x00000002   PAD
-    0x00014168   0x0000001e   Code   RO          494    .emb_text           app_timer.o
+    0x00014168   0x0000001e   Code   RO          520    .emb_text           app_timer.o
     0x00014186   0x00000002   PAD
-    0x00014188   0x0000001e   Code   RO          723    .emb_text           simple_uart.o
+    0x00014188   0x0000001e   Code   RO          681    .emb_text           simple_uart.o
     0x000141a6   0x00000002   PAD
-    0x000141a8   0x0000001e   Code   RO          750    .emb_text           twi_sw_master.o
+    0x000141a8   0x0000001e   Code   RO          708    .emb_text           twi_sw_master.o
     0x000141c6   0x00000002   PAD
-    0x000141c8   0x00000038   Code   RO          779    .emb_text           c_p.l(rt_memcpy.o)
+    0x000141c8   0x00000038   Code   RO          737    .emb_text           c_p.l(rt_memcpy.o)
     0x00014200   0x00000048   Code   RO            4    .text               arm_startup_nrf51.o
     0x00014248   0x000000d8   Code   RO           12    .text               system_nrf51.o
-    0x00014320   0x000009ac   Code   RO           69    .text               main.o
-    0x00014ccc   0x00000744   Code   RO          272    .text               ble_uart.o
-    0x00015410   0x00000730   Code   RO          318    .text               ble_i2c.o
-    0x00015b40   0x000005d4   Code   RO          407    .text               ble_advdata.o
-    0x00016114   0x00000260   Code   RO          454    .text               app_scheduler.o
-    0x00016374   0x00000ac8   Code   RO          495    .text               app_timer.o
-    0x00016e3c   0x00000308   Code   RO          545    .text               ble_conn_params.o
-    0x00017144   0x0000011c   Code   RO          587    .text               ble_stack_handler.o
-    0x00017260   0x0000028c   Code   RO          624    .text               app_button.o
-    0x000174ec   0x0000042c   Code   RO          658    .text               app_gpiote.o
-    0x00017918   0x00000144   Code   RO          724    .text               simple_uart.o
-    0x00017a5c   0x00000338   Code   RO          751    .text               twi_sw_master.o
-    0x00017d94   0x00000082   Code   RO          780    .text               c_p.l(rt_memcpy.o)
-    0x00017e16   0x00000040   Code   RO          783    .text               c_p.l(rt_memclr.o)
-    0x00017e56   0x00000006   Code   RO          791    .text               c_p.l(heapauxi.o)
-    0x00017e5c   0x0000003e   Code   RO          817    .text               c_p.l(sys_stackheap_outer.o)
-    0x00017e9a   0x0000000c   Code   RO          820    .text               c_p.l(exit.o)
-    0x00017ea6   0x00000002   PAD
-    0x00017ea8   0x00000008   Code   RO          832    .text               c_p.l(libspace.o)
-    0x00017eb0   0x0000000c   Code   RO          887    .text               c_p.l(sys_exit.o)
-    0x00017ebc   0x00000002   Code   RO          906    .text               c_p.l(use_no_semi.o)
-    0x00017ebe   0x00000000   Code   RO          908    .text               c_p.l(indicate_semi.o)
-    0x00017ebe   0x0000001c   Code   RO           88    i.__ARM_common_switch8  main.o
-    0x00017eda   0x00000002   PAD
-    0x00017edc   0x00000008   Data   RO           71    .constdata          main.o
-    0x00017ee4   0x00000010   Data   RO          274    .constdata          ble_uart.o
-    0x00017ef4   0x00000010   Data   RO          320    .constdata          ble_i2c.o
-    0x00017f04   0x00000020   Data   RO          957    Region$$Table       anon$$obj.o
+    0x00014320   0x00000a98   Code   RO           69    .text               main.o
+    0x00014db8   0x00000744   Code   RO          270    .text               ble_uart.o
+    0x000154fc   0x00000730   Code   RO          316    .text               ble_i2c.o
+    0x00015c2c   0x00000690   Code   RO          344    .text               ble_dig.o
+    0x000162bc   0x000005d4   Code   RO          433    .text               ble_advdata.o
+    0x00016890   0x00000260   Code   RO          480    .text               app_scheduler.o
+    0x00016af0   0x00000ac8   Code   RO          521    .text               app_timer.o
+    0x000175b8   0x00000308   Code   RO          571    .text               ble_conn_params.o
+    0x000178c0   0x0000011c   Code   RO          613    .text               ble_stack_handler.o
+    0x000179dc   0x00000144   Code   RO          682    .text               simple_uart.o
+    0x00017b20   0x00000338   Code   RO          709    .text               twi_sw_master.o
+    0x00017e58   0x00000082   Code   RO          738    .text               c_p.l(rt_memcpy.o)
+    0x00017eda   0x00000040   Code   RO          741    .text               c_p.l(rt_memclr.o)
+    0x00017f1a   0x00000006   Code   RO          749    .text               c_p.l(heapauxi.o)
+    0x00017f20   0x0000003e   Code   RO          775    .text               c_p.l(sys_stackheap_outer.o)
+    0x00017f5e   0x0000000c   Code   RO          778    .text               c_p.l(exit.o)
+    0x00017f6a   0x00000002   PAD
+    0x00017f6c   0x00000008   Code   RO          790    .text               c_p.l(libspace.o)
+    0x00017f74   0x0000000c   Code   RO          845    .text               c_p.l(sys_exit.o)
+    0x00017f80   0x00000002   Code   RO          864    .text               c_p.l(use_no_semi.o)
+    0x00017f82   0x00000000   Code   RO          866    .text               c_p.l(indicate_semi.o)
+    0x00017f82   0x0000001c   Code   RO           88    i.__ARM_common_switch8  main.o
+    0x00017f9e   0x00000002   PAD
+    0x00017fa0   0x0000000c   Data   RO           71    .constdata          main.o
+    0x00017fac   0x00000010   Data   RO          272    .constdata          ble_uart.o
+    0x00017fbc   0x00000010   Data   RO          318    .constdata          ble_i2c.o
+    0x00017fcc   0x00000010   Data   RO          346    .constdata          ble_dig.o
+    0x00017fdc   0x00000020   Data   RO          915    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Base: 0x20002000, Size: 0x00001580, Max: 0x00002000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Base: 0x20002000, Size: 0x00001578, Max: 0x00002000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20002000   0x00000004   Data   RW           13    .data               system_nrf51.o
     0x20002004   0x00000008   Data   RW           72    .data               main.o
-    0x2000200c   0x0000000b   Data   RW          275    .data               ble_uart.o
+    0x2000200c   0x0000000b   Data   RW          273    .data               ble_uart.o
     0x20002017   0x00000001   PAD
-    0x20002018   0x00000009   Data   RW          321    .data               ble_i2c.o
-    0x20002021   0x00000003   PAD
-    0x20002024   0x0000000e   Data   RW          455    .data               app_scheduler.o
-    0x20002032   0x00000002   PAD
-    0x20002034   0x00000024   Data   RW          496    .data               app_timer.o
-    0x20002058   0x0000001c   Data   RW          547    .data               ble_conn_params.o
-    0x20002074   0x0000000e   Data   RW          588    .data               ble_stack_handler.o
-    0x20002082   0x00000002   PAD
-    0x20002084   0x00000020   Data   RW          625    .data               app_button.o
-    0x200020a4   0x0000000a   Data   RW          659    .data               app_gpiote.o
-    0x200020ae   0x00000002   PAD
-    0x200020b0   0x0000036c   Zero   RW           70    .bss                main.o
-    0x2000241c   0x00000074   Zero   RW          273    .bss                ble_uart.o
-    0x20002490   0x00000074   Zero   RW          319    .bss                ble_i2c.o
-    0x20002504   0x0000001c   Zero   RW          546    .bss                ble_conn_params.o
-    0x20002520   0x00000060   Zero   RW          833    .bss                c_p.l(libspace.o)
-    0x20002580   0x00000800   Zero   RW            2    HEAP                arm_startup_nrf51.o
-    0x20002d80   0x00000800   Zero   RW            1    STACK               arm_startup_nrf51.o
+    0x20002018   0x00000009   Data   RW          319    .data               ble_i2c.o
+    0x20002021   0x00000001   PAD
+    0x20002022   0x00000008   Data   RW          347    .data               ble_dig.o
+    0x2000202a   0x00000002   PAD
+    0x2000202c   0x0000000e   Data   RW          481    .data               app_scheduler.o
+    0x2000203a   0x00000002   PAD
+    0x2000203c   0x00000024   Data   RW          522    .data               app_timer.o
+    0x20002060   0x0000001c   Data   RW          573    .data               ble_conn_params.o
+    0x2000207c   0x0000000e   Data   RW          614    .data               ble_stack_handler.o
+    0x2000208a   0x00000002   PAD
+    0x2000208c   0x0000034c   Zero   RW           70    .bss                main.o
+    0x200023d8   0x00000074   Zero   RW          271    .bss                ble_uart.o
+    0x2000244c   0x00000074   Zero   RW          317    .bss                ble_i2c.o
+    0x200024c0   0x00000038   Zero   RW          345    .bss                ble_dig.o
+    0x200024f8   0x0000001c   Zero   RW          572    .bss                ble_conn_params.o
+    0x20002514   0x00000060   Zero   RW          791    .bss                c_p.l(libspace.o)
+    0x20002574   0x00000004   PAD
+    0x20002578   0x00000800   Zero   RW            2    HEAP                arm_startup_nrf51.o
+    0x20002d78   0x00000800   Zero   RW            1    STACK               arm_startup_nrf51.o
 
 
 ==============================================================================
@@ -951,26 +938,25 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       652         92          0         32          0       8084   app_button.o
-      1068         40          0         10          0      15286   app_gpiote.o
        608         94          0         14          0      14471   app_scheduler.o
       2790        186          0         36          0      25673   app_timer.o
         72         32        192          0       4096        712   arm_startup_nrf51.o
       1492          4          0          0          0      33702   ble_advdata.o
        776         38          0         28         28      16598   ble_conn_params.o
+      1680        104         16          8         56       7349   ble_dig.o
       1840        102         16          9        116       7351   ble_i2c.o
          0          0          0          0          0       3628   ble_srv_common.o
        284         74          0         14          0       9229   ble_stack_handler.o
       1860        108         16         11        116       7520   ble_uart.o
-      2504        420          8          8        876      76508   main.o
+      2740        376         12          8        844      76589   main.o
        354         14          0          0          0       4764   simple_uart.o
        216         28          0          4          0      21581   system_nrf51.o
        854          8          0          0          0       4326   twi_sw_master.o
 
     ----------------------------------------------------------------------
-     15378       1240        264        176       5232     249433   Object Totals
+     15574       1168        284        140       5256     233493   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         8          0          0         10          0          0   (incl. Padding)
+         8          0          0          8          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1000,8 +986,8 @@ Image component sizes
          2          0          0          0          0         68   use_no_semi.o
 
     ----------------------------------------------------------------------
-       522         16          0          0         96        796   Library Totals
-         6          0          0          0          0          0   (incl. Padding)
+       522         16          0          0        100        796   Library Totals
+         6          0          0          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1010,7 +996,7 @@ Image component sizes
        516         16          0          0         96        796   c_p.l
 
     ----------------------------------------------------------------------
-       522         16          0          0         96        796   Library Totals
+       522         16          0          0        100        796   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -1019,15 +1005,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     15900       1256        264        176       5328     248977   Grand Totals
-     15900       1256        264        176       5328     248977   ELF Image Totals
-     15900       1256        264        176          0          0   ROM Totals
+     16096       1184        284        140       5356     233081   Grand Totals
+     16096       1184        284        140       5356     233081   ELF Image Totals
+     16096       1184        284        140          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                16164 (  15.79kB)
-    Total RW  Size (RW Data + ZI Data)              5504 (   5.38kB)
-    Total ROM Size (Code + RO Data + RW Data)      16340 (  15.96kB)
+    Total RO  Size (Code + RO Data)                16380 (  16.00kB)
+    Total RW  Size (RW Data + ZI Data)              5496 (   5.37kB)
+    Total ROM Size (Code + RO Data + RW Data)      16520 (  16.13kB)
 
 ==============================================================================
 

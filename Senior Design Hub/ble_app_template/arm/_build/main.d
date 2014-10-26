@@ -43,11 +43,10 @@
 .\_build\main.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\ble\ble_error_log.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\ble\ble_flash.h
-.\_build\main.o: ..\..\..\NordicSDK\Include\app_common\app_gpiote.h
-.\_build\main.o: ..\..\..\NordicSDK\Include\app_common\app_button.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\ble\ble_debug_assert_handler.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\simple_uart.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_uart.h
 .\_build\main.o: ..\global_config.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_i2c.h
+.\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_dig.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\twi_master.h

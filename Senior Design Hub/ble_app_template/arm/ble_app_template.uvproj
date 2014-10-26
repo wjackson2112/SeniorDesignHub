@@ -431,6 +431,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_dig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -924,6 +929,11 @@
               <FileName>ble_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_dig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
             </File>
           </Files>
         </Group>

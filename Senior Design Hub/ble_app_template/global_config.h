@@ -25,4 +25,10 @@
 #define TWI_MASTER_CONFIG_CLOCK_PIN_NUMBER I2C_CLK_PIN_NUMBER
 #define TWI_MASTER_CONFIG_DATA_PIN_NUMBER  I2C_SDA_PIN_NUMBER
 
+/*************************
+ * DIGITAL CONFIGURATION *
+ *************************/
+#define DIG_INPUT_PIN				(13U)
+#define DIG_OUTPUT_PIN			(12U)
+
 #endif

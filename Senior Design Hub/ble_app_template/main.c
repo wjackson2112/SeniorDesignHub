@@ -41,12 +41,11 @@
 #include "ble_stack_handler.h"
 #include "app_timer.h"
 #include "ble_error_log.h"
-#include "app_gpiote.h"
-#include "app_button.h"
 #include "ble_debug_assert_handler.h"
 #include "simple_uart.h"
 #include "ble_uart.h"
 #include "ble_i2c.h"
+#include "ble_dig.h"
 #include "twi_master.h"
 #include "global_config.h"
 
@@ -95,6 +94,8 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 #define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
 
 static void uart_reconfig(uint8_t);
+static void i2c_init(void);
+static void dig_init(void);
 
 /**@brief Function for error handling, which is called when an error has occurred. 
  *
@@ -234,7 +235,7 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
-    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}};
+    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}, {0x5740, BLE_UUID_TYPE_BLE}};
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -255,10 +256,9 @@ static void advertising_init(void)
  */
 static void services_init(void)
 {
-    // YOUR_JOB: Add code to initialize the services used by the application.
 	  ble_uart_init_t uart_init;
 
-    // Initialize Connectionless Configuration Service
+    // Initialize UART Service
     memset(&uart_init, 0, sizeof(uart_init));
 
     uart_init.evt_handler = NULL;
@@ -270,10 +270,9 @@ static void services_init(void)
 
     ble_uart_init(&m_uart, &uart_init);
 		
-		// YOUR_JOB: Add code to initialize the services used by the application.
 	  ble_i2c_init_t i2c_init;
 
-    // Initialize Connectionless Configuration Service
+    // Initialize I2C Service
     memset(&i2c_init, 0, sizeof(i2c_init));
 
     i2c_init.evt_handler = NULL;
@@ -284,6 +283,20 @@ static void services_init(void)
     }
 
     ble_i2c_init(&m_i2c, &i2c_init);
+		
+	  ble_dig_init_t dig_init;
+
+    // Initialize Digital Service
+    memset(&dig_init, 0, sizeof(dig_init));
+
+    dig_init.evt_handler = NULL;
+    dig_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        dig_init.initial_transmit_state[i] = 0x00;
+    }
+
+    ble_dig_init(&m_dig, &dig_init);
 }
 
 
@@ -434,6 +447,19 @@ void on_write(ble_evt_t *p_ble_evt)
 					send_stop_bit = true;
 				}
 		}
+		
+		//Check for Digital Service Input
+		if (*check_handler == m_dig.transmit_handles.value_handle){
+			
+			if(m_dig.transmit_packet[0] > 0)
+				nrf_gpio_pin_set(DIG_OUTPUT_PIN);
+			else
+				nrf_gpio_pin_clear(DIG_OUTPUT_PIN);
+		}
+		
+		if (*check_handler == m_dig.config_handles.value_handle){
+			
+		}
 }
 
 
@@ -541,6 +567,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     
 		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
 		ble_i2c_on_ble_evt(&m_i2c, p_ble_evt);
+		ble_dig_on_ble_evt(&m_dig, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
 		on_ble_evt(p_ble_evt);
     /* 
@@ -592,15 +619,15 @@ static void button_event_handler(uint8_t pin_no)
 
 /**@brief Function for initializing the GPIOTE handler module.
  */
-static void gpiote_init(void)
+/*static void gpiote_init(void)
 {
     APP_GPIOTE_INIT(APP_GPIOTE_MAX_USERS);
-}
+}*/
 
 
 /**@brief Function for initializing the button handler module.
  */
-static void buttons_init(void)
+/*static void buttons_init(void)
 {
     // Note: Array must be static because a pointer to it will be saved in the Button handler
     //       module.
@@ -616,7 +643,7 @@ static void buttons_init(void)
     // Note: If the only use of buttons is to wake up, the app_button module can be omitted, and
     //       the wakeup button can be configured by
     // GPIO_WAKEUP_BUTTON_CONFIG(WAKEUP_BUTTON_PIN);
-}
+}*/
 
 
 /**@brief Function for the Power manager.
@@ -785,8 +812,105 @@ static void uart_reconfig(uint8_t config_byte){
 
 }
 
-void i2c_init(void){
+static void i2c_init(void){
 	twi_master_init();
+}
+
+/**
+ * Configures pin 0 for input and pin 8 for output and
+ * configures GPIOTE to give interrupt on pin change.
+ */
+/*static void gpio_init(void)
+{
+  NRF_GPIO->PIN_CNF[DIG_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
+                                        | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
+                                        | (NRF_GPIO_PIN_NOPULL << GPIO_PIN_CNF_PULL_Pos)
+                                        | (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos)
+                                        | (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos);    
+
+  // Enable interrupt:
+  NVIC_EnableIRQ(GPIOTE_IRQn);
+  NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
+}*/
+
+
+/** GPIOTE interrupt handler.
+ * Triggered on pin 0 change
+ */
+/*void GPIOTE_IRQHandler(void)
+{
+  // Event causing the interrupt must be cleared
+  if ((NRF_GPIOTE->EVENTS_PORT != 0))
+  {
+    NRF_GPIOTE->EVENTS_PORT = 0;
+  }
+	
+	uint8_t data[] = {nrf_gpio_pin_read(DIG_PIN)};
+  ble_dig_transmit(data, 1);
+}*/
+
+/**
+ * Configures pin 0 for input and pin 8 for output and
+ * configures GPIOTE to give interrupt on pin change.
+ */
+static void gpio_init(void)
+{
+  NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
+                                        | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
+                                        | (NRF_GPIO_PIN_NOPULL << GPIO_PIN_CNF_PULL_Pos)
+                                        | (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos)
+                                        | (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos); 
+
+  // Enable interrupt:
+	NVIC_SetPriority(GPIOTE_IRQn, 3);
+  NVIC_EnableIRQ(GPIOTE_IRQn);
+	
+  NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
+}
+
+/** GPIOTE interrupt handler.
+ * Triggered on pin 0 change
+ */
+void GPIOTE_IRQHandler(void)
+{
+  // Event causing the interrupt must be cleared
+  if ((NRF_GPIOTE->EVENTS_PORT != 0))
+  {
+    NRF_GPIOTE->EVENTS_PORT = 0;
+  }
+  // Active low.
+  if (nrf_gpio_pin_read(DIG_INPUT_PIN) == 0)
+  {
+			uint8_t data[] = {0};
+			
+      ble_dig_receive_send(&m_dig, data, 1);
+			NVIC_DisableIRQ(GPIOTE_IRQn);
+		  NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_High << GPIO_PIN_CNF_SENSE_Pos)
+                                        | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
+                                        | (NRF_GPIO_PIN_NOPULL << GPIO_PIN_CNF_PULL_Pos)
+                                        | (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos)
+                                        | (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos); 
+			NVIC_EnableIRQ(GPIOTE_IRQn);
+			NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
+  } else {
+			uint8_t data[] = {1};
+			NVIC_DisableIRQ(GPIOTE_IRQn);
+			ble_dig_receive_send(&m_dig, data, 1);
+			
+			NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
+                                        | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
+                                        | (NRF_GPIO_PIN_NOPULL << GPIO_PIN_CNF_PULL_Pos)
+                                        | (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos)
+                                        | (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos); 
+			NVIC_EnableIRQ(GPIOTE_IRQn);
+			NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
+	}
+}
+
+static void dig_init(void){
+	nrf_gpio_cfg_output(DIG_OUTPUT_PIN);
+	nrf_gpio_pin_clear(DIG_OUTPUT_PIN);
+	gpio_init();
 }
 
 
@@ -797,8 +921,9 @@ int main(void)
     // Initialize
     leds_init();
     timers_init();
-    gpiote_init();
-    buttons_init();
+    //gpiote_init();
+    //buttons_init();
+		
     ble_stack_init();
     scheduler_init();
     gap_params_init();
@@ -808,10 +933,13 @@ int main(void)
     sec_params_init();
 		uart_init();
 		i2c_init();
+		dig_init();		
+		
     
     // Start execution
     timers_start();
     advertising_start();
+
     
     // Enter main loop
     for (;;)
