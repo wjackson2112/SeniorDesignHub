@@ -49,4 +49,5 @@
 .\_build\main.o: ..\global_config.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_i2c.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_dig.h
+.\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_ana.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\twi_master.h

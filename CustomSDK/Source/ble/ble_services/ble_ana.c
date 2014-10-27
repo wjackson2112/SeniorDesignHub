@@ -1,5 +1,5 @@
 
-#include "ble_dig.h"
+#include "ble_ana.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -11,13 +11,13 @@
 #include "nrf_gpio.h"
 
 
-#define BLE_UUID_DIG_SERVICE	 	 	 	 	    0x5740 
-#define BLE_UUID_DIG_RECEIVE_CHAR         0x5741  
-#define BLE_UUID_DIG_TRANSMIT_CHAR					0x5742  
-#define BLE_UUID_DIG_CONFIG_CHAR						0x5743
-#define DIG_UUID_INDEX              				0
+#define BLE_UUID_ANA_SERVICE	 	 	 	 	    0x6740 
+#define BLE_UUID_ANA_RECEIVE_CHAR         0x6741  
+#define BLE_UUID_ANA_TRANSMIT_CHAR					0x6742  
+#define BLE_UUID_ANA_CONFIG_CHAR						0x6743
+#define ANA_UUID_INDEX              				0
 
-/**@brief 128-bit DIG UUID base List. */
+/**@brief 128-bit ANA UUID base List. */
 static const ble_uuid128_t m_base_uuid128 =
 {
 	 {
@@ -26,81 +26,81 @@ static const ble_uuid128_t m_base_uuid128 =
 	 }
 };
 
-ble_dig_t m_dig;
+ble_ana_t m_ana;
 
-void ble_dig_receive(uint8_t * data, uint16_t length){
-	ble_dig_receive_send(&m_dig, data, length);
+void ble_ana_receive(uint8_t * data, uint16_t length){
+	ble_ana_receive_send(&m_ana, data, length);
 }
 
 /**@brief Function for handling the Connect event.
  *
- * @param   p_dig       DIG Service structure.
+ * @param   p_ana       ANA Service structure.
  * @param   p_ble_evt   Event received from the BLE stack.
  */
-static void on_connect(ble_dig_t * p_dig, ble_evt_t * p_ble_evt)
+static void on_connect(ble_ana_t * p_ana, ble_evt_t * p_ble_evt)
 {
-	p_dig->conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+	p_ana->conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
 }
 
 /**@brief Function for handling the Disconnect event.
  *
- * @param   p_dig       DIG Service structure.
+ * @param   p_ana       ANA Service structure.
  * @param   p_ble_evt   Event received from the BLE stack.
  */
-static void on_disconnect(ble_dig_t * p_dig, ble_evt_t * p_ble_evt)
+static void on_disconnect(ble_ana_t * p_ana, ble_evt_t * p_ble_evt)
 {
 	UNUSED_PARAMETER(p_ble_evt);
-	p_dig->conn_handle = BLE_CONN_HANDLE_INVALID;
+	p_ana->conn_handle = BLE_CONN_HANDLE_INVALID;
 }
 
 
 
 /**@brief Function for handling the Write event.
  *
- * @param   p_dig       DIG structure.
+ * @param   p_ana       ANA structure.
  * @param   p_ble_evt   Event received from the BLE stack.
  */
-static void on_write(ble_dig_t * p_dig, ble_evt_t * p_ble_evt)
+static void on_write(ble_ana_t * p_ana, ble_evt_t * p_ble_evt)
 {
 	
 		ble_gatts_evt_write_t * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 	  const uint16_t char_handler = p_evt_write->handle;
 	
-		static uint16_t len_dig_transmit_packet = 20;
-		static uint16_t len_dig_receive_packet = 20;
-		static uint16_t len_dig_config_packet = 1;
+		static uint16_t len_ana_transmit_packet = 20;
+		static uint16_t len_ana_receive_packet = 20;
+		static uint16_t len_ana_config_packet = 1;
 
-		if(p_evt_write->handle == p_dig->transmit_handles.value_handle)
+		if(p_evt_write->handle == p_ana->transmit_handles.value_handle)
 		{
-			sd_ble_gatts_value_get(char_handler, 0, &len_dig_transmit_packet, p_dig->transmit_packet);
+			sd_ble_gatts_value_get(char_handler, 0, &len_ana_transmit_packet, p_ana->transmit_packet);
 		}
 		
-		if(p_evt_write->handle == p_dig->receive_handles.value_handle)
+		if(p_evt_write->handle == p_ana->receive_handles.value_handle)
 		{
-			sd_ble_gatts_value_get(char_handler, 0, &len_dig_receive_packet, p_dig->receive_packet);
+			sd_ble_gatts_value_get(char_handler, 0, &len_ana_receive_packet, p_ana->receive_packet);
 		}
 		
-		if(p_evt_write->handle == p_dig->config_handles.value_handle)
+		if(p_evt_write->handle == p_ana->config_handles.value_handle)
 		{
-			sd_ble_gatts_value_get(char_handler, 0, &len_dig_config_packet, p_dig->config_packet);
+			sd_ble_gatts_value_get(char_handler, 0, &len_ana_config_packet, p_ana->config_packet);
 		}
 		
 }
 
-void ble_dig_on_ble_evt(ble_dig_t * p_dig, ble_evt_t * p_ble_evt)
+void ble_ana_on_ble_evt(ble_ana_t * p_ana, ble_evt_t * p_ble_evt)
 {
 	switch(p_ble_evt->header.evt_id)
 	{
 		case BLE_GAP_EVT_CONNECTED:
-			on_connect(p_dig, p_ble_evt);
+			on_connect(p_ana, p_ble_evt);
 			break;
 			
 		case BLE_GAP_EVT_DISCONNECTED:
-			on_disconnect(p_dig, p_ble_evt);
+			on_disconnect(p_ana, p_ble_evt);
 		    break;
 					
 		case BLE_GATTS_EVT_WRITE:
-			on_write(p_dig, p_ble_evt);
+			on_write(p_ana, p_ble_evt);
 			break;
 			
 		default:	
@@ -110,12 +110,12 @@ void ble_dig_on_ble_evt(ble_dig_t * p_dig, ble_evt_t * p_ble_evt)
 
 /**@brief Function for adding the transmit characteristic.
  *
- * @param   p_dig        DIG Service structure.
- * @param   p_dig_init   Information needed to initialize the service.
+ * @param   p_ana        ANA Service structure.
+ * @param   p_ana_init   Information needed to initialize the service.
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-static uint32_t dig_transmit_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p_dig_init)
+/*static uint32_t ana_transmit_char_add(ble_ana_t * p_ana, const ble_ana_init_t * p_ana_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_md_t cccd_md;
@@ -141,7 +141,7 @@ static uint32_t dig_transmit_char_add(ble_dig_t * p_dig, const ble_dig_init_t * 
     char_md.p_cccd_md              = &cccd_md;
     char_md.p_sccd_md 	 	 	       = NULL;
 
-	BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_DIG_TRANSMIT_CHAR);
+	BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_ANA_TRANSMIT_CHAR);
 	
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -153,7 +153,7 @@ static uint32_t dig_transmit_char_add(ble_dig_t * p_dig, const ble_dig_init_t * 
     attr_md.vlen       = 1;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
-		initial_trans_state[0] = p_dig_init->initial_transmit_state[0];
+		initial_trans_state[0] = p_ana_init->initial_transmit_state[0];
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 
@@ -164,22 +164,22 @@ static uint32_t dig_transmit_char_add(ble_dig_t * p_dig, const ble_dig_init_t * 
     attr_char_value.max_len      = 1;
     attr_char_value.p_value      = initial_trans_state;
 
-    return sd_ble_gatts_characteristic_add(p_dig->service_handle,
+    return sd_ble_gatts_characteristic_add(p_ana->service_handle,
 											&char_md,
 											&attr_char_value,
-											&p_dig->transmit_handles);
+											&p_ana->transmit_handles);
 
-}
+}*/
 
 
 /**@brief Function for adding the receive characteristic.
  *
- * @param  p_dig        DIG Service structure.
- * @param  p_dig_init   Information needed to initialize the service.
+ * @param  p_ana        ANA Service structure.
+ * @param  p_ana_init   Information needed to initialize the service.
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-static uint32_t dig_receive_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p_dig_init)
+static uint32_t ana_receive_char_add(ble_ana_t * p_ana, const ble_ana_init_t * p_ana_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_md_t cccd_md;
@@ -205,7 +205,7 @@ static uint32_t dig_receive_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p
     char_md.p_cccd_md              = &cccd_md;
     char_md.p_sccd_md 	 	 	       = NULL;
 
-	BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_DIG_RECEIVE_CHAR);
+	BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_ANA_RECEIVE_CHAR);
 	
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -217,32 +217,32 @@ static uint32_t dig_receive_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p
     attr_md.vlen       = 1;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
-		initial_rec_state[0] = p_dig_init->initial_receive_state[0];
+		initial_rec_state[0] = p_ana_init->initial_receive_state[0];
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 
     attr_char_value.p_uuid       = &ble_uuid;
     attr_char_value.p_attr_md    = &attr_md;
-    attr_char_value.init_len     = 1;
+    attr_char_value.init_len     = 2;
     attr_char_value.init_offs    = 0;
-    attr_char_value.max_len      = 1;
+    attr_char_value.max_len      = 2;
     attr_char_value.p_value      = initial_rec_state;
 
-    return sd_ble_gatts_characteristic_add(p_dig->service_handle,
+    return sd_ble_gatts_characteristic_add(p_ana->service_handle,
 											&char_md,
 											&attr_char_value,
-											&p_dig->receive_handles);
+											&p_ana->receive_handles);
 
 }
 
 /**@brief Function for adding the configuration characteristic.
  *
- * @param  p_dig        DIG Service structure.
- * @param  p_dig_init   Information needed to initialize the service.
+ * @param  p_ana        ANA Service structure.
+ * @param  p_ana_init   Information needed to initialize the service.
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-/*static uint32_t dig_config_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p_dig_init)
+/*static uint32_t ana_config_char_add(ble_ana_t * p_ana, const ble_ana_init_t * p_ana_init)
 {
     ble_gatts_char_md_t char_md;
     ble_gatts_attr_md_t cccd_md;
@@ -268,7 +268,7 @@ static uint32_t dig_receive_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p
     char_md.p_cccd_md              = &cccd_md;
     char_md.p_sccd_md 	 	 	       = NULL;
 
-		BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_DIG_CONFIG_CHAR);
+		BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_ANA_CONFIG_CHAR);
 	
     memset(&attr_md, 0, sizeof(attr_md));
 
@@ -291,47 +291,47 @@ static uint32_t dig_receive_char_add(ble_dig_t * p_dig, const ble_dig_init_t * p
     attr_char_value.max_len      = 1;
     attr_char_value.p_value      = initial_conf_state;
 
-    return sd_ble_gatts_characteristic_add(p_dig->service_handle,
+    return sd_ble_gatts_characteristic_add(p_ana->service_handle,
 											&char_md,
 											&attr_char_value,
-											&p_dig->config_handles);
+											&p_ana->config_handles);
 
 }*/
 
-uint32_t ble_dig_init(ble_dig_t * p_dig, const ble_dig_init_t * p_dig_init)
+uint32_t ble_ana_init(ble_ana_t * p_ana, const ble_ana_init_t * p_ana_init)
 {
 	uint32_t  err_code;
 	ble_uuid_t ble_uuid;
 	
-	p_dig->evt_handler 	 	  	 	      = p_dig_init->evt_handler;
-	p_dig->conn_handle 	  	 		      = BLE_CONN_HANDLE_INVALID;
-	p_dig->is_notification_supported  = p_dig_init->support_notification;
+	p_ana->evt_handler 	 	  	 	      = p_ana_init->evt_handler;
+	p_ana->conn_handle 	  	 		      = BLE_CONN_HANDLE_INVALID;
+	p_ana->is_notification_supported  = p_ana_init->support_notification;
 	
-    ble_uuid.type = BLE_UUID_TYPE_VENDOR_BEGIN + DIG_UUID_INDEX;
-	ble_uuid.uuid = BLE_UUID_DIG_SERVICE;
+    ble_uuid.type = BLE_UUID_TYPE_VENDOR_BEGIN + ANA_UUID_INDEX;
+	ble_uuid.uuid = BLE_UUID_ANA_SERVICE;
 	
 	err_code = sd_ble_uuid_vs_add(&m_base_uuid128, &ble_uuid.type);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY, &ble_uuid, &p_dig->service_handle);
+	err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY, &ble_uuid, &p_ana->service_handle);
 	if(err_code != NRF_SUCCESS)
 	{
 		return err_code;
 	}
 	 
-	err_code = dig_receive_char_add(p_dig, p_dig_init);
+	err_code = ana_receive_char_add(p_ana, p_ana_init);
 	if(err_code != NRF_SUCCESS)
 	{
 		return err_code;
 	}
 	
-	err_code = dig_transmit_char_add(p_dig, p_dig_init);
+	/*err_code = ana_transmit_char_add(p_ana, p_ana_init);
 	if(err_code != NRF_SUCCESS)
 	{
 		return err_code;
-	}
+	}*/
 	
-	/*err_code = dig_config_char_add(p_dig, p_dig_init);
+	/*err_code = ana_config_char_add(p_ana, p_ana_init);
 	if(err_code != NRF_SUCCESS)
 	{
 		return err_code;
@@ -340,12 +340,12 @@ uint32_t ble_dig_init(ble_dig_t * p_dig, const ble_dig_init_t * p_dig_init)
 	return NRF_SUCCESS;
 }
 
-uint32_t ble_dig_transmit_send(ble_dig_t * p_dig, uint8_t data[], uint16_t length)
+uint32_t ble_ana_transmit_send(ble_ana_t * p_ana, uint8_t data[], uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		
 		//update database
-		err_code = sd_ble_gatts_value_set(p_dig->transmit_handles.value_handle,
+		err_code = sd_ble_gatts_value_set(p_ana->transmit_handles.value_handle,
 																			0,
 																			&length,
 																		  data);
@@ -354,19 +354,19 @@ uint32_t ble_dig_transmit_send(ble_dig_t * p_dig, uint8_t data[], uint16_t lengt
 			return err_code;
 		}
 		//send value if connected and notifying
-		if((p_dig->conn_handle != BLE_CONN_HANDLE_INVALID) && p_dig->is_notification_supported)
+		if((p_ana->conn_handle != BLE_CONN_HANDLE_INVALID) && p_ana->is_notification_supported)
 		{
 			ble_gatts_hvx_params_t hvx_params;
 			
 			memset(&hvx_params, 0, sizeof(hvx_params));
 			
-			hvx_params.handle      = p_dig->transmit_handles.value_handle;
+			hvx_params.handle      = p_ana->transmit_handles.value_handle;
 			hvx_params.type        = BLE_GATT_HVX_NOTIFICATION;
 			hvx_params.offset 	   = 0;
 			hvx_params.p_len 	   = &length;
 			hvx_params.p_data 	   = data;
 			
-			err_code = sd_ble_gatts_hvx(p_dig->conn_handle, &hvx_params);
+			err_code = sd_ble_gatts_hvx(p_ana->conn_handle, &hvx_params);
 		}
 		else
 		{
@@ -375,12 +375,12 @@ uint32_t ble_dig_transmit_send(ble_dig_t * p_dig, uint8_t data[], uint16_t lengt
 	return err_code;
 }
 
-uint32_t ble_dig_receive_send(ble_dig_t * p_dig, uint8_t * data, uint16_t length)
+uint32_t ble_ana_receive_send(ble_ana_t * p_ana, uint8_t * data, uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		
 		//update database
-		err_code = sd_ble_gatts_value_set(p_dig->receive_handles.value_handle,
+		err_code = sd_ble_gatts_value_set(p_ana->receive_handles.value_handle,
 																			0,
 																			&length,
 																		  data);
@@ -389,19 +389,19 @@ uint32_t ble_dig_receive_send(ble_dig_t * p_dig, uint8_t * data, uint16_t length
 			return err_code;
 		}
 		//send value if connected and notifying
-		if((p_dig->conn_handle != BLE_CONN_HANDLE_INVALID) && p_dig->is_notification_supported)
+		if((p_ana->conn_handle != BLE_CONN_HANDLE_INVALID) && p_ana->is_notification_supported)
 		{
 			ble_gatts_hvx_params_t hvx_params;
 			
 			memset(&hvx_params, 0, sizeof(hvx_params));
 			
-			hvx_params.handle      = p_dig->receive_handles.value_handle;
+			hvx_params.handle      = p_ana->receive_handles.value_handle;
 			hvx_params.type        = BLE_GATT_HVX_NOTIFICATION;
 			hvx_params.offset 	   = 0;
 			hvx_params.p_len 	     = &length;
 			hvx_params.p_data 	   = data;
 			
-			err_code = sd_ble_gatts_hvx(p_dig->conn_handle, &hvx_params);
+			err_code = sd_ble_gatts_hvx(p_ana->conn_handle, &hvx_params);
 		}
 		else
 		{
@@ -410,12 +410,12 @@ uint32_t ble_dig_receive_send(ble_dig_t * p_dig, uint8_t * data, uint16_t length
 	return err_code;
 }
 
-uint32_t ble_dig_config_send(ble_dig_t * p_dig, uint8_t * data, uint16_t length)
+uint32_t ble_ana_config_send(ble_ana_t * p_ana, uint8_t * data, uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		
 		//update database
-		err_code = sd_ble_gatts_value_set(p_dig->config_handles.value_handle,
+		err_code = sd_ble_gatts_value_set(p_ana->config_handles.value_handle,
 																			0,
 																			&length,
 																		  data);
@@ -424,19 +424,19 @@ uint32_t ble_dig_config_send(ble_dig_t * p_dig, uint8_t * data, uint16_t length)
 			return err_code;
 		}
 		//send value if connected and notifying
-		if((p_dig->conn_handle != BLE_CONN_HANDLE_INVALID) && p_dig->is_notification_supported)
+		if((p_ana->conn_handle != BLE_CONN_HANDLE_INVALID) && p_ana->is_notification_supported)
 		{
 			ble_gatts_hvx_params_t hvx_params;
 			
 			memset(&hvx_params, 0, sizeof(hvx_params));
 			
-			hvx_params.handle      = p_dig->config_handles.value_handle;
+			hvx_params.handle      = p_ana->config_handles.value_handle;
 			hvx_params.type        = BLE_GATT_HVX_NOTIFICATION;
 			hvx_params.offset 	   = 0;
 			hvx_params.p_len 	     = &length;
 			hvx_params.p_data 	   = data;
 			
-			err_code = sd_ble_gatts_hvx(p_dig->conn_handle, &hvx_params);
+			err_code = sd_ble_gatts_hvx(p_ana->conn_handle, &hvx_params);
 		}
 		else
 		{

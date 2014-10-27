@@ -46,6 +46,7 @@
 #include "ble_uart.h"
 #include "ble_i2c.h"
 #include "ble_dig.h"
+#include "ble_ana.h"
 #include "twi_master.h"
 #include "global_config.h"
 
@@ -92,6 +93,8 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 //           the scheduler).
 #define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
 #define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
+
+static app_timer_id_t analog_timer;
 
 static void uart_reconfig(uint8_t);
 static void i2c_init(void);
@@ -235,7 +238,7 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
-    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}, {0x5740, BLE_UUID_TYPE_BLE}};
+    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}, {0x5740, BLE_UUID_TYPE_BLE}, {0x6740, BLE_UUID_TYPE_BLE}};
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -256,9 +259,9 @@ static void advertising_init(void)
  */
 static void services_init(void)
 {
+	  // Initialize UART Service
 	  ble_uart_init_t uart_init;
 
-    // Initialize UART Service
     memset(&uart_init, 0, sizeof(uart_init));
 
     uart_init.evt_handler = NULL;
@@ -270,9 +273,9 @@ static void services_init(void)
 
     ble_uart_init(&m_uart, &uart_init);
 		
+		// Initialize I2C Service
 	  ble_i2c_init_t i2c_init;
 
-    // Initialize I2C Service
     memset(&i2c_init, 0, sizeof(i2c_init));
 
     i2c_init.evt_handler = NULL;
@@ -284,9 +287,9 @@ static void services_init(void)
 
     ble_i2c_init(&m_i2c, &i2c_init);
 		
+		// Initialize Digital Service
 	  ble_dig_init_t dig_init;
-
-    // Initialize Digital Service
+    
     memset(&dig_init, 0, sizeof(dig_init));
 
     dig_init.evt_handler = NULL;
@@ -297,6 +300,20 @@ static void services_init(void)
     }
 
     ble_dig_init(&m_dig, &dig_init);
+		
+		// Initialize Analog Service
+		ble_ana_init_t ana_init;
+		
+    memset(&ana_init, 0, sizeof(ana_init));
+
+    ana_init.evt_handler = NULL;
+    ana_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        ana_init.initial_transmit_state[i] = 0x00;
+    }
+
+    ble_ana_init(&m_ana, &ana_init);
 }
 
 
@@ -568,6 +585,7 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
 		ble_i2c_on_ble_evt(&m_i2c, p_ble_evt);
 		ble_dig_on_ble_evt(&m_dig, p_ble_evt);
+		ble_ana_on_ble_evt(&m_ana, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
 		on_ble_evt(p_ble_evt);
     /* 
@@ -598,53 +616,6 @@ static void scheduler_init(void)
 {
     APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 }
-
-
-/* YOUR_JOB: Uncomment this function if you need to handle button events.
-static void button_event_handler(uint8_t pin_no)
-{
-    switch (pin_no)
-    {
-        case MY_BUTTON_PIN:
-            // Code to handle MY_BUTTON keypresses
-            break;
-        
-        // Handle any other buttons
-            
-        default:
-            APP_ERROR_HANDLER(pin_no);
-    }
-}
-*/
-
-/**@brief Function for initializing the GPIOTE handler module.
- */
-/*static void gpiote_init(void)
-{
-    APP_GPIOTE_INIT(APP_GPIOTE_MAX_USERS);
-}*/
-
-
-/**@brief Function for initializing the button handler module.
- */
-/*static void buttons_init(void)
-{
-    // Note: Array must be static because a pointer to it will be saved in the Button handler
-    //       module.
-    static app_button_cfg_t buttons[] =
-    {
-        {WAKEUP_BUTTON_PIN, false, NRF_GPIO_PIN_NOPULL, NULL},
-        // YOUR_JOB: Add other buttons to be used:
-        // {MY_BUTTON_PIN,     false, NRF_GPIO_PIN_NOPULL, button_event_handler}
-    };
-    
-    APP_BUTTON_INIT(buttons, sizeof(buttons) / sizeof(buttons[0]), BUTTON_DETECTION_DELAY, true);
-                    
-    // Note: If the only use of buttons is to wake up, the app_button module can be omitted, and
-    //       the wakeup button can be configured by
-    // GPIO_WAKEUP_BUTTON_CONFIG(WAKEUP_BUTTON_PIN);
-}*/
-
 
 /**@brief Function for the Power manager.
  */
@@ -820,39 +791,6 @@ static void i2c_init(void){
  * Configures pin 0 for input and pin 8 for output and
  * configures GPIOTE to give interrupt on pin change.
  */
-/*static void gpio_init(void)
-{
-  NRF_GPIO->PIN_CNF[DIG_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
-                                        | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
-                                        | (NRF_GPIO_PIN_NOPULL << GPIO_PIN_CNF_PULL_Pos)
-                                        | (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos)
-                                        | (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos);    
-
-  // Enable interrupt:
-  NVIC_EnableIRQ(GPIOTE_IRQn);
-  NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Set << GPIOTE_INTENSET_PORT_Pos;
-}*/
-
-
-/** GPIOTE interrupt handler.
- * Triggered on pin 0 change
- */
-/*void GPIOTE_IRQHandler(void)
-{
-  // Event causing the interrupt must be cleared
-  if ((NRF_GPIOTE->EVENTS_PORT != 0))
-  {
-    NRF_GPIOTE->EVENTS_PORT = 0;
-  }
-	
-	uint8_t data[] = {nrf_gpio_pin_read(DIG_PIN)};
-  ble_dig_transmit(data, 1);
-}*/
-
-/**
- * Configures pin 0 for input and pin 8 for output and
- * configures GPIOTE to give interrupt on pin change.
- */
 static void gpio_init(void)
 {
   NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
@@ -913,6 +851,65 @@ static void dig_init(void){
 	gpio_init();
 }
 
+#define ADC_REF_VOLTAGE_IN_MILLIVOLTS        1200                                      
+#define ADC_PRE_SCALING_COMPENSATION         3                                         
+#define DIODE_FWD_VOLT_DROP_MILLIVOLTS       270  
+#define ADC_RESULT_IN_MILLI_VOLTS(ADC_VALUE)\
+        ((((ADC_VALUE) * ADC_REF_VOLTAGE_IN_MILLIVOLTS) / 1023) * ADC_PRE_SCALING_COMPENSATION)
+
+void ADC_IRQHandler(void)
+{
+
+	  NRF_ADC->INTENCLR = ADC_INTENCLR_END_Clear;
+    if (NRF_ADC->EVENTS_END != 0)
+    {
+			
+        uint16_t     adc_result;
+        uint16_t     lvl_in_milli_volts;
+
+        NRF_ADC->EVENTS_END     = 0;
+        adc_result              = NRF_ADC->RESULT;
+        NRF_ADC->TASKS_STOP     = 1;
+			
+				lvl_in_milli_volts = ADC_RESULT_IN_MILLI_VOLTS(adc_result);
+			
+				uint8_t data[] = {lvl_in_milli_volts >> 8, lvl_in_milli_volts};
+			
+				ble_ana_receive_send(&m_ana, data, 2);
+			
+    }
+}
+
+static void ana_read(void * p_context){
+	NRF_ADC->INTENSET = ADC_INTENSET_END_Msk;
+  NRF_ADC->CONFIG     = (ADC_CONFIG_RES_10bit                       << ADC_CONFIG_RES_Pos)     |
+                        (ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
+                        (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
+                        (ADC_CONFIG_PSEL_AnalogInput2                   << ADC_CONFIG_PSEL_Pos)    |
+                        (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
+	
+	NRF_ADC->EVENTS_END = 0;
+	NRF_ADC->ENABLE = ADC_ENABLE_ENABLE_Enabled << ADC_ENABLE_ENABLE_Pos;
+	
+	// Enable ADC interrupt
+  sd_nvic_ClearPendingIRQ(ADC_IRQn);
+  sd_nvic_SetPriority(ADC_IRQn, 3);
+  sd_nvic_EnableIRQ(ADC_IRQn);
+
+  NRF_ADC->EVENTS_END  = 0;    // Stop any running conversions.
+	NRF_ADC->TASKS_START = 1;
+}
+
+static void ana_init(void){
+	  
+		uint32_t err_code = NRF_SUCCESS;
+	
+		err_code = app_timer_create(&analog_timer, APP_TIMER_MODE_REPEATED, ana_read);
+    APP_ERROR_CHECK(err_code);
+	
+	  err_code = app_timer_start(analog_timer, APP_TIMER_TICKS(ANA_UPDATE_TIME, APP_TIMER_PRESCALER), NULL);
+    APP_ERROR_CHECK(err_code);
+}
 
 /**@brief Function for application main entry.
  */
@@ -934,7 +931,7 @@ int main(void)
 		uart_init();
 		i2c_init();
 		dig_init();		
-		
+		ana_init();
     
     // Start execution
     timers_start();

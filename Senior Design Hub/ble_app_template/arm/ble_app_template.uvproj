@@ -436,6 +436,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_ana.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -475,16 +480,6 @@
               <FileName>ble_stack_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_stack_handler.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_button.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_gpiote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_gpiote.c</FilePath>
             </File>
             <File>
               <FileName>ble_debug_assert_handler.c</FileName>
@@ -935,6 +930,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_ana.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -974,16 +974,6 @@
               <FileName>ble_stack_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_stack_handler.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_button.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_gpiote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_gpiote.c</FilePath>
             </File>
             <File>
               <FileName>ble_debug_assert_handler.c</FileName>

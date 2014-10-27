@@ -31,4 +31,10 @@
 #define DIG_INPUT_PIN				(13U)
 #define DIG_OUTPUT_PIN			(12U)
 
+/*************************
+ * ANALOG CONFIGURATION  *
+ *************************/
+#define ANA_INPUT_PIN				(4U)
+#define ANA_UPDATE_TIME			(1000U)
+
 #endif
