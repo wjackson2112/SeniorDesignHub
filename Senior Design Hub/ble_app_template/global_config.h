@@ -4,6 +4,14 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/*************************
+ * OVERALL CONFIGURATION *
+ *************************/
+#define DEVICE_NAME "Hub0"
+#define PASSCODE {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+#define SETTINGS_ADDRESS 0x0001CC00
+#define SETTINGS_BACKUP 0x0001C800
+
 /**********************
  * UART CONFIGURATION *
  **********************/

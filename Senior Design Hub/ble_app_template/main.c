@@ -47,6 +47,7 @@
 #include "ble_i2c.h"
 #include "ble_dig.h"
 #include "ble_ana.h"
+#include "ble_conf.h"
 #include "twi_master.h"
 #include "global_config.h"
 
@@ -54,7 +55,7 @@
 // YOUR_JOB: Define any other buttons to be used by the applications:
 // #define MY_BUTTON_PIN                   NRF6310_BUTTON_1
 
-#define DEVICE_NAME                     "SensorHub000"                           /**< Name of device. Will be included in the advertising data. */
+
 
 #define APP_ADV_INTERVAL                64                                          /**< The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
 #define APP_ADV_TIMEOUT_IN_SECONDS      0                                         /**< The advertising timeout (in units of seconds). */
@@ -99,6 +100,10 @@ static app_timer_id_t analog_timer;
 static void uart_reconfig(uint8_t);
 static void i2c_init(void);
 static void dig_init(void);
+void flash_update(void);
+
+bool needs_reboot = false;
+bool needs_update = false;
 
 /**@brief Function for error handling, which is called when an error has occurred. 
  *
@@ -206,7 +211,7 @@ static void gap_params_init(void)
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
     
     err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME, 
+                                          (const uint8_t *)device_name, 
                                           strlen(DEVICE_NAME));
     APP_ERROR_CHECK(err_code);  
 
@@ -259,6 +264,25 @@ static void advertising_init(void)
  */
 static void services_init(void)
 {
+	
+		// Initialize Configuration Service
+	  ble_conf_init_t conf_init;
+
+    memset(&conf_init, 0, sizeof(conf_init));
+
+    conf_init.evt_handler = NULL;
+    conf_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        conf_init.initial_device_name_state[i] = 0x00;
+    }
+		
+		for (int i = 0; i < sizeof(DEVICE_NAME); i++){
+			conf_init.initial_device_name_state[i] = device_name[i];
+		}
+
+    ble_conf_init(&m_conf, &conf_init);
+	
 	  // Initialize UART Service
 	  ble_uart_init_t uart_init;
 
@@ -419,63 +443,346 @@ static void advertising_start(void)
     nrf_gpio_pin_set(ADVERTISING_LED_PIN_NO);
 }
 
+/** Erases a page in flash
+ *
+ * @param page_address Adress of first word in page to be erased
+ */
+static void flash_page_erase(uint32_t *page_address)
+{
+  // Turn on flash erase enable and wait until the NVMC is ready:
+  NRF_NVMC->CONFIG = (NVMC_CONFIG_WEN_Een << NVMC_CONFIG_WEN_Pos);
+  while (NRF_NVMC->READY == NVMC_READY_READY_Busy)
+  {
+  }
+  // Erase page:
+  NRF_NVMC->ERASEPAGE = (uint32_t)page_address;
+  while (NRF_NVMC->READY == NVMC_READY_READY_Busy)
+  {
+  }
+  // Turn off flash erase enable and wait until the NVMC is ready:
+  NRF_NVMC->CONFIG &= ~(NVMC_CONFIG_WEN_Een << NVMC_CONFIG_WEN_Pos);
+  while (NRF_NVMC->READY == NVMC_READY_READY_Busy)
+  {
+  }
+}
+
+/** Fills a page in flash with a value
+ *
+ * @param address Adress of first word in page to be filled
+ * @param value Value to write to flash
+ */
+static void flash_word_write(uint32_t *address, uint32_t value)
+{
+  // Turn on flash write enable and wait until the NVMC is ready:
+  NRF_NVMC->CONFIG = (NVMC_CONFIG_WEN_Wen << NVMC_CONFIG_WEN_Pos);
+  while (NRF_NVMC->READY == NVMC_READY_READY_Busy)
+  {
+  }
+  *address = value;
+  // Turn off flash write enable and wait until the NVMC is ready:
+  NRF_NVMC->CONFIG = (NVMC_CONFIG_WEN_Ren << NVMC_CONFIG_WEN_Pos);
+  while (NRF_NVMC->READY == NVMC_READY_READY_Busy)
+  {
+  }
+}
+
+/**
+ * @brief Calculate Checksum for Page
+ * @details This calculates a 32-bit checksum for a chosen page in memory.  The checksum is created by simply adding all of the values
+ * in the page together and allowing the uint32 to overflow.  0xFFFFFFFF is always changed to 0x00000000 to avoid confusing this with
+ * an empty word in the page.
+ * 
+ * @param start_address Address of the page for which to create a checksum. 
+ * @return The checksum value.
+ */
+uint32_t calculate_page_checksum(uint32_t *start_address)
+{
+    uint32_t checksum = 0x00000000;
+    for (int i = 0;  i < 255; i++) {
+        checksum += *(start_address + i);
+
+    }
+
+    //All F's signals that the page was erased so
+    //don't use this sentinel value
+    //0x00000000 is acceptable just as a check
+    if (checksum == 0xFFFFFFFF) {
+        checksum = 0x00000000;
+    }
+
+    return checksum;
+}
+
+/**
+ * @brief Copy a Page
+ * @details This function copies one page to another page
+ * 
+ * @param from_address Address of the page to copy
+ * @param to_address Address of the page to overwrite
+ */
+void copy_page(uint32_t *from_address, uint32_t *to_address)
+{
+    for (int i = 0; i < 255; i++) {
+        flash_word_write(to_address + i, *(from_address + i));
+    }
+}
+
+/**
+ * @brief Update Settings Values in Flash
+ * @details This function is called when a disconnect occurs to avoid interferring with BLE timing.  This is also
+ * the point at which settings could have changed since the user must connect to change anything.  Once the settings
+ * are written, new checksums are created and recorded.
+ */
+void flash_update(void)
+{
+
+    uint32_t first_checksum = 0x00000000;
+    uint32_t second_checksum = 0x00000000;
+    uint8_t tries_count = 0; //Give up after three tries
+
+    do {
+        tries_count++;
+        uint32_t *addr;   //Page 1
+        uint32_t *addr2;  //Page 2 to be used as a copy of page 1
+
+        uint32_t transmissions[10];
+        for(int i = 0; i < 10; i++){
+        	transmissions[i] = 0;
+        }
+
+        // Start address:
+        addr = (uint32_t *) SETTINGS_ADDRESS;
+        addr2 = (uint32_t *) SETTINGS_BACKUP;
+
+        flash_page_erase(addr);
+				
+				for(int i = 0; i < 20; i++){
+					transmissions[0 + i/4] += (device_name[i] << (3-(i%4)) * 8);
+				}
+				
+				for(int i = 0; i < 20; i++){
+					transmissions[5 + i/4] += (passcode[i] << (3-(i%4)) * 8);
+				}
+
+        for(int i = 0; i < 10; i++){
+        	flash_word_write(addr + i, transmissions[i]);
+        }
+
+        //Write checksum to last word
+        first_checksum = calculate_page_checksum(addr);
+        flash_word_write(addr + 255, first_checksum);
+
+        //Copy to backup
+        flash_page_erase(addr2);
+        copy_page(addr, addr2);
+
+        //Calculate backup checksum
+        second_checksum = calculate_page_checksum(addr2);
+        flash_word_write(addr2 + 255, second_checksum);
+
+        //THIS IS A TEST
+        //Use different combinations to test bad checksum logic
+
+        //flash_page_erase(addr);
+        //flash_page_erase(addr2);
+
+        //for(int i = 0; i < 255; i++){
+        //flash_word_write((addr + i), i);
+        //flash_word_write((addr2 + i), i);
+        //}
+
+    } while (first_checksum != second_checksum && tries_count < 3);
+}
+
+/**
+ * @brief Load all Default Values
+ * @details When both checksums fail due to first startup or corruption, the default values are loaded from
+ * values in defaults.h
+ */
+void load_all_defaults(void)
+{
+
+    //Load Defaults
+	
+		uint8_t def_device_name[] = DEVICE_NAME;
+		for(int i = 0; i < sizeof(DEVICE_NAME); i++){
+			device_name[i] = def_device_name[i];
+		}
+		
+		for(int i = sizeof(DEVICE_NAME); i < 20; i++){
+			device_name[i] = 0x00;
+		}
+		
+		uint8_t def_passcode[] = PASSCODE;
+		for(int i = 0; i < 20; i++){
+			passcode[i] = def_passcode[i];
+		}
+}
+
+/**
+ * @brief Load Values from Flash
+ * @details This function runs at startup to get the values that have been stored back out of flash.
+ * At this point checksums are compared and the integrity of the settings is determined.  If anything is 
+ * corrupted, a recovery is attempted from the backup.  If both are corrupted, the device returns to defaults.
+ */
+void flash_init(void)
+{
+    uint32_t *addr;
+    uint32_t *addr2;
+
+    addr = (uint32_t *) SETTINGS_ADDRESS;
+    addr2 = (uint32_t *) SETTINGS_BACKUP;
+
+    /*
+     *  Confirm the checksums and attempt recovery
+     */
+
+    uint32_t first_checksum = calculate_page_checksum(addr);
+    uint32_t second_checksum = calculate_page_checksum(addr2);
+
+    //Note that if the user uses DFU to upgrade to this build, he must rewrite the
+    //Settings again so he should record all of the settings first, then rewrite
+    //them after the DFU is complete
+
+    //First settings are good, copy over
+    if (first_checksum == *(addr + 255) && second_checksum != *(addr2 + 255)) {
+        flash_page_erase(addr2);
+        copy_page(addr, addr2);
+        flash_word_write(addr2 + 255, second_checksum);
+    }
+
+    //Second settings are good, copy over
+    else if (first_checksum != *(addr + 255) && second_checksum == *(addr2 + 255)) {
+        flash_page_erase(addr);
+        copy_page(addr2, addr);
+        flash_word_write(addr2 + 255, first_checksum);
+    }
+
+    //Both are bad, panic, erase everything, load defaults instead, and return
+    else if (first_checksum != *(addr + 255) && second_checksum != *(addr2 + 255)) {
+        flash_page_erase(addr);
+        flash_page_erase(addr2);
+        load_all_defaults();
+        flash_update();
+        return;
+    }
+
+    //OTA causes new values to be updated improperly
+    //This allows the device to detect the issue and correct itself
+    bool needs_update = false;
+
+		for(int i = 0; i < 20; i++){
+			device_name[i] = *(addr + i/4) >> ((3 - (i%4)) * 8) & 0x000000FF; 
+		}
+		
+		for(int i = 0; i < 20; i++){
+			passcode[i] = *(addr + 5 + i/4) >> ((3 - (i%4)) * 8) & 0x000000FF;
+		}
+
+    if(needs_update){
+      flash_update();
+    }
+
+
+}
+
 /**@brief BLE bluetooth on write handler.
  */
 void on_write(ble_evt_t *p_ble_evt)
 {
 
     uint16_t *check_handler = &p_ble_evt->evt.gatts_evt.params.hvc.handle;
-
-		//Check for UART Service Input
-    if (*check_handler == m_uart.transmit_handles.value_handle) {
-
-        uint8_t * response = m_uart.transmit_packet;
-				simple_uart_put(response[0]);
-        //ble_uart_receive_send(&m_uart, response, 20);
-    }
-		
-		if (*check_handler == m_uart.config_handles.value_handle){
-				uart_reconfig(m_uart.config_packet[0]);
-		}
-		
-		//Check for I2C Service Input
-		if (*check_handler == m_i2c.transmit_handles.value_handle) {
-				uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
-				uint8_t * value = &(m_i2c.transmit_packet[1]);
-				
-				//Write
-				if(addr_and_r_w % 2 == 0){
-					twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
-				}
-				//Read
-				if(addr_and_r_w % 2 == 1){
-					twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
-					ble_i2c_receive_send(&m_i2c, value, p_ble_evt->evt.gatts_evt.params.write.len - 1);
-				}
-				
-		}
-		
-		//0x00 - No Stop Bit
-		//0x01 - Include Stop Bit
-		if (*check_handler == m_i2c.config_handles.value_handle){
-				if(m_i2c.config_packet[0] % 2 == 0){
-					send_stop_bit = false;
-				} else if(m_i2c.config_packet[0] % 2 == 1){
-					send_stop_bit = true;
-				}
-		}
-		
-		//Check for Digital Service Input
-		if (*check_handler == m_dig.transmit_handles.value_handle){
+	
+	
+		//Check for Configuration Service Input
+		if (*check_handler == m_conf.enter_passcode_handles.value_handle){
+			bool valid = true;
 			
-			if(m_dig.transmit_packet[0] > 0)
-				nrf_gpio_pin_set(DIG_OUTPUT_PIN);
-			else
-				nrf_gpio_pin_clear(DIG_OUTPUT_PIN);
+			for(int i = 0; i < 20; i++){
+				if(m_conf.enter_passcode_packet[i] != passcode[i]){
+					valid = false;
+				}
+			}
+			
+			passcode_valid = valid;
 		}
 		
-		if (*check_handler == m_dig.config_handles.value_handle){
+		if(passcode_valid){
+			if (*check_handler == m_conf.set_passcode_handles.value_handle){
+				for(int i = 0; i < 20; i++){
+					passcode[i] = m_conf.set_passcode_packet[i];
+				}
+				needs_update = true;
+			}
+		
+			if (*check_handler == m_conf.device_name_handles.value_handle){
+				int i = 0;
+				while(m_conf.device_name_packet[i] != 0x00){
+					device_name[i] = m_conf.device_name_packet[i];
+					i++;
+				}
+				
+				for(; i < 20; i++){
+					device_name[i] = 0x00;
+				}
+				
+				needs_update = true;
+				needs_reboot = true;
+			}
+		
+
+			//Check for UART Service Input
+			if (*check_handler == m_uart.transmit_handles.value_handle) {
+
+					uint8_t * response = m_uart.transmit_packet;
+					simple_uart_put(response[0]);
+					//ble_uart_receive_send(&m_uart, response, 20);
+			}
+		
+			if (*check_handler == m_uart.config_handles.value_handle){
+					uart_reconfig(m_uart.config_packet[0]);
+			}
+		
+			//Check for I2C Service Input
+			if (*check_handler == m_i2c.transmit_handles.value_handle) {
+					uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
+					uint8_t * value = &(m_i2c.transmit_packet[1]);
+				
+					//Write
+					if(addr_and_r_w % 2 == 0){
+						twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
+					}
+					//Read
+					if(addr_and_r_w % 2 == 1){
+						twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
+						if(passcode_valid)
+							ble_i2c_receive_send(&m_i2c, value, p_ble_evt->evt.gatts_evt.params.write.len - 1);
+					}
+				
+			}
+		
+			//0x00 - No Stop Bit
+			//0x01 - Include Stop Bit
+			if (*check_handler == m_i2c.config_handles.value_handle){
+					if(m_i2c.config_packet[0] % 2 == 0){
+						send_stop_bit = false;
+					} else if(m_i2c.config_packet[0] % 2 == 1){
+						send_stop_bit = true;
+					}
+			}
+		
+			//Check for Digital Service Input
+			if (*check_handler == m_dig.transmit_handles.value_handle){
 			
+				if(m_dig.transmit_packet[0] > 0)
+					nrf_gpio_pin_set(DIG_OUTPUT_PIN);
+				else
+					nrf_gpio_pin_clear(DIG_OUTPUT_PIN);
+			}
+		
+			if (*check_handler == m_dig.config_handles.value_handle){
+			
+			}
 		}
 }
 
@@ -493,6 +800,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
+						passcode_valid = false;
             nrf_gpio_pin_set(CONNECTED_LED_PIN_NO);
             nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
@@ -508,6 +816,12 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             break;
             
         case BLE_GAP_EVT_DISCONNECTED:
+						if(needs_update)
+							flash_update();
+				
+						if(needs_reboot)
+							sd_nvic_SystemReset();
+						
             nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
@@ -581,7 +895,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
  */
 static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
-    
+    ble_conf_on_ble_evt(&m_conf, p_ble_evt);
 		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
 		ble_i2c_on_ble_evt(&m_i2c, p_ble_evt);
 		ble_dig_on_ble_evt(&m_dig, p_ble_evt);
@@ -641,7 +955,8 @@ void UART0_IRQHandler(void){
 				if(receiving){
 					bytesReceived++;
 					if(bytesReceived == 20){
-            ble_uart_receive_send(&m_uart, buffer, 20);
+						if(passcode_valid)
+							ble_uart_receive_send(&m_uart, buffer, 20);
 						bytesReceived = 0;
 					}
 				}
@@ -655,6 +970,7 @@ void UART0_IRQHandler(void){
 	//uint8_t response[1] = {next_char};
 		
 	if(bytesReceived != 1){
+		if(passcode_valid)
 			ble_uart_receive_send(&m_uart, buffer, bytesReceived);  
 	}
 		
@@ -821,7 +1137,8 @@ void GPIOTE_IRQHandler(void)
   {
 			uint8_t data[] = {0};
 			
-      ble_dig_receive_send(&m_dig, data, 1);
+			if(passcode_valid)
+				ble_dig_receive_send(&m_dig, data, 1);
 			NVIC_DisableIRQ(GPIOTE_IRQn);
 		  NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_High << GPIO_PIN_CNF_SENSE_Pos)
                                         | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
@@ -833,7 +1150,8 @@ void GPIOTE_IRQHandler(void)
   } else {
 			uint8_t data[] = {1};
 			NVIC_DisableIRQ(GPIOTE_IRQn);
-			ble_dig_receive_send(&m_dig, data, 1);
+			if(passcode_valid)
+				ble_dig_receive_send(&m_dig, data, 1);
 			
 			NRF_GPIO->PIN_CNF[DIG_INPUT_PIN] = (GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)
                                         | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
@@ -875,7 +1193,8 @@ void ADC_IRQHandler(void)
 			
 				uint8_t data[] = {lvl_in_milli_volts >> 8, lvl_in_milli_volts};
 			
-				ble_ana_receive_send(&m_ana, data, 2);
+				if(passcode_valid)
+					ble_ana_receive_send(&m_ana, data, 2);
 			
     }
 }
@@ -911,6 +1230,16 @@ static void ana_init(void){
     APP_ERROR_CHECK(err_code);
 }
 
+static void configuration_init(void){
+		
+		//uint8_t def_device_name[] = DEVICE_NAME;
+	
+		//for(int i = 0; i < sizeof(DEVICE_NAME); i++){
+		//	device_name[i] = def_device_name[i];
+		//}
+	
+}
+
 /**@brief Function for application main entry.
  */
 int main(void)
@@ -920,6 +1249,11 @@ int main(void)
     timers_init();
     //gpiote_init();
     //buttons_init();
+	
+		flash_init();
+		configuration_init();
+
+		
 		
     ble_stack_init();
     scheduler_init();

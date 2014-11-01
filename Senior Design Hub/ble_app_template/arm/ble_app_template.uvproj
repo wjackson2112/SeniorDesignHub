@@ -441,6 +441,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -934,6 +939,11 @@
               <FileName>ble_ana.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
             </File>
           </Files>
         </Group>
