@@ -14,7 +14,7 @@
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 #include "common.h"
-#include "spi_master_config.h" // This file must be in the application folder
+#include "global_config.h" // This file must be in the application folder
 
 uint32_t* spi_master_init(SPIModuleNumber module_number, SPIMode mode, bool lsb_first)
 {

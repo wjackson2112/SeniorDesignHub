@@ -48,7 +48,9 @@
 #include "ble_dig.h"
 #include "ble_ana.h"
 #include "ble_conf.h"
+#include "ble_spi.h"
 #include "twi_master.h"
+#include "spi_master.h"
 #include "global_config.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
@@ -117,7 +119,7 @@ bool needs_update = false;
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
     nrf_gpio_pin_set(ASSERT_LED_PIN_NO);
-
+	
     // This call can be used for debug purposes during development of an application.
     // @note CAUTION: Activating this code will write the stack to flash on an error.
     //                This function should NOT be used in a final product.
@@ -243,7 +245,7 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     
     // YOUR_JOB: Use UUIDs for service(s) used in your application.
-    ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}, {0x5740, BLE_UUID_TYPE_BLE}, {0x6740, BLE_UUID_TYPE_BLE}};
+    //ble_uuid_t adv_uuids[] = {{0x3740, BLE_UUID_TYPE_BLE}, {0x4740, BLE_UUID_TYPE_BLE}, {0x5740, BLE_UUID_TYPE_BLE}, {0x6740, BLE_UUID_TYPE_BLE}};
 
     // Build and set advertising data
     memset(&advdata, 0, sizeof(advdata));
@@ -252,8 +254,8 @@ static void advertising_init(void)
     advdata.include_appearance      = true;
     advdata.flags.size              = sizeof(flags);
     advdata.flags.p_data            = &flags;
-    advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
-    advdata.uuids_complete.p_uuids  = adv_uuids;
+    //advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
+    //advdata.uuids_complete.p_uuids  = adv_uuids;
     
     err_code = ble_advdata_set(&advdata, NULL);
     APP_ERROR_CHECK(err_code);
@@ -325,8 +327,23 @@ static void services_init(void)
 
     ble_dig_init(&m_dig, &dig_init);
 		
+		// Initialize SPI Service
+	  ble_spi_init_t spi_init;
+
+    memset(&spi_init, 0, sizeof(spi_init));
+
+    spi_init.evt_handler = NULL;
+    spi_init.support_notification = true;
+
+    for (int i = 0; i < 20; i++) {
+        spi_init.initial_transmit_state[i] = 0x00;
+				spi_init.initial_receive_state[i] = 0x00;
+    }
+
+    ble_spi_init(&m_spi, &spi_init);
+		
 		// Initialize Analog Service
-		ble_ana_init_t ana_init;
+		/*ble_ana_init_t ana_init;
 		
     memset(&ana_init, 0, sizeof(ana_init));
 
@@ -337,7 +354,8 @@ static void services_init(void)
         ana_init.initial_transmit_state[i] = 0x00;
     }
 
-    ble_ana_init(&m_ana, &ana_init);
+    ble_ana_init(&m_ana, &ana_init);*/
+
 }
 
 
@@ -783,6 +801,45 @@ void on_write(ble_evt_t *p_ble_evt)
 			if (*check_handler == m_dig.config_handles.value_handle){
 			
 			}
+			
+			//Check for SPI Service Input
+			if(*check_handler == m_spi.transmit_handles.value_handle){								
+				uint8_t length = p_ble_evt->evt.gatts_evt.params.write.len;
+				
+				uint8_t input[length];
+				uint8_t output[length];
+				
+				for(int i = 0; i < length; i++){
+					input[i] = m_spi.transmit_packet[i];
+					output[i] = 0x00;
+				}
+				
+				if(spi_master_tx_rx(spi_base_address, length, input, output)){
+					ble_spi_receive_send(&m_spi, output, length);
+				}
+				
+			}
+			
+			if(*check_handler == m_spi.config_handles.value_handle){
+				lsb_first = m_spi.config_packet[0] % 2;
+				switch(m_spi.config_packet[0] >> 1){
+					case 0:
+						spi_mode = SPI_MODE0;
+						break;
+					case 1:
+						spi_mode = SPI_MODE1;
+						break;
+					case 2:
+						spi_mode = SPI_MODE2;
+						break;
+					case 3:
+						spi_mode = SPI_MODE3;
+						break;
+					default:
+						break;
+				}
+				spi_base_address = spi_master_init(SPI0, spi_mode, lsb_first);
+			}
 		}
 }
 
@@ -899,7 +956,8 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 		ble_uart_on_ble_evt(&m_uart, p_ble_evt);
 		ble_i2c_on_ble_evt(&m_i2c, p_ble_evt);
 		ble_dig_on_ble_evt(&m_dig, p_ble_evt);
-		ble_ana_on_ble_evt(&m_ana, p_ble_evt);
+		//ble_ana_on_ble_evt(&m_ana, p_ble_evt);
+		ble_spi_on_ble_evt(&m_spi, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
 		on_ble_evt(p_ble_evt);
     /* 
@@ -1194,7 +1252,7 @@ void ADC_IRQHandler(void)
 				uint8_t data[] = {lvl_in_milli_volts >> 8, lvl_in_milli_volts};
 			
 				if(passcode_valid)
-					ble_ana_receive_send(&m_ana, data, 2);
+					ble_dig_analog_send(&m_dig, data, 2);
 			
     }
 }
@@ -1240,6 +1298,12 @@ static void configuration_init(void){
 	
 }
 
+static void spi_init(void){
+	spi_mode = SPI_MODE;
+	lsb_first = SPI_LSB_FIRST;
+	spi_base_address = spi_master_init(SPI0, spi_mode, lsb_first);
+}
+
 /**@brief Function for application main entry.
  */
 int main(void)
@@ -1266,6 +1330,7 @@ int main(void)
 		i2c_init();
 		dig_init();		
 		ana_init();
+		spi_init();
     
     // Start execution
     timers_start();

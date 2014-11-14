@@ -51,4 +51,6 @@
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_dig.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_ana.h
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_conf.h
+.\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_spi.h
+.\_build\main.o: ..\..\..\NordicSDK\Include\spi_master.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\twi_master.h

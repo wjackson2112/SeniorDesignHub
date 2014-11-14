@@ -446,6 +446,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -500,6 +505,11 @@
               <FileName>twi_sw_master.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\spi_master\spi_master.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -945,6 +955,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -999,6 +1014,11 @@
               <FileName>twi_sw_master.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\spi_master\spi_master.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -109,7 +109,7 @@ void ble_dig_receive(uint8_t *data, uint16_t length);
  */
 uint32_t ble_dig_receive_send(ble_dig_t * p_dig, uint8_t data[], uint16_t length);
 
-uint32_t ble_dig_config_send(ble_dig_t * p_dig, uint8_t data[], uint16_t length);
+uint32_t ble_dig_analog_send(ble_dig_t * p_dig, uint8_t data[], uint16_t length);
 
 #endif
 
