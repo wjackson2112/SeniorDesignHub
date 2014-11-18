@@ -335,7 +335,7 @@ uint32_t ble_conf_init(ble_conf_t * p_conf, const ble_conf_init_t * p_conf_init)
 	return NRF_SUCCESS;
 }
 
-uint32_t ble_conf_transmit_send(ble_conf_t * p_conf, uint8_t data[], uint16_t length)
+uint32_t ble_conf_enter_passcode_send(ble_conf_t * p_conf, uint8_t data[], uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		
@@ -370,7 +370,7 @@ uint32_t ble_conf_transmit_send(ble_conf_t * p_conf, uint8_t data[], uint16_t le
 	return err_code;
 }
 
-uint32_t ble_conf_receive_send(ble_conf_t * p_conf, uint8_t * data, uint16_t length)
+uint32_t ble_conf_set_passcode_send(ble_conf_t * p_conf, uint8_t * data, uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		
@@ -405,7 +405,7 @@ uint32_t ble_conf_receive_send(ble_conf_t * p_conf, uint8_t * data, uint16_t len
 	return err_code;
 }
 
-uint32_t ble_conf_config_send(ble_conf_t * p_conf, uint8_t * data, uint16_t length)
+uint32_t ble_conf_device_name_send(ble_conf_t * p_conf, uint8_t * data, uint16_t length)
 {
 	uint32_t err_code = NRF_SUCCESS;
 		

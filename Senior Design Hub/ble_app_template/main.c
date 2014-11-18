@@ -563,8 +563,8 @@ void flash_update(void)
         uint32_t *addr;   //Page 1
         uint32_t *addr2;  //Page 2 to be used as a copy of page 1
 
-        uint32_t transmissions[10];
-        for(int i = 0; i < 10; i++){
+        uint32_t transmissions[11];
+        for(int i = 0; i < 11; i++){
         	transmissions[i] = 0;
         }
 
@@ -581,8 +581,10 @@ void flash_update(void)
 				for(int i = 0; i < 20; i++){
 					transmissions[5 + i/4] += (passcode[i] << (3-(i%4)) * 8);
 				}
+				
+				transmissions[10] = (send_stop_bit << 24) + (((spi_mode << 1) + lsb_first) << 16) + (((uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate) << 8);
 
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 11; i++){
         	flash_word_write(addr + i, transmissions[i]);
         }
 
@@ -635,6 +637,16 @@ void load_all_defaults(void)
 		for(int i = 0; i < 20; i++){
 			passcode[i] = def_passcode[i];
 		}
+		
+		send_stop_bit = I2C_STOP_BIT;
+		
+		spi_mode = SPI_MODE;
+		lsb_first = SPI_LSB_FIRST;
+		
+		uart_parity_included = UART_PARITY_INCLUDED;
+		uart_hw_flow_control = UART_HWFC;
+		uart_baud_rate = UART_BAUD_RATE;
+		
 }
 
 /**
@@ -697,6 +709,18 @@ void flash_init(void)
 			passcode[i] = *(addr + 5 + i/4) >> ((3 - (i%4)) * 8) & 0x000000FF;
 		}
 
+		uint8_t new_conf_state[1] = {*(addr + 10) >> 24};
+		send_stop_bit = new_conf_state[0];
+		
+		new_conf_state[0] = *(addr + 10) >> 16;
+		spi_mode = (SPIMode) (new_conf_state[0] >> 1);
+		lsb_first = new_conf_state[0] % 2;
+		
+		new_conf_state[0] = *(addr + 10) >> 8;
+		uart_parity_included = new_conf_state[0] >> 5;
+		uart_hw_flow_control = (new_conf_state[0] >> 4) % 2;
+		uart_baud_rate = new_conf_state[0] & 0x0F;
+		
     if(needs_update){
       flash_update();
     }
@@ -708,9 +732,8 @@ void flash_init(void)
  */
 void on_write(ble_evt_t *p_ble_evt)
 {
-
-    uint16_t *check_handler = &p_ble_evt->evt.gatts_evt.params.hvc.handle;
 	
+    uint16_t *check_handler = &p_ble_evt->evt.gatts_evt.params.hvc.handle;
 	
 		//Check for Configuration Service Input
 		if (*check_handler == m_conf.enter_passcode_handles.value_handle){
@@ -723,6 +746,19 @@ void on_write(ble_evt_t *p_ble_evt)
 			}
 			
 			passcode_valid = valid;
+			
+			if(passcode_valid){
+				uint8_t new_conf_state[1] = {send_stop_bit};
+				ble_i2c_config_send(&m_i2c, new_conf_state, 1);
+						
+				new_conf_state[0] = (uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate;
+				ble_uart_config_send(&m_uart, new_conf_state, 1);
+						
+				ble_conf_device_name_send(&m_conf, device_name, 20);
+				
+				new_conf_state[0] = (spi_mode << 1) + lsb_first;
+				ble_spi_config_send(&m_spi, new_conf_state, 1);
+			}
 		}
 		
 		if(passcode_valid){
@@ -820,6 +856,8 @@ void on_write(ble_evt_t *p_ble_evt)
 				
 			}
 			
+			//bit 0 - lsb_first
+			//bits 1-2 - SPI_MODE
 			if(*check_handler == m_spi.config_handles.value_handle){
 				lsb_first = m_spi.config_packet[0] % 2;
 				switch(m_spi.config_packet[0] >> 1){
@@ -853,6 +891,9 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     uint32_t                         err_code = NRF_SUCCESS;
     static ble_gap_evt_auth_status_t m_auth_status;
     ble_gap_enc_info_t *             p_enc_info;
+	
+		uint8_t zero_packet[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+		uint8_t zero_single[1] = {0x00};
     
     switch (p_ble_evt->header.evt_id)
     {
@@ -861,6 +902,26 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             nrf_gpio_pin_set(CONNECTED_LED_PIN_NO);
             nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+		
+						ble_i2c_transmit_send(&m_i2c, zero_packet, 20);
+						ble_i2c_receive_send(&m_i2c, zero_packet, 20);
+						ble_i2c_config_send(&m_i2c, zero_single, 1);
+						
+						ble_spi_transmit_send(&m_spi, zero_packet, 20);
+						ble_spi_receive_send(&m_spi, zero_packet, 20);
+						ble_spi_config_send(&m_spi, zero_single, 1);
+						
+						ble_uart_transmit_send(&m_uart, zero_packet, 20);
+						ble_uart_receive_send(&m_uart, zero_packet, 20);
+						ble_uart_config_send(&m_uart, zero_single, 1);
+						
+						ble_dig_transmit_send(&m_dig, zero_single, 1);
+						ble_dig_receive_send(&m_dig, zero_single, 1);
+						ble_dig_analog_send(&m_dig, zero_single, 1);
+						
+						ble_conf_enter_passcode_send(&m_conf, zero_packet, 20);
+						ble_conf_set_passcode_send(&m_conf, zero_packet, 20);
+						ble_conf_device_name_send(&m_conf, zero_packet, 20);
 
             /* YOUR_JOB: Uncomment this part if you are using the app_button module to handle button
                          events (assuming that the button events are only needed in connected
@@ -873,7 +934,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
             break;
             
         case BLE_GAP_EVT_DISCONNECTED:
-						if(needs_update)
+						//if(needs_update)
 							flash_update();
 				
 						if(needs_reboot)
@@ -1313,12 +1374,9 @@ int main(void)
     timers_init();
     //gpiote_init();
     //buttons_init();
-	
+		
 		flash_init();
-		configuration_init();
-
-		
-		
+	
     ble_stack_init();
     scheduler_init();
     gap_params_init();
@@ -1326,6 +1384,7 @@ int main(void)
     services_init();
     conn_params_init();
     sec_params_init();
+
 		uart_init();
 		i2c_init();
 		dig_init();		

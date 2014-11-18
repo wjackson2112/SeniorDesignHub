@@ -12,7 +12,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_bitfields.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_deprecated.h)(0x5391EA20)
-F (.\..\main.c)(0x5465B41B)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\main.o" --omf_browse ".\_build\main.crf" --depend ".\_build\main.d")
+F (.\..\main.c)(0x546AF6CE)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\main.o" --omf_browse ".\_build\main.crf" --depend ".\_build\main.d")
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
@@ -59,7 +59,7 @@ I (..\..\..\NordicSDK\Include\ble\ble_flash.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\ble\ble_debug_assert_handler.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\simple_uart.h)(0x542C3C4A)
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_uart.h)(0x542C3C4A)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_i2c.h)(0x54370D2B)
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_dig.h)(0x5465B3F5)
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_ana.h)(0x5465B544)
@@ -110,7 +110,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
@@ -140,7 +140,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
@@ -170,7 +170,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
@@ -200,13 +200,13 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf_gpio.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_bitfields.h)(0x5391EA20)
-F (..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c)(0x5454043E)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\ble_conf.o" --omf_browse ".\_build\ble_conf.crf" --depend ".\_build\ble_conf.d")
+F (..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c)(0x546AE835)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\ble_conf.o" --omf_browse ".\_build\ble_conf.crf" --depend ".\_build\ble_conf.d")
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_conf.h)(0x54540434)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdbool.h)(0x50FA2630)
@@ -230,13 +230,13 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
 I (..\..\..\NordicSDK\Include\nordic_common.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf_gpio.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_bitfields.h)(0x5391EA20)
-F (..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c)(0x5465B56E)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\ble_spi.o" --omf_browse ".\_build\ble_spi.crf" --depend ".\_build\ble_spi.d")
+F (..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c)(0x546AEE0C)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\ble_spi.o" --omf_browse ".\_build\ble_spi.crf" --depend ".\_build\ble_spi.d")
 I (..\..\..\CustomSDK\Include\ble\ble_services\ble_spi.h)(0x5465A713)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdbool.h)(0x50FA2630)
@@ -260,7 +260,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5088124E)
 I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\app_common\app_error.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 I (..\..\..\NordicSDK\Include\spi_master.h)(0x5391EA20)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x50FA2630)
 I (C:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50FA2630)
@@ -481,7 +481,7 @@ I (C:\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x5088124E)
 I (..\..\..\NordicSDK\Include\system_nrf51.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_bitfields.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_deprecated.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)
 F (..\..\..\NordicSDK\Source\spi_master\spi_master.c)(0x5465A401)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork --enum_is_int -I.. -I..\..\..\NordicSDK\Include -I..\..\..\NordicSDK\Include\app_common -I..\..\..\NordicSDK\Include\ble -I..\..\..\NordicSDK\Include\ble\ble_services -I..\..\..\NordicSDK\Include\ble\softdevice -I..\..\..\CustomSDK\Include\ble\ble_services --c99 -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Device\Nordic\nRF51822\Include -DNRF51 -DDEBUG_NRF_USER -o ".\_build\spi_master.o" --omf_browse ".\_build\spi_master.crf" --depend ".\_build\spi_master.d")
 I (..\..\..\NordicSDK\Include\spi_master.h)(0x5391EA20)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdbool.h)(0x50FA2630)
@@ -498,4 +498,4 @@ I (..\..\..\NordicSDK\Include\nrf51_bitfields.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf51_deprecated.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\nrf_gpio.h)(0x5391EA20)
 I (..\..\..\NordicSDK\Include\common.h)(0x5391EA20)
-I (..\global_config.h)(0x5465A570)
+I (..\global_config.h)(0x546AF6DF)

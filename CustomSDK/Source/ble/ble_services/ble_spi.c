@@ -318,7 +318,7 @@ static uint32_t spi_config_char_add(ble_spi_t * p_spi, const ble_spi_init_t * p_
     attr_md.vlen       = 1;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
-		initial_conf_state[0] = 0x00;
+		initial_conf_state[0] = (spi_mode << 1) + lsb_first;
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 
