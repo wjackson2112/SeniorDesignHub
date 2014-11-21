@@ -350,7 +350,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>NRF51 DEBUG_NRF_USER</Define>
               <Undefine></Undefine>
-              <IncludePath>..;..\..\..\NordicSDK\Include;..\..\..\NordicSDK\Include\app_common;..\..\..\NordicSDK\Include\ble;..\..\..\NordicSDK\Include\ble\ble_services;..\..\..\NordicSDK\Include\ble\softdevice</IncludePath>
+              <IncludePath>..;..\..\..\NordicSDK\Include;..\..\..\NordicSDK\Include\app_common;..\..\..\NordicSDK\Include\ble;..\..\..\NordicSDK\Include\ble\ble_services;..\..\..\NordicSDK\Include\ble\softdevice;..\..\..\CustomSDK\Include\ble\ble_services</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -424,7 +424,32 @@
             <File>
               <FileName>ble_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_dig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_ana.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -467,16 +492,6 @@
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_stack_handler.c</FilePath>
             </File>
             <File>
-              <FileName>app_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_button.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_gpiote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_gpiote.c</FilePath>
-            </File>
-            <File>
               <FileName>ble_debug_assert_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_debug_assert_handler.c</FilePath>
@@ -485,6 +500,16 @@
               <FileName>simple_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>twi_sw_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\spi_master\spi_master.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -908,7 +933,32 @@
             <File>
               <FileName>ble_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_dig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_dig.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_ana.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_ana.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\CustomSDK\Source\ble\ble_services\ble_spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -951,16 +1001,6 @@
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_stack_handler.c</FilePath>
             </File>
             <File>
-              <FileName>app_button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_button.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_gpiote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\NordicSDK\Source\app_common\app_gpiote.c</FilePath>
-            </File>
-            <File>
               <FileName>ble_debug_assert_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\ble\ble_debug_assert_handler.c</FilePath>
@@ -969,6 +1009,16 @@
               <FileName>simple_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\NordicSDK\Source\simple_uart\simple_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>twi_sw_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\twi_master\twi_sw_master.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_master.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\NordicSDK\Source\spi_master\spi_master.c</FilePath>
             </File>
           </Files>
         </Group>

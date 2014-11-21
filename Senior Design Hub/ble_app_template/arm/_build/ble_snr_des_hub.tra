@@ -6,6 +6,11 @@
 ### List of Objects: adding '".\_build\main.o"'
 ### List of Objects: adding '".\_build\ble_srv_common.o"'
 ### List of Objects: adding '".\_build\ble_uart.o"'
+### List of Objects: adding '".\_build\ble_i2c.o"'
+### List of Objects: adding '".\_build\ble_dig.o"'
+### List of Objects: adding '".\_build\ble_ana.o"'
+### List of Objects: adding '".\_build\ble_conf.o"'
+### List of Objects: adding '".\_build\ble_spi.o"'
 ### List of Objects: adding '".\_build\ble_error_log.o"'
 ### List of Objects: adding '".\_build\ble_flash.o"'
 ### List of Objects: adding '".\_build\ble_advdata.o"'
@@ -13,12 +18,12 @@
 ### List of Objects: adding '".\_build\app_timer.o"'
 ### List of Objects: adding '".\_build\ble_conn_params.o"'
 ### List of Objects: adding '".\_build\ble_stack_handler.o"'
-### List of Objects: adding '".\_build\app_button.o"'
-### List of Objects: adding '".\_build\app_gpiote.o"'
 ### List of Objects: adding '".\_build\ble_debug_assert_handler.o"'
 ### List of Objects: adding '".\_build\simple_uart.o"'
+### List of Objects: adding '".\_build\twi_sw_master.o"'
+### List of Objects: adding '".\_build\spi_master.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M0 ".\_build\arm_startup_nrf51.o" ".\_build\system_nrf51.o" ".\_build\main.o" ".\_build\ble_srv_common.o" ".\_build\ble_uart.o" ".\_build\ble_error_log.o" ".\_build\ble_flash.o" ".\_build\ble_advdata.o" ".\_build\app_scheduler.o" ".\_build\app_timer.o" ".\_build\ble_conn_params.o" ".\_build\ble_stack_handler.o" ".\_build\app_button.o" ".\_build\app_gpiote.o" ".\_build\ble_debug_assert_handler.o" ".\_build\simple_uart.o" 
+--cpu Cortex-M0 ".\_build\arm_startup_nrf51.o" ".\_build\system_nrf51.o" ".\_build\main.o" ".\_build\ble_srv_common.o" ".\_build\ble_uart.o" ".\_build\ble_i2c.o" ".\_build\ble_dig.o" ".\_build\ble_ana.o" ".\_build\ble_conf.o" ".\_build\ble_spi.o" ".\_build\ble_error_log.o" ".\_build\ble_flash.o" ".\_build\ble_advdata.o" ".\_build\app_scheduler.o" ".\_build\app_timer.o" ".\_build\ble_conn_params.o" ".\_build\ble_stack_handler.o" ".\_build\ble_debug_assert_handler.o" ".\_build\simple_uart.o" ".\_build\twi_sw_master.o" ".\_build\spi_master.o" 
 --strict --scatter ".\_build\ble_snr_des_hub.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
@@ -26,7 +31,7 @@
 ### ADS-LD Output File: '.\_build\ble_snr_des_hub.axf'
 ### ADS-LD Command File: '.\_build\ble_snr_des_hub.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile '.\_build\ble_snr_des_hub.lnp', Handle=0x00004FA0
+### Creating CmdFile '.\_build\ble_snr_des_hub.lnp', Handle=0x000039D0
 ### Writing '.lnp' file
 ### ADS-LD Command file '.\_build\ble_snr_des_hub.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
