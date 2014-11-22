@@ -1,5 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
 	<file>omegasensor.png</file>
+	<file>green.png</file>
+	<file>red.png</file>
 </qresource>
 </RCC>

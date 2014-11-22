@@ -10,8 +10,7 @@ class DriverDemo : public DriverUART
 public:
 	static QString Name();
 	virtual QWidget* CreateView();
-	virtual void Recv(const GatoCharacteristic& characteristic,
-		const QByteArray& data);
+	virtual void Recv(uint16_t characteristic, const QByteArray& data);
 
 signals:
 	void ADC(int value);

@@ -3,58 +3,57 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QObject>
-
-#include <gato/gatouuid.h>
-#include <gato/gatocharacteristic.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QMetaType>
+#include <QtCore/QSharedPointer>
 
 #include <stdint.h>
-
-class GatoService;
-class GatoPeripheral;
-class GatoCharacteristic;
 
 class SensorHub : public QObject
 {
 	Q_OBJECT
 
 public:
-	SensorHub(GatoPeripheral *peripheral, int rssi,
-		QObject *parent = 0);
-	~SensorHub();
+	SensorHub(int rssi, QObject *parent = 0);
+	virtual ~SensorHub();
 
 	int GetRSSI() const;
 	void SetRSSI(int rssi);
 
+	QString GetAddress() const;
 	QString HardwareName() const;
 
-	void Connect();
-	void Disconnect();
+	virtual void Connect() = 0;
+	virtual void Disconnect() = 0;
+	virtual bool IsConnected() const = 0;
 
-	void Write(const GatoCharacteristic& characteristic,
-		const QByteArray& data);
-	void SetNotify(const GatoCharacteristic& characteristic);
+	virtual void Write(uint16_t service, uint16_t characteristic,
+		const QByteArray& data) = 0;
+	virtual void SetNotify(uint16_t service, uint16_t characteristic) = 0;
 
-	GatoCharacteristic CharacteristicByUUID(
-		uint16_t service, uint16_t characteristic) const;
+	QDateTime LastSeen() const;
 
 signals:
-	void Read(const GatoCharacteristic& characteristic,
-		const QByteArray& data);
+	void Read(uint16_t characteristic, const QByteArray& data);
 
-private slots:
-	void Connected();
-	void ServicesDiscovered();
-	void CharacteristicsDiscovered(const GatoService& service);
-	void DescriptorsDiscovered(const GatoCharacteristic& characteristic);
+protected:
+	void SetAddress(const QString& addr);
+	void SetHardwareName(const QString& name);
+
+protected slots:
+	void UpdateLastSeen();
+	void LoadDrivers();
 
 private:
 	int mRSSI;
-	GatoPeripheral *mPeripheral;
-	GatoCharacteristic *mRx, *mTx, *mConfig;
+	QDateTime mLastSeen;
 
-	/// List of services and if the characteristics for that service have been
-	// discovered yet.
-	QMap<GatoUUID, bool> mCharacteristicsDiscovered;
+	QString mAddress;
+	QString mHardwareName;
 };
+
+typedef QSharedPointer<SensorHub> SensorHubPtr;
+
+Q_DECLARE_METATYPE(SensorHubPtr);
 
 #endif // __SensorHub_h__

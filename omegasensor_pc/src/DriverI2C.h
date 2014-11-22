@@ -1,0 +1,27 @@
+#ifndef __DriverI2C_h__
+#define __DriverI2C_h__
+
+#include "Driver.h"
+
+class DriverI2C : public Driver
+{
+	Q_OBJECT
+
+public:
+	static QString Name() { return "Generic I2C"; }
+	virtual DriverType Type() { return DriverType_I2C; }
+
+	virtual void Initialize(const SensorHubPtr& hub);
+	virtual void Send(const QByteArray& data);
+
+	void DisableStop();
+	void EnableStop();
+
+	void RegisterRead(uint8_t addr, uint8_t reg);
+
+protected slots:
+	virtual void Recv(uint16_t characteristic,
+		const QByteArray& data);
+};
+
+#endif // __DriverI2C_h__

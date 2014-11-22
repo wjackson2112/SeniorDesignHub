@@ -3,6 +3,8 @@
 #include "DriverDemoModel.h"
 #include "SensorHub.h"
 
+const uint16_t OMEGA_CHAR_UART_RX      = 0x3741;
+
 QString DriverDemo::Name()
 {
 	return "UART Demo";
@@ -18,10 +20,10 @@ QWidget* DriverDemo::CreateView()
 	return view;
 }
 
-void DriverDemo::Recv(const GatoCharacteristic& characteristic,
+void DriverDemo::Recv(uint16_t characteristic,
 	const QByteArray& data)
 {
-	if(characteristic.uuid() != mRX.uuid())
+	if(characteristic != OMEGA_CHAR_UART_RX)
 		return;
 
 	bool ok = false;
