@@ -15,12 +15,12 @@
 /**********************
  * UART CONFIGURATION *
  **********************/
-#define UART_RTS_PIN_NUMBER (10U)
-#define UART_TXD_PIN_NUMBER (12U)
-#define UART_CTS_PIN_NUMBER (6U)
-#define UART_RXD_PIN_NUMBER (11U)
+#define UART_RTS_PIN_NUMBER (34U)
+#define UART_TXD_PIN_NUMBER (32U)
+#define UART_CTS_PIN_NUMBER (35U)
+#define UART_RXD_PIN_NUMBER (33U)
 #define UART_HWFC false
-#define UART_BAUD_RATE (4U) //UART_BAUDRATE_BAUDRATE_Baud9600
+#define UART_BAUD_RATE UART_BAUDRATE_BAUDRATE_Baud9600
 #define UART_PARITY_INCLUDED false
 
 /**********************
@@ -36,22 +36,22 @@
 /*************************
  * DIGITAL CONFIGURATION *
  *************************/
-#define DIG_INPUT_PIN				(13U)
-#define DIG_OUTPUT_PIN			(12U)
+#define DIG_INPUT_PIN				(5U)
+#define DIG_OUTPUT_PIN			(4U)
 
 /*************************
  * ANALOG CONFIGURATION  *
  *************************/
-#define ANA_INPUT_PIN				(4U)
+#define ANA_INPUT_PIN				(2U)
 #define ANA_UPDATE_TIME			(1000U)
 
 /*********************
  * SPI CONFIGURATION *
  *********************/
-#define SPI_SCK_PIN (0U)
-#define SPI_MOSI_PIN (1U)
-#define SPI_MISO_PIN (2U)
-#define SPI_SS_PIN (3U)
+#define SPI_SCK_PIN (12U)
+#define SPI_MOSI_PIN (10U)
+#define SPI_MISO_PIN (11U)
+#define SPI_SS_PIN (13U)
 
 #define SPI_MODE SPI_MODE0
 #define SPI_LSB_FIRST true

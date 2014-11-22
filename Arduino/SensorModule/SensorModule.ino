@@ -33,7 +33,7 @@ void check_input(){
 }
 
 void setup(){
-    Serial.begin(9600);
+    Serial.begin(14400);
 
     pinMode(RED, OUTPUT);
     pinMode(GREEN, OUTPUT);

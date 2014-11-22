@@ -64,8 +64,8 @@
 
 // YOUR_JOB: Modify these according to requirements.
 #define APP_TIMER_PRESCALER             0                                           /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_MAX_TIMERS            2                                           /**< Maximum number of simultaneously created timers. */
-#define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
+#define APP_TIMER_MAX_TIMERS            4                                           /**< Maximum number of simultaneously created timers. */
+#define APP_TIMER_OP_QUEUE_SIZE         5                                           /**< Size of timer operation queues. */
 
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(50, UNIT_1_25_MS)            /**< Minimum acceptable connection interval (0.5 seconds). */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(100, UNIT_1_25_MS)           /**< Maximum acceptable connection interval (1 second). */
@@ -118,7 +118,6 @@ bool needs_update = false;
  */
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
-    nrf_gpio_pin_set(ASSERT_LED_PIN_NO);
 	
     // This call can be used for debug purposes during development of an application.
     // @note CAUTION: Activating this code will write the stack to flash on an error.
@@ -229,6 +228,8 @@ static void gap_params_init(void)
     gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
 
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
+		
+		//sd_ble_gap_tx_power_set(+4);
     APP_ERROR_CHECK(err_code);
 }
 
@@ -286,7 +287,7 @@ static void services_init(void)
     ble_conf_init(&m_conf, &conf_init);
 	
 	  // Initialize UART Service
-	  ble_uart_init_t uart_init;
+	  /*ble_uart_init_t uart_init;
 
     memset(&uart_init, 0, sizeof(uart_init));
 
@@ -297,7 +298,7 @@ static void services_init(void)
         uart_init.initial_transmit_state[i] = 0x00;
     }
 
-    ble_uart_init(&m_uart, &uart_init);
+    ble_uart_init(&m_uart, &uart_init);*/
 		
 		// Initialize I2C Service
 	  ble_i2c_init_t i2c_init;
@@ -314,7 +315,7 @@ static void services_init(void)
     ble_i2c_init(&m_i2c, &i2c_init);
 		
 		// Initialize Digital Service
-	  ble_dig_init_t dig_init;
+	  /*ble_dig_init_t dig_init;
     
     memset(&dig_init, 0, sizeof(dig_init));
 
@@ -325,10 +326,10 @@ static void services_init(void)
         dig_init.initial_transmit_state[i] = 0x00;
     }
 
-    ble_dig_init(&m_dig, &dig_init);
+    ble_dig_init(&m_dig, &dig_init);*/
 		
 		// Initialize SPI Service
-	  ble_spi_init_t spi_init;
+	  /*ble_spi_init_t spi_init;
 
     memset(&spi_init, 0, sizeof(spi_init));
 
@@ -340,7 +341,7 @@ static void services_init(void)
 				spi_init.initial_receive_state[i] = 0x00;
     }
 
-    ble_spi_init(&m_spi, &spi_init);
+    ble_spi_init(&m_spi, &spi_init);*/
 		
 		// Initialize Analog Service
 		/*ble_ana_init_t ana_init;
@@ -800,7 +801,15 @@ void on_write(ble_evt_t *p_ble_evt)
 			//Check for I2C Service Input
 			if (*check_handler == m_i2c.transmit_handles.value_handle) {
 					uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
-					uint8_t * value = &(m_i2c.transmit_packet[1]);
+					//uint8_t * value = &(m_i2c.transmit_packet[1]);
+				
+					uint8_t data_length = p_ble_evt->evt.gatts_evt.params.write.len - 1;
+				
+					uint8_t value[data_length];
+				
+					for(int i = 0; i < data_length; i++){
+						value[i] = m_i2c.transmit_packet[i+1];
+					}
 				
 					//Write
 					if(addr_and_r_w % 2 == 0){
@@ -1323,7 +1332,7 @@ static void ana_read(void * p_context){
   NRF_ADC->CONFIG     = (ADC_CONFIG_RES_10bit                       << ADC_CONFIG_RES_Pos)     |
                         (ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
                         (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
-                        (ADC_CONFIG_PSEL_AnalogInput2                   << ADC_CONFIG_PSEL_Pos)    |
+                        (ADC_CONFIG_PSEL_AnalogInput3                   << ADC_CONFIG_PSEL_Pos)    |
                         (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
 	
 	NRF_ADC->EVENTS_END = 0;
@@ -1378,10 +1387,11 @@ int main(void)
 		flash_init();
 	
     ble_stack_init();
+		services_init();
     scheduler_init();
     gap_params_init();
     advertising_init();
-    services_init();
+    
     conn_params_init();
     sec_params_init();
 

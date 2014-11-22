@@ -63,7 +63,7 @@ typedef struct ble_uart_s
 
 extern bool uart_parity_included;
 extern bool uart_hw_flow_control;
-extern uint8_t uart_baud_rate;
+extern uint32_t uart_baud_rate;
 
 extern ble_uart_t m_uart;
 
