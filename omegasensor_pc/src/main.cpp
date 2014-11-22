@@ -1,5 +1,6 @@
-//#include "MainWindow.h"
-#include <SensorHubService.h>
+#include "HubList.h"
+
+#include <SensorHubLinuxService.h>
 
 #include <QtGui/QApplication>
 
@@ -14,8 +15,10 @@ int main(int argc, char *argv[])
 	//MainWindow *mainWindow = new MainWindow;
 	//mainWindow->show();
 
-	SensorHubService serv;
-	serv.StartScan();
+	SensorHubLinuxService serv;
+
+	HubList *list = new HubList;
+	list->show();
 
 	// Run the main application event loop.
 	int ret = app.exec();

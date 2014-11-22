@@ -81,25 +81,43 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 SET(${PROJECT_NAME}_SRCS
 	src/main.cpp
 	src/SensorHub.cpp
+	src/SensorHubConfig.cpp
+	src/SensorHubLinux.cpp
 	src/SensorHubService.cpp
+	src/SensorHubLinuxService.cpp
+
+	src/AddHub.cpp
+	src/Config.cpp
+	src/HubList.cpp
+	src/HubListModel.cpp
 
 	src/DriverDemo.cpp
 	src/DriverDemoModel.cpp
 	src/DriverDemoView.cpp
 	src/DriverUART.cpp
+	src/DriverI2C.cpp
 
 	src/SimpleGraph.cpp
 )
 
 SET(${PROJECT_NAME}_HDRS
 	src/SensorHub.h
+	src/SensorHubConfig.h
+	src/SensorHubLinux.h
 	src/SensorHubService.h
+	src/SensorHubLinuxService.h
+
+	src/AddHub.h
+	src/Config.h
+	src/HubList.h
+	src/HubListModel.h
 
 	src/Driver.h
 	src/DriverDemo.h
 	src/DriverDemoModel.h
 	src/DriverDemoView.h
 	src/DriverUART.h
+	src/DriverI2C.h
 
 	src/SimpleGraph.h
 )
@@ -124,6 +142,9 @@ SET(${PROJECT_NAME}_RCC
 QT4_ADD_RESOURCES(${PROJECT_NAME}_RCC_SRCS ${${PROJECT_NAME}_RCC})
 
 SET(${PROJECT_NAME}_UIS
+	ui/AddHub.ui
+	ui/Config.ui
+	ui/HubList.ui
 	ui/DriverDemo.ui
 )
 QT4_WRAP_UI(${PROJECT_NAME}_UI_SRCS ${${PROJECT_NAME}_UIS})

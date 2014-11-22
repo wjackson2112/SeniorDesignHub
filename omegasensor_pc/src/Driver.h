@@ -4,8 +4,11 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
+#include <stdint.h>
+
+#include "SensorHub.h"
+
 class QWidget;
-class SensorHub;
 
 class Driver : public QObject
 {
@@ -13,10 +16,22 @@ class Driver : public QObject
 
 public:
 	virtual QWidget* CreateView() { return 0; }
-	virtual void Initialize(SensorHub *hub) { mHub = hub; }
+	virtual void Initialize(const SensorHubPtr& hub) { mHub = hub; }
+
+	typedef enum _DriverType
+	{
+		DriverType_Unknown = -1,
+		DriverType_UART = 0,
+		DriverType_I2C,
+		DriverType_SPI,
+		DriverType_Analog,
+		DriverType_Digital,
+	}DriverType;
+
+	virtual DriverType Type() = 0;
 
 protected:
-	SensorHub *mHub;
+	SensorHubPtr mHub;
 };
 
 #define DRIVER(name) Driver* Construct##name() { return new name(); } \
