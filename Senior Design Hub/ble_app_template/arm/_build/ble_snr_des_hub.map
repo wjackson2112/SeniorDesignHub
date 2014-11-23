@@ -559,18 +559,18 @@ Image Symbol Table
     .text                                    0x00014328   Section        0  main.o(.text)
     leds_init                                0x0001434d   Thumb Code    56  main.o(.text)
     timers_init                              0x00014385   Thumb Code    48  main.o(.text)
-    gap_params_init                          0x000143b5   Thumb Code   126  main.o(.text)
-    advertising_init                         0x00014433   Thumb Code    70  main.o(.text)
-    services_init                            0x00014479   Thumb Code   248  main.o(.text)
-    sec_params_init                          0x00014571   Thumb Code    66  main.o(.text)
-    on_conn_params_evt                       0x000145b3   Thumb Code    46  main.o(.text)
-    conn_params_error_handler                0x000145e1   Thumb Code    16  main.o(.text)
-    conn_params_init                         0x000145f1   Thumb Code    86  main.o(.text)
-    timers_start                             0x00014647   Thumb Code     2  main.o(.text)
-    advertising_start                        0x00014649   Thumb Code    74  main.o(.text)
-    flash_page_erase                         0x00014693   Thumb Code    54  main.o(.text)
-    flash_word_write                         0x000146c9   Thumb Code    36  main.o(.text)
-    uart_reconfig                            0x00014af5   Thumb Code   292  main.o(.text)
+    gap_params_init                          0x000143b5   Thumb Code   124  main.o(.text)
+    advertising_init                         0x00014431   Thumb Code    70  main.o(.text)
+    services_init                            0x00014477   Thumb Code   248  main.o(.text)
+    sec_params_init                          0x0001456f   Thumb Code    66  main.o(.text)
+    on_conn_params_evt                       0x000145b1   Thumb Code    46  main.o(.text)
+    conn_params_error_handler                0x000145df   Thumb Code    16  main.o(.text)
+    conn_params_init                         0x000145ef   Thumb Code    86  main.o(.text)
+    timers_start                             0x00014645   Thumb Code     2  main.o(.text)
+    advertising_start                        0x00014647   Thumb Code    74  main.o(.text)
+    flash_page_erase                         0x00014691   Thumb Code    54  main.o(.text)
+    flash_word_write                         0x000146c7   Thumb Code    36  main.o(.text)
+    uart_reconfig                            0x00014af3   Thumb Code   294  main.o(.text)
     on_ble_evt                               0x00014f13   Thumb Code   512  main.o(.text)
     ble_evt_dispatch                         0x00015113   Thumb Code    58  main.o(.text)
     ble_stack_init                           0x0001514d   Thumb Code    50  main.o(.text)
@@ -940,11 +940,11 @@ Image Symbol Table
     SystemInit                               0x000142e7   Thumb Code    38  system_nrf51.o(.text)
     app_error_handler                        0x00014329   Thumb Code    22  main.o(.text)
     assert_nrf_callback                      0x0001433f   Thumb Code    14  main.o(.text)
-    calculate_page_checksum                  0x000146ed   Thumb Code   104  main.o(.text)
-    copy_page                                0x00014755   Thumb Code    30  main.o(.text)
-    flash_update                             0x00014773   Thumb Code   340  main.o(.text)
-    load_all_defaults                        0x000148c7   Thumb Code   110  main.o(.text)
-    flash_init                               0x00014935   Thumb Code   448  main.o(.text)
+    calculate_page_checksum                  0x000146eb   Thumb Code    28  main.o(.text)
+    copy_page                                0x00014707   Thumb Code   106  main.o(.text)
+    flash_update                             0x00014771   Thumb Code   340  main.o(.text)
+    load_all_defaults                        0x000148c5   Thumb Code   110  main.o(.text)
+    flash_init                               0x00014933   Thumb Code   448  main.o(.text)
     on_write                                 0x00014c19   Thumb Code   762  main.o(.text)
     UART0_IRQHandler                         0x000151cb   Thumb Code   114  main.o(.text)
     GPIOTE_IRQHandler                        0x000152a1   Thumb Code   156  main.o(.text)
@@ -1242,14 +1242,14 @@ Image component sizes
          0          0          0          0          0       3628   ble_srv_common.o
        284         74          0         14          0       9229   ble_stack_handler.o
       1852        106         16         15        116       7520   ble_uart.o
-      5092        532          0         16        996      85493   main.o
+      5092        534          0         16        996      85401   main.o
        354         14          0          0          0       4764   simple_uart.o
        440         12          0          0          0       4831   spi_master.o
        216         28          0          4          0      21581   system_nrf51.o
        854          8          0          0          0       4326   twi_sw_master.o
 
     ----------------------------------------------------------------------
-     21860       1534        304        200       5700     262212   Object Totals
+     21860       1536        304        200       5700     262120   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          6          0          0         11          0          0   (incl. Padding)
 
@@ -1314,9 +1314,9 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     23292       1612        304        200       5800     262064   Grand Totals
-     23292       1612        304        200       5800     262064   ELF Image Totals
-     23292       1612        304        200          0          0   ROM Totals
+     23292       1614        304        200       5800     261972   Grand Totals
+     23292       1614        304        200       5800     261972   ELF Image Totals
+     23292       1614        304        200          0          0   ROM Totals
 
 ==============================================================================
 

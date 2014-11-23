@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\_build\ble_snr_des_hub.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\_build\ble_snr_des_hub.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Sat Nov 22 13:32:07 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 24]: Last Updated: Sat Nov 22 13:45:50 2014
 <BR><P>
 <H3>Maximum Stack Usage =        304 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -397,12 +397,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;softdevice_assertion_handler
 </UL>
 
-<P><STRONG><a name="[66]"></a>calculate_page_checksum</STRONG> (Thumb, 104 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[66]"></a>calculate_page_checksum</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flash_init
 <LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flash_update
 </UL>
 
-<P><STRONG><a name="[62]"></a>copy_page</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, main.o(.text))
+<P><STRONG><a name="[62]"></a>copy_page</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = copy_page
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;flash_word_write
@@ -1210,7 +1210,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[53]"></a>gap_params_init</STRONG> (Thumb, 126 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[53]"></a>gap_params_init</STRONG> (Thumb, 124 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = gap_params_init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_error_handler
@@ -1290,7 +1290,7 @@ Local Symbols
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copy_page
 </UL>
 
-<P><STRONG><a name="[69]"></a>uart_reconfig</STRONG> (Thumb, 292 bytes, Stack size 24 bytes, main.o(.text))
+<P><STRONG><a name="[69]"></a>uart_reconfig</STRONG> (Thumb, 294 bytes, Stack size 24 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = uart_reconfig &rArr; simple_uart_config &rArr; nrf_gpio_cfg_input
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;simple_uart_config
