@@ -75,6 +75,13 @@ void SensorHubLinux::Write(uint16_t service, uint16_t characteristic,
 	UpdateLastSeen();
 }
 
+void SensorHubLinux::Read(uint16_t service, uint16_t characteristic)
+{
+	Q_ASSERT(mPeripheral);
+	mPeripheral->readValue(CharacteristicByUUID(
+		service, characteristic));
+}
+
 void SensorHubLinux::SetNotify(uint16_t service, uint16_t characteristic)
 {
 	// Unlike Android, this will write descriptor 0x2902.
@@ -176,7 +183,6 @@ GatoCharacteristic SensorHubLinux::CharacteristicByUUID(
 void SensorHubLinux::ReadGato(const GatoCharacteristic& characteristic,
 		const QByteArray& data)
 {
-	std::cout << "wtf" << std::endl;
 	UpdateLastSeen();
-	emit Read(characteristic.uuid().toUInt16(), data);
+	emit Recv(characteristic.uuid().toUInt16(), data);
 }

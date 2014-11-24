@@ -29,12 +29,13 @@ public:
 
 	virtual void Write(uint16_t service, uint16_t characteristic,
 		const QByteArray& data) = 0;
+	virtual void Read(uint16_t service, uint16_t characteristic) = 0;
 	virtual void SetNotify(uint16_t service, uint16_t characteristic) = 0;
 
 	QDateTime LastSeen() const;
 
 signals:
-	void Read(uint16_t characteristic, const QByteArray& data);
+	void Recv(uint16_t characteristic, const QByteArray& data);
 
 protected:
 	void SetAddress(const QString& addr);

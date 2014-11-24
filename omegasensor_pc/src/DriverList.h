@@ -1,3 +1,4 @@
 DRIVER(DriverUART)
 DRIVER(DriverDemo)
 DRIVER(DriverI2C)
+DRIVER(Driver10DOF)

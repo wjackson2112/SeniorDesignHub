@@ -17,7 +17,8 @@ public:
 	void DisableStop();
 	void EnableStop();
 
-	void RegisterRead(uint8_t addr, uint8_t reg);
+	void RegisterRead(uint8_t addr, uint8_t reg, uint8_t count = 1);
+	void RegisterWrite(uint8_t addr, uint8_t reg, uint8_t data);
 
 protected slots:
 	virtual void Recv(uint16_t characteristic,

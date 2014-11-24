@@ -52,7 +52,7 @@ void DriverDemoView::Reset()
 
 void DriverDemoView::Update()
 {
-	QList<int> data;
+	QList<float> data;
 
 	for(int i = mModel->NumValues() - 1; i >= 0; i--)
 		data.append(mModel->Value(i));

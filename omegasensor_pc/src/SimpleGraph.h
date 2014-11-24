@@ -12,15 +12,15 @@ class SimpleGraph : public QWidget
 public:
 	SimpleGraph(QWidget *parent = 0);
 
-	void SetData(const QList<int>& data);
-	void SetRange(int min, int max);
+	void SetData(const QList<float>& data);
+	void SetRange(float min, float max);
 
 protected:
 	virtual void paintEvent(QPaintEvent *event);
 
 private:
-	int mMin, mMax;
-	QList<int> mData;
+	float mMin, mMax;
+	QList<float> mData;
 };
 
 #endif // __SimpleGraph_h__

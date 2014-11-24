@@ -15,7 +15,7 @@ void DriverUART::Initialize(const SensorHubPtr& hub)
 	Q_ASSERT(mHub);
 	mHub->SetNotify(OMEGA_CHAR_UART_SERVICE, OMEGA_CHAR_UART_RX);
 
-	connect(mHub.data(), SIGNAL(Read(uint16_t, const QByteArray&)),
+	connect(mHub.data(), SIGNAL(Recv(uint16_t, const QByteArray&)),
 		this, SLOT(Recv(uint16_t, const QByteArray&)));
 }
 

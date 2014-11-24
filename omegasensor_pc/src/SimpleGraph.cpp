@@ -12,13 +12,13 @@ SimpleGraph::SimpleGraph(QWidget *p) : QWidget(p),
 	// Nothing to see here.
 }
 
-void SimpleGraph::SetData(const QList<int>& data)
+void SimpleGraph::SetData(const QList<float>& data)
 {
 	mData = data;
 	repaint();
 }
 
-void SimpleGraph::SetRange(int min, int max)
+void SimpleGraph::SetRange(float min, float max)
 {
 	mMin = min;
 	mMax = max;
@@ -28,7 +28,7 @@ void SimpleGraph::paintEvent(QPaintEvent *evt)
 {
 	float w = width() - 2 * MARGIN;
 	float h = height() - 2 * MARGIN;
-	float space = w / (mData.count() - 1);
+	float space = w / (mData.count() - 1.0f);
 	float scale = h / (float)(mMax - mMin);
 
 	QPainter p(this);
@@ -39,7 +39,7 @@ void SimpleGraph::paintEvent(QPaintEvent *evt)
 
 	for(int i = 0; i < mData.count(); i++)
 	{
-		int val = mData.at(i);
+		float val = mData.at(i);
 		int x = (int)(i * space + MARGIN + 0.5f);
 		int y = (int)(scale * (val - mMin) + MARGIN + 0.5f);
 		y = height() - y; // Flip the y-axis.

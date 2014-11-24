@@ -96,6 +96,9 @@ SET(${PROJECT_NAME}_SRCS
 	src/DriverDemoView.cpp
 	src/DriverUART.cpp
 	src/DriverI2C.cpp
+	src/Driver10DOF.cpp
+	src/Driver10DOFModel.cpp
+	src/Driver10DOFView.cpp
 
 	src/SimpleGraph.cpp
 )
@@ -118,6 +121,9 @@ SET(${PROJECT_NAME}_HDRS
 	src/DriverDemoView.h
 	src/DriverUART.h
 	src/DriverI2C.h
+	src/Driver10DOF.h
+	src/Driver10DOFModel.h
+	src/Driver10DOFView.h
 
 	src/SimpleGraph.h
 )
@@ -146,6 +152,7 @@ SET(${PROJECT_NAME}_UIS
 	ui/Config.ui
 	ui/HubList.ui
 	ui/DriverDemo.ui
+	ui/Driver10DOF.ui
 )
 QT4_WRAP_UI(${PROJECT_NAME}_UI_SRCS ${${PROJECT_NAME}_UIS})
 

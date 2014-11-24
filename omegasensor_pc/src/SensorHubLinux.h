@@ -27,6 +27,7 @@ public:
 
 	virtual void Write(uint16_t service, uint16_t characteristic,
 		const QByteArray& data);
+	virtual void Read(uint16_t service, uint16_t characteristic);
 	virtual void SetNotify(uint16_t service, uint16_t characteristic);
 
 private slots:

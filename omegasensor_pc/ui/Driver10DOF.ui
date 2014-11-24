@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Driver10DOF</class>
+ <widget class="QWidget" name="Driver10DOF">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>512</width>
+    <height>398</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>10DOF Sensor Module</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Accel</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="accelXLabel">
+          <property name="text">
+           <string>X: 0.0g</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="accelYLabel">
+          <property name="text">
+           <string>Y: 0.0g</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="accelZLabel">
+          <property name="text">
+           <string>Z: 0.0g</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="accelMagLabel">
+          <property name="text">
+           <string>Mag: 0.0g</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="SimpleGraph" name="accelXPlot" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>75</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SimpleGraph" name="accelYPlot" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>75</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="SimpleGraph" name="accelZPlot" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>75</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SimpleGraph</class>
+   <extends>QWidget</extends>
+   <header>SimpleGraph.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
