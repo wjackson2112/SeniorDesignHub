@@ -63,7 +63,14 @@ void SensorHubLinux::Connected()
 {
 	// Discover all services.
 	Q_ASSERT(mPeripheral);
-	mPeripheral->discoverServices();
+	if(mPeripheral->haveServices())
+	{
+		LoadDrivers();
+	}
+	else
+	{
+		mPeripheral->discoverServices();
+	}
 }
 
 void SensorHubLinux::Write(uint16_t service, uint16_t characteristic,

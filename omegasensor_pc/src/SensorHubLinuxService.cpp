@@ -10,8 +10,10 @@
 
 SensorHubLinuxService::SensorHubLinuxService(QObject *p) : SensorHubService(p)
 {
+	mManager = new GatoCentralManager;
+
 	// Connect the manager signals.
-	connect(&mManager, SIGNAL(discoveredPeripheral(GatoPeripheral*,
+	connect(mManager, SIGNAL(discoveredPeripheral(GatoPeripheral*,
 		quint8, int)), this, SLOT(DiscoveredPeripheral(GatoPeripheral*,
 		quint8, int)));
 }
@@ -25,13 +27,24 @@ SensorHubLinuxService::~SensorHubLinuxService()
 void SensorHubLinuxService::StartScan()
 {
 	// Start scanning for bluetooth devices.
-	mManager.scanForPeripherals();
+	mManager->scanForPeripherals();
+}
+
+void SensorHubLinuxService::Reload()
+{
+	delete mManager;
+	mManager = new GatoCentralManager;
+
+	// Connect the manager signals.
+	connect(mManager, SIGNAL(discoveredPeripheral(GatoPeripheral*,
+		quint8, int)), this, SLOT(DiscoveredPeripheral(GatoPeripheral*,
+		quint8, int)));
 }
 
 void SensorHubLinuxService::StopScan()
 {
 	// Stop scanning for bluetooth devices.
-	mManager.stopScan();
+	mManager->stopScan();
 }
 
 void SensorHubLinuxService::DiscoveredPeripheral(GatoPeripheral *peripheral,

@@ -31,7 +31,7 @@ void DriverI2C::Initialize(const SensorHubPtr& hub)
 
 	mHub->Write(OMEGA_CHAR_CONF_SERVICE, OMEGA_CHAR_CONF_ENTER_PASS,
 		QByteArray((char*)pass, sizeof(pass)));
-	mHub->SetNotify(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_RX);
+	//mHub->SetNotify(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_RX);
 }
 
 void DriverI2C::RegisterRead(uint8_t addr, uint8_t reg, uint8_t count)
@@ -83,7 +83,7 @@ void DriverI2C::RegisterWrite(uint8_t addr, uint8_t reg, uint8_t value)
 }
 
 void DriverI2C::DisableStop()
-{return;
+{//return;
 	uint8_t data = I2C_NO_STOP_BIT;
 
 	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_CONFIG,
@@ -91,7 +91,7 @@ void DriverI2C::DisableStop()
 }
 
 void DriverI2C::EnableStop()
-{
+{//return;
 	uint8_t data = I2C_INCLUDE_STOP_BIT;
 
 	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_CONFIG,

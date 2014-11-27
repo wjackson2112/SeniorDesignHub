@@ -4,6 +4,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
+#include <iostream>
 #include <stdint.h>
 
 #include "SensorHub.h"
@@ -15,6 +16,7 @@ class Driver : public QObject
 	Q_OBJECT
 
 public:
+	virtual ~Driver();
 	virtual QWidget* CreateView() { return 0; }
 	virtual void Initialize(const SensorHubPtr& hub) { mHub = hub; }
 

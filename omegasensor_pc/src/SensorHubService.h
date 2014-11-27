@@ -74,6 +74,11 @@ public slots:
 	virtual void StopScan() = 0;
 
 	/**
+	 * Restart the service.
+	 */
+	virtual void Reload() = 0;
+
+	/**
 	 * Load the driver for the sensor hub at the given address.
 	 */
 	void LoadDriver(const QString& addr, const QString& driver);

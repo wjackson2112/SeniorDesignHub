@@ -91,6 +91,7 @@ SET(${PROJECT_NAME}_SRCS
 	src/HubList.cpp
 	src/HubListModel.cpp
 
+	src/Driver.cpp
 	src/DriverDemo.cpp
 	src/DriverDemoModel.cpp
 	src/DriverDemoView.cpp

@@ -15,6 +15,9 @@ public:
 	void SetModel(Driver10DOFModel *model);
 	void SetDeviceName(const QString& name);
 
+protected:
+	virtual void closeEvent(QCloseEvent *evt);
+
 protected slots:
 	void Update();
 

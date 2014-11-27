@@ -8,6 +8,7 @@ class DriverI2C : public Driver
 	Q_OBJECT
 
 public:
+	virtual ~DriverI2C() { }
 	static QString Name() { return "Generic I2C"; }
 	virtual DriverType Type() { return DriverType_I2C; }
 

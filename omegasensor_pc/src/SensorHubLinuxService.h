@@ -16,6 +16,7 @@ public:
 public slots:
 	virtual void StartScan();
 	virtual void StopScan();
+	virtual void Reload();
 
 private slots:
 	void DiscoveredPeripheral(GatoPeripheral *peripheral,
@@ -23,7 +24,7 @@ private slots:
 
 private:
 	/// Qt wrapper around Bluez (Linux BLE).
-	GatoCentralManager mManager;
+	GatoCentralManager *mManager;
 };
 
 #endif // __SensorHubLinuxService_h__
