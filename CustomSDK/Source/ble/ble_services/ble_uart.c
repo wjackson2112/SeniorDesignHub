@@ -28,7 +28,7 @@ static const ble_uuid128_t m_base_uuid128 =
 
 bool uart_parity_included = UART_PARITY_INCLUDED;
 bool uart_hw_flow_control = UART_HWFC;
-uint8_t uart_baud_rate = UART_BAUD_RATE;
+uint32_t uart_baud_rate = UART_BAUD_RATE;
 
 ble_uart_t m_uart;
 
@@ -316,7 +316,7 @@ static uint32_t uart_config_char_add(ble_uart_t * p_uart, const ble_uart_init_t 
     attr_md.vlen       = 1;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
-		initial_conf_state[0] = (uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate;
+		initial_conf_state[0] = (uart_parity_included << 5) + (uart_hw_flow_control << 4); //+ uart_baud_rate;
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 

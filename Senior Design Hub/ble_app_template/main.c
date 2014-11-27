@@ -59,33 +59,30 @@
 
 
 
-#define APP_ADV_INTERVAL                64                                          /**< The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
-#define APP_ADV_TIMEOUT_IN_SECONDS      0                                         /**< The advertising timeout (in units of seconds). */
+#define APP_ADV_INTERVAL                     64                                        /**< The advertising interval (in units of 0.625 ms. This value corresponds to 25 ms). */
+#define APP_ADV_TIMEOUT_IN_SECONDS           0                                       /**< The advertising timeout in units of seconds. */
 
-// YOUR_JOB: Modify these according to requirements.
-#define APP_TIMER_PRESCALER             0                                           /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_MAX_TIMERS            2                                           /**< Maximum number of simultaneously created timers. */
-#define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
+#define APP_TIMER_PRESCALER                  0                                         /**< Value of the RTC1 PRESCALER register. */
+#define APP_TIMER_MAX_TIMERS                 4                                         /**< Maximum number of simultaneously created timers. */
+#define APP_TIMER_OP_QUEUE_SIZE              5                                         /**< Size of timer operation queues. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(50, UNIT_1_25_MS)            /**< Minimum acceptable connection interval (0.5 seconds). */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(100, UNIT_1_25_MS)           /**< Maximum acceptable connection interval (1 second). */
-#define SLAVE_LATENCY                   0                                           /**< Slave latency. */
-#define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)             /**< Connection supervisory timeout (4 seconds). */
-#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(20000, APP_TIMER_PRESCALER) /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (15 seconds). */
-#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER)  /**< Time between each call to sd_ble_gap_conn_param_update after the first (5 seconds). */
-#define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
+#define MIN_CONN_INTERVAL										 MSEC_TO_UNITS(50, UNIT_1_25_MS)
+#define MAX_CONN_INTERVAL										 MSEC_TO_UNITS(100, UNIT_1_25_MS)
+#define SLAVE_LATENCY                        0                                         /**< Slave latency. */
+#define CONN_SUP_TIMEOUT                     MSEC_TO_UNITS(4000,UNIT_10_MS)                 /**< Connection supervisory timeout (4 seconds), Supervision Timeout uses 10 ms units. */
 
-#define APP_GPIOTE_MAX_USERS            1                                           /**< Maximum number of users of the GPIOTE handler. */
+#define FIRST_CONN_PARAMS_UPDATE_DELAY       APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER)/**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (5 seconds). */
+#define NEXT_CONN_PARAMS_UPDATE_DELAY        APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER)/**< Time between each call to sd_ble_gap_conn_param_update after the first (30 seconds). */
+#define MAX_CONN_PARAMS_UPDATE_COUNT         3                                         /**< Number of attempts before giving up the connection parameter negotiation. */
 
-#define BUTTON_DETECTION_DELAY          APP_TIMER_TICKS(50, APP_TIMER_PRESCALER)    /**< Delay from a GPIOTE event until a button is reported as pushed (in number of timer ticks). */
+#define SEC_PARAM_TIMEOUT                    30                                        /**< Timeout for Pairing Request or Security Request (in seconds). */
+#define SEC_PARAM_BOND                       1                                         /**< Perform bonding. */
+#define SEC_PARAM_MITM                       0                                         /**< Man In The Middle protection not required. */
+#define SEC_PARAM_IO_CAPABILITIES            BLE_GAP_IO_CAPS_NONE                      /**< No I/O capabilities. */
+#define SEC_PARAM_OOB                        0                                         /**< Out Of Band data not available. */
+#define SEC_PARAM_MIN_KEY_SIZE               7                                         /**< Minimum encryption key size. */
+#define SEC_PARAM_MAX_KEY_SIZE               16                                        /**< Maximum encryption key size. */
 
-#define SEC_PARAM_TIMEOUT               30                                          /**< Timeout for Pairing Request or Security Request (in seconds). */
-#define SEC_PARAM_BOND                  1                                           /**< Perform bonding. */
-#define SEC_PARAM_MITM                  0                                           /**< Man In The Middle protection not required. */
-#define SEC_PARAM_IO_CAPABILITIES       BLE_GAP_IO_CAPS_NONE                        /**< No I/O capabilities. */
-#define SEC_PARAM_OOB                   0                                           /**< Out Of Band data not available. */
-#define SEC_PARAM_MIN_KEY_SIZE          7                                           /**< Minimum encryption key size. */
-#define SEC_PARAM_MAX_KEY_SIZE          16                                          /**< Maximum encryption key size. */
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
@@ -118,7 +115,6 @@ bool needs_update = false;
  */
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
-    nrf_gpio_pin_set(ASSERT_LED_PIN_NO);
 	
     // This call can be used for debug purposes during development of an application.
     // @note CAUTION: Activating this code will write the stack to flash on an error.
@@ -229,6 +225,8 @@ static void gap_params_init(void)
     gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
 
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
+		
+		err_code = sd_ble_gap_tx_power_set(+4);
     APP_ERROR_CHECK(err_code);
 }
 
@@ -418,9 +416,9 @@ static void conn_params_init(void)
     cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
     cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
     cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
-    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
-    cp_init.disconnect_on_fail             = false;
-    cp_init.evt_handler                    = on_conn_params_evt;
+    cp_init.start_on_notify_cccd_handle    = m_conf.enter_passcode_handles.cccd_handle;
+    cp_init.disconnect_on_fail             = true;
+    cp_init.evt_handler                    = NULL;
     cp_init.error_handler                  = conn_params_error_handler;
     
     err_code = ble_conn_params_init(&cp_init);
@@ -800,7 +798,15 @@ void on_write(ble_evt_t *p_ble_evt)
 			//Check for I2C Service Input
 			if (*check_handler == m_i2c.transmit_handles.value_handle) {
 					uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
-					uint8_t * value = &(m_i2c.transmit_packet[1]);
+					//uint8_t * value = &(m_i2c.transmit_packet[1]);
+				
+					uint8_t data_length = p_ble_evt->evt.gatts_evt.params.write.len - 1;
+				
+					uint8_t value[data_length];
+				
+					for(int i = 0; i < data_length; i++){
+						value[i] = m_i2c.transmit_packet[i+1];
+					}
 				
 					//Write
 					if(addr_and_r_w % 2 == 0){
@@ -1323,7 +1329,7 @@ static void ana_read(void * p_context){
   NRF_ADC->CONFIG     = (ADC_CONFIG_RES_10bit                       << ADC_CONFIG_RES_Pos)     |
                         (ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
                         (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
-                        (ADC_CONFIG_PSEL_AnalogInput2                   << ADC_CONFIG_PSEL_Pos)    |
+                        (ADC_CONFIG_PSEL_AnalogInput3                   << ADC_CONFIG_PSEL_Pos)    |
                         (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
 	
 	NRF_ADC->EVENTS_END = 0;
@@ -1370,20 +1376,24 @@ static void spi_init(void){
 int main(void)
 {
     // Initialize
+	
     leds_init();
     timers_init();
+	
+		nrf_gpio_cfg_input(20, NRF_GPIO_PIN_PULLDOWN);
+		
     //gpiote_init();
     //buttons_init();
 		
 		flash_init();
 	
     ble_stack_init();
+		gap_params_init();
+		services_init();
+		conn_params_init();
+		sec_params_init();
+		advertising_init();
     scheduler_init();
-    gap_params_init();
-    advertising_init();
-    services_init();
-    conn_params_init();
-    sec_params_init();
 
 		uart_init();
 		i2c_init();
