@@ -3,6 +3,8 @@
 
 #include "Driver.h"
 
+class I2COperationChain;
+
 class DriverI2C : public Driver
 {
 	Q_OBJECT
@@ -14,6 +16,8 @@ public:
 
 	virtual void Initialize(const SensorHubPtr& hub);
 	virtual void Send(const QByteArray& data);
+
+	void Send(const I2COperationChain& chain);
 
 	void DisableStop();
 	void EnableStop();

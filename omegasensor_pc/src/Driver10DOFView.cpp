@@ -5,7 +5,7 @@
 
 #define ACCEL_RANGE (1.2f)
 #define MAG_RANGE (1.3f * 100.0f) // 1.3 gauss = 130uT
-#define GYRO_RANGE (1.2f)
+#define GYRO_RANGE (245.0f)
 
 Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p), mModel(0)
 {
@@ -74,7 +74,7 @@ void Driver10DOFView::Update()
 		mModel->AccelY(0) * mModel->AccelY(0) +
 		mModel->AccelZ(0) * mModel->AccelZ(0));
 
-	ui.accelMagLabel->setText(tr("Magnitude: %1g").arg(
+	ui.accelMagLabel->setText(tr("Mag: %1g").arg(
 		accelMag));
 
 	// Mag
@@ -109,7 +109,7 @@ void Driver10DOFView::Update()
 		mModel->MagY(0) * mModel->MagY(0) +
 		mModel->MagZ(0) * mModel->MagZ(0));
 
-	ui.magMagLabel->setText(tr("Magnitude: %1g").arg(
+	ui.magMagLabel->setText(tr("Mag: %1uT").arg(
 		magMag));
 
 	// Gyro
@@ -131,20 +131,20 @@ void Driver10DOFView::Update()
 	ui.gyroZPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
 	ui.gyroZPlot->SetData(gyroZ);
 
-	ui.gyroXLabel->setText(tr("X: %1deg/sec").arg(
+	ui.gyroXLabel->setText(tr("X: %1dps").arg(
 		mModel->GyroX(0)));
 
-	ui.gyroYLabel->setText(tr("Y: %1deg/sec").arg(
+	ui.gyroYLabel->setText(tr("Y: %1dps").arg(
 		mModel->GyroY(0)));
 
-	ui.gyroZLabel->setText(tr("Z: %1deg/sec").arg(
+	ui.gyroZLabel->setText(tr("Z: %1dps").arg(
 		mModel->GyroZ(0)));
 
 	float gyroMag = sqrt(mModel->GyroX(0) * mModel->GyroX(0) +
 		mModel->GyroY(0) * mModel->GyroY(0) +
 		mModel->GyroZ(0) * mModel->GyroZ(0));
 
-	ui.gyroMagLabel->setText(tr("Magnitude: %1g").arg(
+	ui.gyroMagLabel->setText(tr("Mag: %1dps").arg(
 		gyroMag));
 }
 

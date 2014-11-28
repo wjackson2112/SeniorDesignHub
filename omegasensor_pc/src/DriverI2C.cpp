@@ -1,5 +1,6 @@
 #include "DriverI2C.h"
 #include "SensorHub.h"
+#include "I2COperationChain.h"
 
 #include <iostream>
 #include <iomanip>
@@ -101,6 +102,18 @@ void DriverI2C::EnableStop()
 void DriverI2C::Send(const QByteArray& data)
 {
 	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_TX, data);
+}
+
+void DriverI2C::Send(const I2COperationChain& chain)
+{
+	QByteArray data = chain.OperationData();
+	if(data.isEmpty())
+		return;
+
+	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_TX, data);
+
+	if(chain.ReadLength())
+		mHub->Read(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_RX);
 }
 
 void DriverI2C::Recv(uint16_t characteristic,

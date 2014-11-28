@@ -101,6 +101,8 @@ SET(${PROJECT_NAME}_SRCS
 	src/Driver10DOFModel.cpp
 	src/Driver10DOFView.cpp
 
+	src/I2COperationChain.cpp
+
 	src/SimpleGraph.cpp
 )
 
@@ -125,6 +127,8 @@ SET(${PROJECT_NAME}_HDRS
 	src/Driver10DOF.h
 	src/Driver10DOFModel.h
 	src/Driver10DOFView.h
+
+	src/I2COperationChain.h
 
 	src/SimpleGraph.h
 )
