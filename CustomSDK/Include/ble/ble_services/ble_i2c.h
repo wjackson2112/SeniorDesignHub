@@ -62,6 +62,8 @@ typedef struct ble_i2c_s
 }ble_i2c_t;
 
 extern bool send_stop_bit;
+extern bool use_operation_chaining;
+extern bool use_transaction_id;
 
 extern ble_i2c_t m_i2c;
 

@@ -27,6 +27,8 @@ static const ble_uuid128_t m_base_uuid128 =
 };
 
 bool send_stop_bit = I2C_STOP_BIT;
+bool use_operation_chaining = I2C_OPERATION_CHAINING;
+bool use_transaction_id = I2C_TRANSACTION_ID;
 
 ble_i2c_t m_i2c;
 
@@ -130,7 +132,8 @@ static uint32_t i2c_transmit_char_add(ble_i2c_t * p_i2c, const ble_i2c_init_t * 
 	
     memset(&char_md, 0, sizeof(char_md));
 
-	char_md.char_props.write  = 1;
+		char_md.char_props.write_wo_resp = 1;
+		char_md.char_props.write  = 1;
     char_md.char_props.read   = 0;
     char_md.char_props.notify = 0;
     char_md.p_char_user_desc       = NULL;
@@ -148,7 +151,7 @@ static uint32_t i2c_transmit_char_add(ble_i2c_t * p_i2c, const ble_i2c_init_t * 
 
     attr_md.rd_auth    = 0;
     attr_md.wr_auth    = 0;
-    attr_md.vlen       = 1;
+    attr_md.vlen       = 0;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
 		initial_trans_state[0] = p_i2c_init->initial_transmit_state[0];
@@ -213,7 +216,7 @@ static uint32_t i2c_receive_char_add(ble_i2c_t * p_i2c, const ble_i2c_init_t * p
 	
     memset(&char_md, 0, sizeof(char_md));
 
-	char_md.char_props.write  = 0;
+		char_md.char_props.write  = 0;
     char_md.char_props.read   = 1;
     char_md.char_props.notify = 1;
     char_md.p_char_user_desc       = NULL;
@@ -316,7 +319,7 @@ static uint32_t i2c_config_char_add(ble_i2c_t * p_i2c, const ble_i2c_init_t * p_
     attr_md.vlen       = 1;
 	  attr_md.vloc       = BLE_GATTS_VLOC_STACK;
 		
-		initial_conf_state[0] = send_stop_bit;
+		initial_conf_state[0] = (use_transaction_id << 2) && ((use_operation_chaining) << 1) && send_stop_bit;
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 
