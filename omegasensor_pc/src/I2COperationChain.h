@@ -13,6 +13,8 @@ public:
 	I2COperationChain();
 	~I2COperationChain();
 
+	void Clear();
+
 	void SetTransactionID(uint8_t id);
 	void SetTransactionIDEnabled(bool enabled);
 
@@ -25,7 +27,7 @@ public:
 
 	void AddRegisterRead(uint8_t addr, uint8_t reg, uint8_t sz);
 	void AddRegisterWrite(uint8_t addr, uint8_t reg, uint8_t val);
-	void AddRegisterWrite(uint8_t addr, uint8_t reg, const uint8_t *data,
+	void AddRegisterWriteEx(uint8_t addr, uint8_t reg, const uint8_t *data,
 		uint8_t sz = 1);
 
 	uint8_t ReadLength() const;

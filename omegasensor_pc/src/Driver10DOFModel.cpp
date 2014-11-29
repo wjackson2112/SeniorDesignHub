@@ -13,7 +13,7 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	connect(&mTimer, SIGNAL(timeout()), drv, SLOT(Sample()));
 
 	mTimer.setSingleShot(false);
-	mTimer.start(100);
+	mTimer.start(10);
 
 	for(size_t i = 0; i < MAX_HISTORY; i++)
 	{

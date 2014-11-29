@@ -4,7 +4,8 @@
 #include <iostream>
 
 #define ACCEL_RANGE (1.2f)
-#define MAG_RANGE (1.3f * 100.0f) // 1.3 gauss = 130uT
+//#define MAG_RANGE (1.3f * 100.0f) // 1.3 gauss = 130uT
+#define MAG_RANGE (40.0f)
 #define GYRO_RANGE (245.0f)
 
 Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p), mModel(0)
@@ -146,6 +147,9 @@ void Driver10DOFView::Update()
 
 	ui.gyroMagLabel->setText(tr("Mag: %1dps").arg(
 		gyroMag));
+
+	ui.compassWidget->setDirection(
+		mModel->MagX(0), mModel->MagY(0));
 }
 
 void Driver10DOFView::closeEvent(QCloseEvent *evt)

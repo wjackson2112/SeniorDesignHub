@@ -1,6 +1,10 @@
 #include "I2COperationChain.h"
 
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QByteArray>
+
+#include <iostream>
 
 const uint8_t I2C_READ  = 1;
 const uint8_t I2C_WRITE = 0;
@@ -15,6 +19,18 @@ I2COperationChain::I2COperationChain() : mTransactionID(0),
 I2COperationChain::~I2COperationChain()
 {
 	// Nothing to see here.
+}
+
+void I2COperationChain::Clear()
+{
+	mTransactionID = 0;
+	mTransactionIDEnabled = false;
+
+	mTotalRead = 0;
+	mChainLength = 0;
+
+	// Zero out the operation chain buffer.
+	memset(mOperationChain, 0, sizeof(mOperationChain));
 }
 
 void I2COperationChain::SetTransactionID(uint8_t id)
@@ -75,10 +91,10 @@ void I2COperationChain::AddRegisterRead(uint8_t addr, uint8_t reg,
 void I2COperationChain::AddRegisterWrite(uint8_t addr, uint8_t reg,
 	uint8_t val)
 {
-	AddRegisterWrite(addr, reg, &val, 1);
+	AddRegisterWriteEx(addr, reg, &val, 1);
 }
 
-void I2COperationChain::AddRegisterWrite(uint8_t addr, uint8_t reg,
+void I2COperationChain::AddRegisterWriteEx(uint8_t addr, uint8_t reg,
 	const uint8_t *data, uint8_t sz)
 {
 	uint8_t buffer[sz + 1];
@@ -104,6 +120,15 @@ QByteArray I2COperationChain::OperationData() const
 		uint8_t buffer[CHAIN_PACKET_SIZE];
 		buffer[0] = mTransactionID;
 		memcpy(&buffer[1], mOperationChain, mChainLength);
+
+		QStringList hexDump;
+
+		for(int i = 0; i < (mChainLength + 1); i++)
+		{
+			hexDump.append(QString("0x%1").arg(buffer[i], 2, 16, QLatin1Char('0')));
+		}
+
+		std::cout << "OP: " << hexDump.join(" ").toUtf8().constData() << std::endl;
 
 		return QByteArray((char*)buffer, mChainLength + 1);
 	}

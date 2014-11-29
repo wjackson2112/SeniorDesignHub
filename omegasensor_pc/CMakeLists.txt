@@ -103,6 +103,7 @@ SET(${PROJECT_NAME}_SRCS
 
 	src/I2COperationChain.cpp
 
+	src/Compass.cpp
 	src/SimpleGraph.cpp
 )
 
@@ -130,6 +131,7 @@ SET(${PROJECT_NAME}_HDRS
 
 	src/I2COperationChain.h
 
+	src/Compass.h
 	src/SimpleGraph.h
 )
 QT4_WRAP_CPP(${PROJECT_NAME}_MOC_SRCS ${${PROJECT_NAME}_HDRS})

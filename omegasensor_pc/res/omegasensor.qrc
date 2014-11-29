@@ -3,5 +3,7 @@
 	<file>omegasensor.png</file>
 	<file>green.png</file>
 	<file>red.png</file>
+	<file>compass.png</file>
+	<file>compass_needle.png</file>
 </qresource>
 </RCC>
