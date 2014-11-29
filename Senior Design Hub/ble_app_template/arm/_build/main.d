@@ -54,3 +54,4 @@
 .\_build\main.o: ..\..\..\CustomSDK\Include\ble\ble_services\ble_spi.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\spi_master.h
 .\_build\main.o: ..\..\..\NordicSDK\Include\twi_master.h
+.\_build\main.o: ..\..\..\NordicSDK\Include\nrf_delay.h

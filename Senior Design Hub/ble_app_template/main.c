@@ -52,6 +52,7 @@
 #include "twi_master.h"
 #include "spi_master.h"
 #include "global_config.h"
+#include "nrf_delay.h"
 
 #define WAKEUP_BUTTON_PIN               NRF6310_BUTTON_0                            /**< Button used to wake up the application. */
 // YOUR_JOB: Define any other buttons to be used by the applications:
@@ -66,8 +67,8 @@
 #define APP_TIMER_MAX_TIMERS                 4                                         /**< Maximum number of simultaneously created timers. */
 #define APP_TIMER_OP_QUEUE_SIZE              5                                         /**< Size of timer operation queues. */
 
-#define MIN_CONN_INTERVAL										 MSEC_TO_UNITS(50, UNIT_1_25_MS)
-#define MAX_CONN_INTERVAL										 MSEC_TO_UNITS(100, UNIT_1_25_MS)
+#define MIN_CONN_INTERVAL										 MSEC_TO_UNITS(10, UNIT_1_25_MS)
+#define MAX_CONN_INTERVAL										 MSEC_TO_UNITS(20, UNIT_1_25_MS)
 #define SLAVE_LATENCY                        0                                         /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                     MSEC_TO_UNITS(4000,UNIT_10_MS)                 /**< Connection supervisory timeout (4 seconds), Supervision Timeout uses 10 ms units. */
 
@@ -381,7 +382,7 @@ static void sec_params_init(void)
  *
  * @param[in]   p_evt   Event received from the Connection Parameters Module.
  */
-static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
+/*static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
 {
     uint32_t err_code;
     
@@ -390,7 +391,7 @@ static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
         err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
         APP_ERROR_CHECK(err_code);
     }
-}
+}*/
 
 
 /**@brief Function for handling a Connection Parameters error.
@@ -580,7 +581,7 @@ void flash_update(void)
 					transmissions[5 + i/4] += (passcode[i] << (3-(i%4)) * 8);
 				}
 				
-				transmissions[10] = (send_stop_bit << 24) + (((spi_mode << 1) + lsb_first) << 16) + (((uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate) << 8);
+				transmissions[10] = (((use_transaction_id << 2) + (use_operation_chaining << 1) + send_stop_bit) << 24) + (((spi_mode << 1) + lsb_first) << 16) + (((uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate) << 8);
 
         for(int i = 0; i < 11; i++){
         	flash_word_write(addr + i, transmissions[i]);
@@ -637,6 +638,8 @@ void load_all_defaults(void)
 		}
 		
 		send_stop_bit = I2C_STOP_BIT;
+		use_operation_chaining = I2C_OPERATION_CHAINING;
+		use_transaction_id = I2C_TRANSACTION_ID;
 		
 		spi_mode = SPI_MODE;
 		lsb_first = SPI_LSB_FIRST;
@@ -708,7 +711,11 @@ void flash_init(void)
 		}
 
 		uint8_t new_conf_state[1] = {*(addr + 10) >> 24};
-		send_stop_bit = new_conf_state[0];
+		
+		
+		use_transaction_id = (new_conf_state[0] >> 2) & 0x01;
+		use_operation_chaining = (new_conf_state[0] >> 1) & 0x01;
+		send_stop_bit = new_conf_state[0] & 0x01;
 		
 		new_conf_state[0] = *(addr + 10) >> 16;
 		spi_mode = (SPIMode) (new_conf_state[0] >> 1);
@@ -746,7 +753,7 @@ void on_write(ble_evt_t *p_ble_evt)
 			passcode_valid = valid;
 			
 			if(passcode_valid){
-				uint8_t new_conf_state[1] = {send_stop_bit};
+				uint8_t new_conf_state[1] = {(use_transaction_id << 2) + (use_operation_chaining << 1) + send_stop_bit};
 				ble_i2c_config_send(&m_i2c, new_conf_state, 1);
 						
 				new_conf_state[0] = (uart_parity_included << 5) + (uart_hw_flow_control << 4) + uart_baud_rate;
@@ -797,33 +804,115 @@ void on_write(ble_evt_t *p_ble_evt)
 		
 			//Check for I2C Service Input
 			if (*check_handler == m_i2c.transmit_handles.value_handle) {
-					uint8_t addr_and_r_w = m_i2c.transmit_packet[0];
-					//uint8_t * value = &(m_i2c.transmit_packet[1]);
+					
+					//Using Operation Chaining
+					if(use_operation_chaining){
+							uint8_t transmission_length = p_ble_evt->evt.gatts_evt.params.write.len;
+							
+							uint8_t op_start = 0;
+						
+							uint8_t reply[20] = {0};
+							uint8_t reply_size = 0;
+							
+							if(use_transaction_id){
+								reply[0] = m_i2c.transmit_packet[op_start++];
+								reply_size = 1;
+							}
+							
+							while(op_start < transmission_length){
+								uint8_t addr_and_r_w = m_i2c.transmit_packet[op_start++];
+								uint8_t op_size = m_i2c.transmit_packet[op_start++];
+								uint8_t stop_bit = op_size >> 7;
+								op_size = op_size & 0x1F;
+								
+								//Write
+								if(addr_and_r_w % 2 == 0){
+									uint8_t value[op_size];
+									
+									for(uint8_t i = 0; i < op_size; i++){
+										value[i] = m_i2c.transmit_packet[op_start++];
+									}
+									
+									twi_master_transfer(addr_and_r_w, value, op_size, stop_bit);
+									nrf_delay_us(50);
+								} 
+								//Read
+								else if(addr_and_r_w % 2 == 1){
+									uint8_t value[op_size];
+									
+									for(uint8_t i = 0; i < op_size; i++){
+										value[i] = 0x00;
+									}
+									
+									twi_master_transfer(addr_and_r_w, value, op_size, stop_bit);
+									nrf_delay_us(50);
+									
+									for(uint8_t i = 0; i < op_size; i++){
+										reply[reply_size++] = value[i];
+									}
+								}
+							}
+							
+							if(reply_size > 0){
+								ble_i2c_receive_send(&m_i2c, reply, reply_size);
+							}
+					
+					//Not Using Operation Chaining
+					} else {
+							uint8_t current_byte = 0;
+							uint8_t transaction_id = 0;
+						
+							if(use_transaction_id){
+								transaction_id = m_i2c.transmit_packet[current_byte++];
+							}
+						
+							uint8_t addr_and_r_w = m_i2c.transmit_packet[current_byte++];
+							uint8_t data_length = p_ble_evt->evt.gatts_evt.params.write.len - current_byte;
+							uint8_t value[data_length];
 				
-					uint8_t data_length = p_ble_evt->evt.gatts_evt.params.write.len - 1;
+							for(int i = 0; i < data_length; i++){
+								value[i] = m_i2c.transmit_packet[current_byte + i];
+							}
 				
-					uint8_t value[data_length];
-				
-					for(int i = 0; i < data_length; i++){
-						value[i] = m_i2c.transmit_packet[i+1];
-					}
-				
-					//Write
-					if(addr_and_r_w % 2 == 0){
-						twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
-					}
-					//Read
-					if(addr_and_r_w % 2 == 1){
-						twi_master_transfer(addr_and_r_w, value, p_ble_evt->evt.gatts_evt.params.write.len - 1, send_stop_bit); 
-						if(passcode_valid)
-							ble_i2c_receive_send(&m_i2c, value, p_ble_evt->evt.gatts_evt.params.write.len - 1);
-					}
-				
+							//Write
+							if(addr_and_r_w % 2 == 0){
+								twi_master_transfer(addr_and_r_w, value, data_length, send_stop_bit); 
+							}
+							//Read
+							else if(addr_and_r_w % 2 == 1){
+								twi_master_transfer(addr_and_r_w, value, data_length, send_stop_bit);
+
+								if(use_transaction_id){
+									uint8_t reply[data_length + 1];
+									reply[0] = transaction_id;
+									
+									for(uint8_t i = 1; i < data_length + 1; i++){
+										reply[i] = value[i-1];
+									}
+									
+									ble_i2c_receive_send(&m_i2c, reply, data_length + 1);
+								} else {
+									ble_i2c_receive_send(&m_i2c, value, data_length);
+								}
+							}
+					}			
 			}
 		
 			//0x00 - No Stop Bit
 			//0x01 - Include Stop Bit
 			if (*check_handler == m_i2c.config_handles.value_handle){
+					if((m_i2c.config_packet[0] & 0x04) != 0){
+						use_transaction_id = true;
+					} else {
+						use_transaction_id = false;
+					}
+					
+					if((m_i2c.config_packet[0] & 0x02) != 0){
+						use_operation_chaining = true;
+					} else {
+						use_operation_chaining = false;
+					}
+				
 					if(m_i2c.config_packet[0] % 2 == 0){
 						send_stop_bit = false;
 					} else if(m_i2c.config_packet[0] % 2 == 1){
@@ -1353,16 +1442,6 @@ static void ana_init(void){
 	
 	  err_code = app_timer_start(analog_timer, APP_TIMER_TICKS(ANA_UPDATE_TIME, APP_TIMER_PRESCALER), NULL);
     APP_ERROR_CHECK(err_code);
-}
-
-static void configuration_init(void){
-		
-		//uint8_t def_device_name[] = DEVICE_NAME;
-	
-		//for(int i = 0; i < sizeof(DEVICE_NAME); i++){
-		//	device_name[i] = def_device_name[i];
-		//}
-	
 }
 
 static void spi_init(void){
