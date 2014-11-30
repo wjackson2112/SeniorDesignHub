@@ -63,7 +63,7 @@ private:
 	Driver10DOF *mDriver;
 
 	QFile mAccelLog, mMagLog, mGyroLog, mPressureLog, mTempLog;
-	QTimer mTimer;
+	QTimer mTimer, mTimer2;
 
 	int mAccelCount;
 	float mAccelX[MAX_HISTORY];

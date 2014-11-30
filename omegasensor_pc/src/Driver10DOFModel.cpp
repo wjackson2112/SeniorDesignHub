@@ -15,7 +15,12 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	connect(&mTimer, SIGNAL(timeout()), drv, SLOT(Sample()));
 
 	mTimer.setSingleShot(false);
-	mTimer.start(10);
+	mTimer.start(10); // 10 msec
+
+	connect(&mTimer2, SIGNAL(timeout()), drv, SLOT(SamplePressTemp()));
+
+	mTimer2.setSingleShot(false);
+	mTimer2.start(60 * 1000); // 1 min
 
 	for(size_t i = 0; i < MAX_HISTORY; i++)
 	{

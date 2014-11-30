@@ -83,7 +83,7 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 		QByteArray((char*)&config, sizeof(config)));
 
 	I2COperationChain op;
-	op.SetTransactionID(0);
+	op.SetTransactionID(255);
 	op.SetTransactionIDEnabled(true);
 
 	// Accel config.
@@ -95,7 +95,7 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 
 	Send(op);
 	op.Clear();
-	op.SetTransactionID(0);
+	op.SetTransactionID(254);
 	op.SetTransactionIDEnabled(true);
 
 	// Mag config.
@@ -122,6 +122,8 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 	op.AddRegisterRead(BMP180_SLAVE_ADDR, BMP180_REG_OUT_CALIB0 + 12, 10);
 
 	Send(op);
+
+	SamplePressTemp();
 }
 
 void Driver10DOF::Sample()
@@ -136,8 +138,12 @@ void Driver10DOF::Sample()
 	op.AddRegisterRead(GYRO_ADDR, 0x28 | 0x80, 6); // Gyro X, Z, Y
 
 	Send(op);
+}
 
-	op.Clear();
+void Driver10DOF::SamplePressTemp()
+{
+	I2COperationChain op;
+
 	op.SetTransactionIDEnabled(true);
 	op.SetTransactionID(1);
 	op.AddRegisterRead(MAG_ADDR, TEMP_OUT_H_M, 2);

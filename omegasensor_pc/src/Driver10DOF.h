@@ -23,6 +23,7 @@ signals:
 
 protected slots:
 	void Sample();
+	void SamplePressTemp();
 
 private:
 	int32_t BMP180_Measure();
