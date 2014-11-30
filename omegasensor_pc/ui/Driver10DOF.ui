@@ -298,6 +298,51 @@
       </widget>
      </item>
      <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="tempLabel">
+         <property name="text">
+          <string>Temperature: 0 C / 0 F</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="pressureLabel">
+         <property name="text">
+          <string>Pressure: 0 Pa</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="altitudeLabel">
+         <property name="text">
+          <string>Altitude: 0 ft.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="speedLabel">
+         <property name="text">
+          <string>Speed: 0 MPH</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

@@ -18,6 +18,8 @@ signals:
 	void Accel(float x, float y, float z);
 	void Mag(float x, float y, float z);
 	void Gyro(float x, float y, float z);
+	void Pressure(float press);
+	void Temp(float temp);
 
 protected slots:
 	void Sample();

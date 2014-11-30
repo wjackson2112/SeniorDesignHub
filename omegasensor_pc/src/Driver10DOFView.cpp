@@ -10,7 +10,8 @@
 //#define GYRO_RANGE (245.0f)
 #define GYRO_RANGE (50.0f)
 
-Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p), mModel(0)
+Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p),
+	mModel(0), mSpeed(0.0f)
 {
 	// Create the GUI.
 	ui.setupUi(this);
@@ -32,6 +33,12 @@ void Driver10DOFView::SetModel(Driver10DOFModel *model)
 		this, SLOT(Update()));
 
 	connect(mModel, SIGNAL(NewGyro(float, float, float)),
+		this, SLOT(Update()));
+
+	connect(mModel, SIGNAL(NewPressure(float)),
+		this, SLOT(Update()));
+
+	connect(mModel, SIGNAL(NewTemp(float)),
 		this, SLOT(Update()));
 }
 
@@ -218,6 +225,42 @@ void Driver10DOFView::Update()
 
 	ui.compassWidget->setDirection(
 		mModel->MagX(0), mModel->MagY(0));
+
+	float tempC = mModel->Temp(0);
+	float tempF = (9.0f / 5.0f) * tempC + 32.0f;
+
+	float press = mModel->Pressure(0);
+	float altitude = 44330.0f * (1.0f - pow(press / 101325.0f, 1.0f / 5.255f));
+	altitude *= 3.28084; // meters to feet.
+
+	ui.tempLabel->setText(tr("Temperature: %1C / %2F").arg(tempC).arg(tempF));
+	ui.pressureLabel->setText(tr("Pressure: %1 Pa").arg(press));
+	ui.altitudeLabel->setText(tr("Altitude: %1 ft.").arg(altitude));
+
+	// Calculate speed.
+	if(mModel->NumAccelValues() > 10)
+	{
+		float x = mModel->AccelX(0);
+		float y = mModel->AccelY(0);
+		float z = mModel->AccelZ(0);
+		float newMagnitude = sqrt(x * x + y * y + z * z) - 1.0f;
+
+		x = mModel->AccelX(1);
+		y = mModel->AccelY(1);
+		z = mModel->AccelZ(1);
+		float oldMagnitude = sqrt(x * x + y * y + z * z) - 1.0f;
+
+		float timeDelta = mModel->AccelTime(1) - mModel->AccelTime(0);
+		timeDelta /= 1000.0f; // msec to sec.
+
+		float speedChange = oldMagnitude * timeDelta +
+			(newMagnitude / 2.0f) * timeDelta * timeDelta;
+		speedChange *= 21.937; // g=>mph
+
+		mSpeed += speedChange;
+
+		ui.speedLabel->setText(tr("Speed: %1 MPH").arg(mSpeed));
+	}
 }
 
 void Driver10DOFView::closeEvent(QCloseEvent *evt)

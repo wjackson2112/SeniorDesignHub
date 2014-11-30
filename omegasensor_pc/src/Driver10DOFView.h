@@ -26,6 +26,8 @@ private:
 	Driver10DOFModel *mModel;
 
 	Ui::Driver10DOF ui;
+
+	float mSpeed;
 };
 
 #endif // __Driver10DOFView_h__

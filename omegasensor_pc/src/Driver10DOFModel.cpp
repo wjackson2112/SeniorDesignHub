@@ -7,8 +7,10 @@
 
 Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	QObject * p) : QObject(p), mDriver(drv), mAccelCount(0),
-	mMagCount(0), mGyroCount(0), mAccelLog("10dof-accel.csv"),
-	mMagLog("10dof-mag.csv"), mGyroLog("10dof-gyro.csv")
+	mMagCount(0), mGyroCount(0), mPressureCount(0), mTempCount(0),
+	mAccelLog("10dof-accel.csv"), mMagLog("10dof-mag.csv"),
+	mGyroLog("10dof-gyro.csv"), mPressureLog("10dof-press.csv"),
+	mTempLog("10dof-temp.csv")
 {
 	connect(&mTimer, SIGNAL(timeout()), drv, SLOT(Sample()));
 
@@ -26,6 +28,8 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 		mGyroX[i] = 0.0f;
 		mGyroY[i] = 0.0f;
 		mGyroZ[i] = 0.0f;
+		mPressure[i] = 0.0f;
+		mTemp[i] = 0.0f;
 	}
 
 	connect(drv, SIGNAL(Accel(float, float, float)),
@@ -37,6 +41,12 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	connect(drv, SIGNAL(Gyro(float, float, float)),
 		this, SLOT(RecordGyro(float, float, float)));
 
+	connect(drv, SIGNAL(Pressure(float)),
+		this, SLOT(RecordPressure(float)));
+
+	connect(drv, SIGNAL(Temp(float)),
+		this, SLOT(RecordTemp(float)));
+
 	mAccelLog.open(QIODevice::ReadWrite);
 	mAccelLog.write(tr("Time (msec),X (g),Y (g),Z (g)\n").toUtf8());
 
@@ -45,6 +55,12 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 
 	mGyroLog.open(QIODevice::ReadWrite);
 	mGyroLog.write(tr("Time (msec),X (dps),Y (dps),Z (dps)\n").toUtf8());
+
+	mPressureLog.open(QIODevice::ReadWrite);
+	mPressureLog.write(tr("Time (msec),Pressure (Pa)\n").toUtf8());
+
+	mTempLog.open(QIODevice::ReadWrite);
+	mTempLog.write(tr("Time (msec),Temp (C)\n").toUtf8());
 }
 
 float Driver10DOFModel::AccelX(int idx) const
@@ -69,6 +85,14 @@ float Driver10DOFModel::AccelZ(int idx) const
 		return 0.0f;
 
 	return mAccelZ[idx];
+}
+
+int64_t Driver10DOFModel::AccelTime(int idx) const
+{
+	if(idx < 0 || idx >= MAX_HISTORY)
+		return 0;
+
+	return mAccelTime[idx].toMSecsSinceEpoch();
 }
 
 int Driver10DOFModel::NumAccelValues() const
@@ -234,6 +258,88 @@ void Driver10DOFModel::RecordGyro(float x, float y, float z)
 	row.append(QString::number(z));
 	mGyroLog.write(QString("%1\n").arg(row.join(",")).toUtf8());
 	mGyroLog.flush();
+}
+
+float Driver10DOFModel::Pressure(int idx) const
+{
+	if(idx < 0 || idx >= MAX_HISTORY)
+		return 0.0f;
+
+	return mPressure[idx];
+}
+
+int Driver10DOFModel::NumPressureValues() const
+{
+	return mPressureCount;
+}
+
+void Driver10DOFModel::RecordPressure(float press)
+{
+	// Keep track of how many values.
+	if(mPressureCount < MAX_HISTORY)
+		mPressureCount++;
+
+	// Shift the old values.
+	for(size_t i = MAX_HISTORY - 1; i > 0; i--)
+	{
+		mPressureTime[i] = mPressureTime[i - 1];
+		mPressure[i] = mPressure[i - 1];
+	}
+
+	// Save the new value.
+	mPressureTime[0] = QDateTime::currentDateTime();
+	mPressure[0] = press;
+
+	// Emit the signal to the view.
+	//std::cout << "Send pressure to view..." << std::endl;
+	emit NewPressure(press);
+
+	QStringList row;
+	row.append(QString::number(mPressureTime[0].toMSecsSinceEpoch()));
+	row.append(QString::number(press));
+	mPressureLog.write(QString("%1\n").arg(row.join(",")).toUtf8());
+	mPressureLog.flush();
+}
+
+float Driver10DOFModel::Temp(int idx) const
+{
+	if(idx < 0 || idx >= MAX_HISTORY)
+		return 0.0f;
+
+	return mTemp[idx];
+}
+
+int Driver10DOFModel::NumTempValues() const
+{
+	return mTempCount;
+}
+
+void Driver10DOFModel::RecordTemp(float temp)
+{
+	// Keep track of how many values.
+	if(mTempCount < MAX_HISTORY)
+		mTempCount++;
+
+	// Shift the old values.
+	for(size_t i = MAX_HISTORY - 1; i > 0; i--)
+	{
+		mTempTime[i] = mTempTime[i - 1];
+		mTemp[i] = mTemp[i - 1];
+	}
+
+	// Save the new value.
+	mTempTime[0] = QDateTime::currentDateTime();
+	mTemp[0] = temp;
+
+	// Emit the signal to the view.
+	//std::cout << "Send temp to view..." << std::endl;
+	emit NewTemp(temp);
+
+	QStringList row;
+	row.append(QString::number(mTempTime[0].toMSecsSinceEpoch()));
+	row.append(QString::number(temp));
+	mTempLog.write(QString("%1\n").arg(row.join(",")).toUtf8());
+	mTempLog.flush();
 }
 
 void Driver10DOFModel::CleanClose()

@@ -220,6 +220,9 @@ void Driver10DOF::Recv(uint16_t characteristic,
 			int16_t *spt = (int16_t*)pt;
 
 			float temp = ((float)spt[0] * 0.0085989392f) + 15.719639f;
+
+			//emit Temp(temp);
+
 			//std::cout << "Temp: " << temp << std::endl;
 			return;
 		}
@@ -244,6 +247,9 @@ void Driver10DOF::Recv(uint16_t characteristic,
 
 			float altitude = 44330.0f * (1.0f - pow(p / 101325.0f, 1.0f / 5.255f));
 			altitude *= 3.28084;
+
+			emit Temp((float)T / 10.0f);
+			emit Pressure(p);
 
 			/*
 			std::cout << "Bosch Temp: " << ((float)T / 10.0f) << std::endl;

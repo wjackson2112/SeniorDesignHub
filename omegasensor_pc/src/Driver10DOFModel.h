@@ -21,6 +21,8 @@ public:
 	float AccelY(int idx = 0) const;
 	float AccelZ(int idx = 0) const;
 
+	int64_t AccelTime(int idx = 0) const;
+
 	int NumAccelValues() const;
 
 	float MagX(int idx = 0) const;
@@ -35,22 +37,32 @@ public:
 
 	int NumGyroValues() const;
 
+	float Pressure(int idx = 0) const;
+	int NumPressureValues() const;
+
+	float Temp(int idx = 0) const;
+	int NumTempValues() const;
+
 	void CleanClose();
 
 signals:
 	void NewAccel(float x, float y, float z);
 	void NewMag(float x, float y, float z);
 	void NewGyro(float x, float y, float z);
+	void NewPressure(float press);
+	void NewTemp(float temp);
 
 private slots:
 	void RecordAccel(float x, float y, float z);
 	void RecordMag(float x, float y, float z);
 	void RecordGyro(float x, float y, float z);
+	void RecordPressure(float press);
+	void RecordTemp(float temp);
 
 private:
 	Driver10DOF *mDriver;
 
-	QFile mAccelLog, mMagLog, mGyroLog;
+	QFile mAccelLog, mMagLog, mGyroLog, mPressureLog, mTempLog;
 	QTimer mTimer;
 
 	int mAccelCount;
@@ -70,6 +82,14 @@ private:
 	float mGyroY[MAX_HISTORY];
 	float mGyroZ[MAX_HISTORY];
 	QDateTime mGyroTime[MAX_HISTORY];
+
+	int mPressureCount;
+	float mPressure[MAX_HISTORY];
+	QDateTime mPressureTime[MAX_HISTORY];
+
+	int mTempCount;
+	float mTemp[MAX_HISTORY];
+	QDateTime mTempTime[MAX_HISTORY];
 };
 
 #endif // __Driver10DOFModel_h__
