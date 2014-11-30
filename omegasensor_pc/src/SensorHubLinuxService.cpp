@@ -54,7 +54,7 @@ void SensorHubLinuxService::DiscoveredPeripheral(GatoPeripheral *peripheral,
 	if(!OMEGA_NAME_REGEX.exactMatch(peripheral->name()))
 		return;
 
-	std::cout << peripheral->name().toUtf8().constData() << std::endl;
+	//std::cout << peripheral->name().toUtf8().constData() << std::endl;
 
 	// We get to hand parse this because it doesn't work right. Yay!
 	const uint8_t *data = (uint8_t*)peripheral->advertData().constData();
@@ -142,9 +142,11 @@ void SensorHubLinuxService::DiscoveredPeripheral(GatoPeripheral *peripheral,
 	}
 
 	// Print out some debug info about the sensor hub.
+	/*
 	std::cout << "Name: " << peripheral->name().toUtf8().constData()
 		<< " | MAC: " << peripheral->address().toString().toUtf8().constData()
 		<< " | RSSI: " << rssi << " dBm" << std::endl;
 	std::cout << "  Services: "
 		<< uuids.join(", ").toUtf8().constData() << std::endl;
+	*/
 }

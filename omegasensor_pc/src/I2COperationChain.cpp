@@ -128,7 +128,7 @@ QByteArray I2COperationChain::OperationData() const
 			hexDump.append(QString("0x%1").arg(buffer[i], 2, 16, QLatin1Char('0')));
 		}
 
-		std::cout << "OP: " << hexDump.join(" ").toUtf8().constData() << std::endl;
+		//std::cout << "OP: " << hexDump.join(" ").toUtf8().constData() << std::endl;
 
 		return QByteArray((char*)buffer, mChainLength + 1);
 	}

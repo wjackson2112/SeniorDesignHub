@@ -21,6 +21,27 @@ signals:
 
 protected slots:
 	void Sample();
+
+private:
+	int32_t BMP180_Measure();
+	int32_t computeB5(int32_t ut);
+	float getPressure();
+
+	int16_t AC1;
+	int16_t AC2;
+	int16_t AC3;
+	uint16_t AC4;
+	uint16_t AC5;
+	uint16_t AC6;
+	int16_t B1;
+	int16_t B2;
+	int16_t MB;
+	int16_t MC;
+	int16_t MD;
+
+	int32_t UT;
+	int32_t UP;
+	int32_t T;
 };
 
 #endif // __Driver10DOF_h__

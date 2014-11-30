@@ -24,6 +24,16 @@ void Compass::paintEvent(QPaintEvent *evt)
 
 void Compass::setDirection(float x, float y)
 {
+	x *= -1;
+
+	//x = 0, y = 22.7, z = don't give a fuck
+	// y = 27.4 (car off)
+	// y = 16.3
+
+	// -38, 2
+	//x -= 38;
+	//y += 0;//20.7;
+
 	float mag = sqrt(x * x + y * y);
 	x /= mag;
 	y /= mag;

@@ -38,8 +38,13 @@ Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 		this, SLOT(RecordGyro(float, float, float)));
 
 	mAccelLog.open(QIODevice::ReadWrite);
+	mAccelLog.write(tr("Time (msec),X (g),Y (g),Z (g)\n").toUtf8());
+
 	mMagLog.open(QIODevice::ReadWrite);
+	mMagLog.write(tr("Time (msec),X (uT),Y (uT),Z (uT)\n").toUtf8());
+
 	mGyroLog.open(QIODevice::ReadWrite);
+	mGyroLog.write(tr("Time (msec),X (dps),Y (dps),Z (dps)\n").toUtf8());
 }
 
 float Driver10DOFModel::AccelX(int idx) const
@@ -80,12 +85,14 @@ void Driver10DOFModel::RecordAccel(float x, float y, float z)
 	// Shift the old values.
 	for(size_t i = MAX_HISTORY - 1; i > 0; i--)
 	{
+		mAccelTime[i] = mAccelTime[i - 1];
 		mAccelX[i] = mAccelX[i - 1];
 		mAccelY[i] = mAccelY[i - 1];
 		mAccelZ[i] = mAccelZ[i - 1];
 	}
 
 	// Save the new value.
+	mAccelTime[0] = QDateTime::currentDateTime();
 	mAccelX[0] = x;
 	mAccelY[0] = y;
 	mAccelZ[0] = z;
@@ -95,6 +102,7 @@ void Driver10DOFModel::RecordAccel(float x, float y, float z)
 	emit NewAccel(x, y, z);
 
 	QStringList row;
+	row.append(QString::number(mAccelTime[0].toMSecsSinceEpoch()));
 	row.append(QString::number(x));
 	row.append(QString::number(y));
 	row.append(QString::number(z));
@@ -140,12 +148,14 @@ void Driver10DOFModel::RecordMag(float x, float y, float z)
 	// Shift the old values.
 	for(size_t i = MAX_HISTORY - 1; i > 0; i--)
 	{
+		mMagTime[i] = mMagTime[i - 1];
 		mMagX[i] = mMagX[i - 1];
 		mMagY[i] = mMagY[i - 1];
 		mMagZ[i] = mMagZ[i - 1];
 	}
 
 	// Save the new value.
+	mMagTime[0] = QDateTime::currentDateTime();
 	mMagX[0] = x;
 	mMagY[0] = y;
 	mMagZ[0] = z;
@@ -155,6 +165,7 @@ void Driver10DOFModel::RecordMag(float x, float y, float z)
 	emit NewMag(x, y, z);
 
 	QStringList row;
+	row.append(QString::number(mMagTime[0].toMSecsSinceEpoch()));
 	row.append(QString::number(x));
 	row.append(QString::number(y));
 	row.append(QString::number(z));
@@ -200,12 +211,14 @@ void Driver10DOFModel::RecordGyro(float x, float y, float z)
 	// Shift the old values.
 	for(size_t i = MAX_HISTORY - 1; i > 0; i--)
 	{
+		mGyroTime[i] = mGyroTime[i - 1];
 		mGyroX[i] = mGyroX[i - 1];
 		mGyroY[i] = mGyroY[i - 1];
 		mGyroZ[i] = mGyroZ[i - 1];
 	}
 
 	// Save the new value.
+	mGyroTime[0] = QDateTime::currentDateTime();
 	mGyroX[0] = x;
 	mGyroY[0] = y;
 	mGyroZ[0] = z;
@@ -215,6 +228,7 @@ void Driver10DOFModel::RecordGyro(float x, float y, float z)
 	emit NewGyro(x, y, z);
 
 	QStringList row;
+	row.append(QString::number(mGyroTime[0].toMSecsSinceEpoch()));
 	row.append(QString::number(x));
 	row.append(QString::number(y));
 	row.append(QString::number(z));

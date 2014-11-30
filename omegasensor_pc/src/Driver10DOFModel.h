@@ -4,6 +4,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QObject>
+#include <QtCore/QDateTime>
 
 class Driver10DOF;
 
@@ -56,16 +57,19 @@ private:
 	float mAccelX[MAX_HISTORY];
 	float mAccelY[MAX_HISTORY];
 	float mAccelZ[MAX_HISTORY];
+	QDateTime mAccelTime[MAX_HISTORY];
 
 	int mMagCount;
 	float mMagX[MAX_HISTORY];
 	float mMagY[MAX_HISTORY];
 	float mMagZ[MAX_HISTORY];
+	QDateTime mMagTime[MAX_HISTORY];
 
 	int mGyroCount;
 	float mGyroX[MAX_HISTORY];
 	float mGyroY[MAX_HISTORY];
 	float mGyroZ[MAX_HISTORY];
+	QDateTime mGyroTime[MAX_HISTORY];
 };
 
 #endif // __Driver10DOFModel_h__

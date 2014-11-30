@@ -2,11 +2,13 @@
 #include "Driver10DOFModel.h"
 
 #include <iostream>
+#include <float.h>
 
 #define ACCEL_RANGE (1.2f)
 //#define MAG_RANGE (1.3f * 100.0f) // 1.3 gauss = 130uT
 #define MAG_RANGE (40.0f)
-#define GYRO_RANGE (245.0f)
+//#define GYRO_RANGE (245.0f)
+#define GYRO_RANGE (50.0f)
 
 Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p), mModel(0)
 {
@@ -46,20 +48,50 @@ void Driver10DOFView::Update()
 	// Accel
 	QList<float> accelX, accelY, accelZ;
 
-	for(int i = mModel->NumAccelValues() - 1; i >= 0; i--)
+	float minAccelX = FLT_MAX, maxAccelX = -FLT_MAX;
+	float minAccelY = FLT_MAX, maxAccelY = -FLT_MAX;
+	float minAccelZ = FLT_MAX, maxAccelZ = -FLT_MAX;
+
+	float minMagX = FLT_MAX, maxMagX = -FLT_MAX;
+	float minMagY = FLT_MAX, maxMagY = -FLT_MAX;
+	float minMagZ = FLT_MAX, maxMagZ = -FLT_MAX;
+
+	float minGyroX = FLT_MAX, maxGyroX = -FLT_MAX;
+	float minGyroY = FLT_MAX, maxGyroY = -FLT_MAX;
+	float minGyroZ = FLT_MAX, maxGyroZ = -FLT_MAX;
+
+	for(int i = 0; i < mModel->NumAccelValues(); i++)
 	{
-		accelX.append(mModel->AccelX(i));
-		accelY.append(mModel->AccelY(i));
-		accelZ.append(mModel->AccelZ(i));
+		float x = mModel->AccelX(i);
+		if(x < minAccelX)
+			minAccelX = x;
+		if(x > maxAccelX)
+			maxAccelX = x;
+
+		float y = mModel->AccelY(i);
+		if(y < minAccelY)
+			minAccelY = y;
+		if(y > maxAccelY)
+			maxAccelY = y;
+
+		float z = mModel->AccelZ(i);
+		if(z < minAccelZ)
+			minAccelZ = z;
+		if(z > maxAccelZ)
+			maxAccelZ = z;
+
+		accelX.prepend(x);
+		accelY.prepend(y);
+		accelZ.prepend(z);
 	}
 
-	ui.accelXPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelXPlot->SetRange(minAccelX, maxAccelX);
 	ui.accelXPlot->SetData(accelX);
 
-	ui.accelYPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelYPlot->SetRange(minAccelY, maxAccelY);
 	ui.accelYPlot->SetData(accelY);
 
-	ui.accelZPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelZPlot->SetRange(minAccelZ, maxAccelZ);
 	ui.accelZPlot->SetData(accelZ);
 
 	ui.accelXLabel->setText(tr("X: %1g").arg(
@@ -83,18 +115,36 @@ void Driver10DOFView::Update()
 
 	for(int i = mModel->NumMagValues() - 1; i >= 0; i--)
 	{
-		magX.append(mModel->MagX(i));
-		magY.append(mModel->MagY(i));
-		magZ.append(mModel->MagZ(i));
+		float x = mModel->MagX(i);
+		if(x < minMagX)
+			minMagX = x;
+		if(x > maxMagX)
+			maxMagX = x;
+
+		float y = mModel->MagY(i);
+		if(y < minMagY)
+			minMagY = y;
+		if(y > maxMagY)
+			maxMagY = y;
+
+		float z = mModel->MagZ(i);
+		if(z < minMagZ)
+			minMagZ = z;
+		if(z > maxMagZ)
+			maxMagZ = z;
+
+		magX.append(x);
+		magY.append(y);
+		magZ.append(z);
 	}
 
-	ui.magXPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magXPlot->SetRange(minMagX, maxMagX);
 	ui.magXPlot->SetData(magX);
 
-	ui.magYPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magYPlot->SetRange(minMagY, maxMagY);
 	ui.magYPlot->SetData(magY);
 
-	ui.magZPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magZPlot->SetRange(minMagZ, maxMagZ);
 	ui.magZPlot->SetData(magZ);
 
 	ui.magXLabel->setText(tr("X: %1uT").arg(
@@ -118,18 +168,36 @@ void Driver10DOFView::Update()
 
 	for(int i = mModel->NumGyroValues() - 1; i >= 0; i--)
 	{
-		gyroX.append(mModel->GyroX(i));
-		gyroY.append(mModel->GyroY(i));
-		gyroZ.append(mModel->GyroZ(i));
+		float x = mModel->GyroX(i);
+		if(x < minGyroX)
+			minGyroX = x;
+		if(x > maxGyroX)
+			maxGyroX = x;
+
+		float y = mModel->GyroY(i);
+		if(y < minGyroY)
+			minGyroY = y;
+		if(y > maxGyroY)
+			maxGyroY = y;
+
+		float z = mModel->GyroZ(i);
+		if(z < minGyroZ)
+			minGyroZ = z;
+		if(z > maxGyroZ)
+			maxGyroZ = z;
+
+		gyroX.append(x);
+		gyroY.append(y);
+		gyroZ.append(z);
 	}
 
-	ui.gyroXPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroXPlot->SetRange(minGyroX, maxGyroX);
 	ui.gyroXPlot->SetData(gyroX);
 
-	ui.gyroYPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroYPlot->SetRange(minGyroY, maxGyroY);
 	ui.gyroYPlot->SetData(gyroY);
 
-	ui.gyroZPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroZPlot->SetRange(minGyroZ, maxGyroZ);
 	ui.gyroZPlot->SetData(gyroZ);
 
 	ui.gyroXLabel->setText(tr("X: %1dps").arg(
