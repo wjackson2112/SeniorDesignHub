@@ -29,6 +29,10 @@ public:
 	float MagY(int idx = 0) const;
 	float MagZ(int idx = 0) const;
 
+	float AvgMagX() const;
+	float AvgMagY() const;
+	float AvgMagZ() const;
+
 	int NumMagValues() const;
 
 	float GyroX(int idx = 0) const;

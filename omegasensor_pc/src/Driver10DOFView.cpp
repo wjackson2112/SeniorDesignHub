@@ -223,8 +223,10 @@ void Driver10DOFView::Update()
 	ui.gyroMagLabel->setText(tr("Mag: %1dps").arg(
 		gyroMag));
 
+	/*ui.compassWidget->setDirection(
+		mModel->MagX(0), mModel->MagY(0));*/
 	ui.compassWidget->setDirection(
-		mModel->MagX(0), mModel->MagY(0));
+		mModel->AvgMagX(), mModel->AvgMagY());
 
 	float tempC = mModel->Temp(0);
 	float tempF = (9.0f / 5.0f) * tempC + 32.0f;

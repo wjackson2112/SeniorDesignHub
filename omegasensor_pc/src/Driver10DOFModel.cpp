@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+const int MAG_AVG_COUNT = 30;
+
 Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	QObject * p) : QObject(p), mDriver(drv), mAccelCount(0),
 	mMagCount(0), mGyroCount(0), mPressureCount(0), mTempCount(0),
@@ -161,6 +163,45 @@ float Driver10DOFModel::MagZ(int idx) const
 		return 0.0f;
 
 	return mMagZ[idx];
+}
+
+float Driver10DOFModel::AvgMagX() const
+{
+	if(mMagCount < MAG_AVG_COUNT)
+		return mMagX[0];
+
+	float val = 0.0f;
+	
+	for(int i = 0; i < MAG_AVG_COUNT; i++)
+		val += mMagX[i];
+
+	return val / MAG_AVG_COUNT;
+}
+
+float Driver10DOFModel::AvgMagY() const
+{
+	if(mMagCount < MAG_AVG_COUNT)
+		return mMagY[0];
+
+	float val = 0.0f;
+	
+	for(int i = 0; i < MAG_AVG_COUNT; i++)
+		val += mMagY[i];
+
+	return val / MAG_AVG_COUNT;
+}
+
+float Driver10DOFModel::AvgMagZ() const
+{
+	if(mMagCount < MAG_AVG_COUNT)
+		return mMagZ[0];
+
+	float val = 0.0f;
+	
+	for(int i = 0; i < MAG_AVG_COUNT; i++)
+		val += mMagZ[i];
+
+	return val / MAG_AVG_COUNT;
 }
 
 int Driver10DOFModel::NumMagValues() const
