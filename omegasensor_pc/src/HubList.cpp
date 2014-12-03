@@ -4,7 +4,7 @@
 #include "AddHub.h"
 #include "Config.h"
 
-#include <QtGui/QMessageBox>
+#include <QMessageBox>
 
 HubList::HubList() : QMainWindow()
 {
@@ -76,6 +76,8 @@ void HubList::RemoveHub()
 void HubList::selectionChanged(const QItemSelection& selected,
 	const QItemSelection& deselected)
 {
+	Q_UNUSED(deselected);
+
 	ui.removeButton->setEnabled(!selected.isEmpty());
 	ui.configButton->setEnabled(!selected.isEmpty());
 }

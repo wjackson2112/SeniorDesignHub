@@ -5,7 +5,7 @@
 
 class DriverDemo;
 
-const size_t MAX_HISTORY = 30;
+const int MAX_HISTORY = 30;
 
 class DriverDemoModel : public QObject
 {

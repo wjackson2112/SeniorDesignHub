@@ -3,7 +3,7 @@
 
 #include <QtCore/QList>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class SimpleGraph : public QWidget
 {

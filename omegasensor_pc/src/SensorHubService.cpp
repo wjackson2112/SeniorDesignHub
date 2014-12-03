@@ -5,7 +5,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QMapIterator>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 static SensorHubService *g_service = 0;
 

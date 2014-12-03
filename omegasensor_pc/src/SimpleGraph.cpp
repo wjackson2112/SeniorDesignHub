@@ -26,6 +26,8 @@ void SimpleGraph::SetRange(float min, float max)
 
 void SimpleGraph::paintEvent(QPaintEvent *evt)
 {
+	Q_UNUSED(evt);
+
 	float w = width() - 2 * MARGIN;
 	float h = height() - 2 * MARGIN;
 	float space = w / (mData.count() - 1.0f);

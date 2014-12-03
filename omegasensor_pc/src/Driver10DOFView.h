@@ -28,6 +28,18 @@ private:
 	Ui::Driver10DOF ui;
 
 	float mSpeed;
+
+	float minAccelX, maxAccelX;
+	float minAccelY, maxAccelY;
+	float minAccelZ, maxAccelZ;
+
+	float minMagX, maxMagX;
+	float minMagY, maxMagY;
+	float minMagZ, maxMagZ;
+
+	float minGyroX, maxGyroX;
+	float minGyroY, maxGyroY;
+	float minGyroZ, maxGyroZ;
 };
 
 #endif // __Driver10DOFView_h__

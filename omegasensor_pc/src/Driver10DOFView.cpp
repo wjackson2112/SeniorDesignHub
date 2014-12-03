@@ -15,6 +15,21 @@ Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p),
 {
 	// Create the GUI.
 	ui.setupUi(this);
+	ui.speedLabel->setVisible(false);
+
+	/*
+	minAccelX = FLT_MAX; maxAccelX = -FLT_MAX;
+	minAccelY = FLT_MAX; maxAccelY = -FLT_MAX;
+	minAccelZ = FLT_MAX; maxAccelZ = -FLT_MAX;
+
+	minMagX = FLT_MAX; maxMagX = -FLT_MAX;
+	minMagY = FLT_MAX; maxMagY = -FLT_MAX;
+	minMagZ = FLT_MAX; maxMagZ = -FLT_MAX;
+
+	minGyroX = FLT_MAX; maxGyroX = -FLT_MAX;
+	minGyroY = FLT_MAX; maxGyroY = -FLT_MAX;
+	minGyroZ = FLT_MAX; maxGyroZ = -FLT_MAX;
+	*/
 }
 
 void Driver10DOFView::SetModel(Driver10DOFModel *model)
@@ -52,20 +67,20 @@ void Driver10DOFView::Update()
 {
 	//std::cout << "View updated!" << std::endl;
 
+	minAccelX = FLT_MAX; maxAccelX = -FLT_MAX;
+	minAccelY = FLT_MAX; maxAccelY = -FLT_MAX;
+	minAccelZ = FLT_MAX; maxAccelZ = -FLT_MAX;
+
+	minMagX = FLT_MAX; maxMagX = -FLT_MAX;
+	minMagY = FLT_MAX; maxMagY = -FLT_MAX;
+	minMagZ = FLT_MAX; maxMagZ = -FLT_MAX;
+
+	minGyroX = FLT_MAX; maxGyroX = -FLT_MAX;
+	minGyroY = FLT_MAX; maxGyroY = -FLT_MAX;
+	minGyroZ = FLT_MAX; maxGyroZ = -FLT_MAX;
+
 	// Accel
 	QList<float> accelX, accelY, accelZ;
-
-	float minAccelX = FLT_MAX, maxAccelX = -FLT_MAX;
-	float minAccelY = FLT_MAX, maxAccelY = -FLT_MAX;
-	float minAccelZ = FLT_MAX, maxAccelZ = -FLT_MAX;
-
-	float minMagX = FLT_MAX, maxMagX = -FLT_MAX;
-	float minMagY = FLT_MAX, maxMagY = -FLT_MAX;
-	float minMagZ = FLT_MAX, maxMagZ = -FLT_MAX;
-
-	float minGyroX = FLT_MAX, maxGyroX = -FLT_MAX;
-	float minGyroY = FLT_MAX, maxGyroY = -FLT_MAX;
-	float minGyroZ = FLT_MAX, maxGyroZ = -FLT_MAX;
 
 	for(int i = 0; i < mModel->NumAccelValues(); i++)
 	{
@@ -267,5 +282,7 @@ void Driver10DOFView::Update()
 
 void Driver10DOFView::closeEvent(QCloseEvent *evt)
 {
+	Q_UNUSED(evt);
+
 	mModel->CleanClose();
 }

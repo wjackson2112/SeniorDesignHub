@@ -8,7 +8,7 @@
 
 class Driver10DOF;
 
-const size_t MAX_HISTORY = 30;
+const int MAX_HISTORY = 30;
 
 class Driver10DOFModel : public QObject
 {
@@ -66,7 +66,6 @@ private slots:
 private:
 	Driver10DOF *mDriver;
 
-	QFile mAccelLog, mMagLog, mGyroLog, mPressureLog, mTempLog;
 	QTimer mTimer, mTimer2;
 
 	int mAccelCount;
@@ -94,6 +93,8 @@ private:
 	int mTempCount;
 	float mTemp[MAX_HISTORY];
 	QDateTime mTempTime[MAX_HISTORY];
+
+	QFile mAccelLog, mMagLog, mGyroLog, mPressureLog, mTempLog;
 };
 
 #endif // __Driver10DOFModel_h__

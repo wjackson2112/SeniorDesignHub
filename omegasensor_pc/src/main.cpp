@@ -1,8 +1,11 @@
 #include "HubList.h"
 
+#ifdef Q_OS_ANDROID
+#else // Q_OS_LINUX
 #include <SensorHubLinuxService.h>
+#endif // Q_OS_ANDROID
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +18,10 @@ int main(int argc, char *argv[])
 	//MainWindow *mainWindow = new MainWindow;
 	//mainWindow->show();
 
+#ifdef Q_OS_ANDROID
+#else // Q_OS_LINUX
 	SensorHubLinuxService serv;
+#endif // Q_OS_ANDROID
 
 	HubList *list = new HubList;
 	list->show();

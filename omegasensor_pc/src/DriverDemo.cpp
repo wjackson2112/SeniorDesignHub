@@ -27,7 +27,7 @@ void DriverDemo::Recv(uint16_t characteristic,
 		return;
 
 	bool ok = false;
-	int value = QString::fromAscii(data).toUInt(&ok);
+	int value = QString::fromUtf8(data).toUInt(&ok);
 	if(ok)
 		emit ADC(value);
 }

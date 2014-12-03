@@ -35,6 +35,8 @@ void AddHub::showEvent(QShowEvent *evt)
 void AddHub::selectionChanged(const QItemSelection& selected,
 	const QItemSelection& deselected)
 {
+	Q_UNUSED(deselected);
+
 	ui.addButton->setEnabled(!selected.isEmpty());
 }
 

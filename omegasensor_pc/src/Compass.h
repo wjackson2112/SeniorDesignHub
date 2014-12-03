@@ -2,7 +2,7 @@
 #define __Compass_h__
 
 #include <QtGui/QPixmap>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class Compass : public QWidget
 {

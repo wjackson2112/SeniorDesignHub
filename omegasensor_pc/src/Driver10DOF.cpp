@@ -126,6 +126,10 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 	SamplePressTemp();
 }
 
+#define ACCEL_REG_DATA (0x28 | 0x80)
+#define MAG_REG_DATA (0x03)
+#define GYRO_REG_DATA (0x28 | 0x80)
+
 void Driver10DOF::Sample()
 {
 	I2COperationChain op;
@@ -133,9 +137,9 @@ void Driver10DOF::Sample()
 	// Sample the accel, mag, and gyro.
 	op.SetTransactionIDEnabled(true);
 	op.SetTransactionID(0);
-	op.AddRegisterRead(ACCEL_ADDR, 0x28 | 0x80, 6); // Accel X, Y, Z
-	op.AddRegisterRead(MAG_ADDR, 0x03, 6); // Mag X, Z, Y
-	op.AddRegisterRead(GYRO_ADDR, 0x28 | 0x80, 6); // Gyro X, Z, Y
+	op.AddRegisterRead(ACCEL_ADDR, ACCEL_REG_DATA, 6); // Accel X, Y, Z
+	op.AddRegisterRead(MAG_ADDR, MAG_REG_DATA, 6); // Mag X, Z, Y
+	op.AddRegisterRead(GYRO_ADDR, GYRO_REG_DATA, 6); // Gyro X, Z, Y
 
 	Send(op);
 }
@@ -216,6 +220,7 @@ void Driver10DOF::Recv(uint16_t characteristic,
 	{
 		case 1:
 		{
+			/*
 			uint16_t pt[3] = { 0 };
 
 			// OUT_X_L_A, OUT_X_H_A,
@@ -227,9 +232,11 @@ void Driver10DOF::Recv(uint16_t characteristic,
 
 			float temp = ((float)spt[0] * 0.0085989392f) + 15.719639f;
 
-			//emit Temp(temp);
+			emit Temp(temp);
 
-			//std::cout << "Temp: " << temp << std::endl;
+			std::cout << "Temp: " << temp << std::endl;
+			*/
+
 			return;
 		}
 		case 2:
