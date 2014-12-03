@@ -68,6 +68,10 @@ Config::Config(const SensorHubPtr& hub, QWidget *p) : QDialog(p)
 
 	ui.digitalDrivers->setCurrentIndex(digitalDrivers.indexOf(
 		mConfig->DriverDigital()) + 1);
+
+#ifdef Q_OS_ANDROID
+	setWindowState(Qt::WindowMaximized);
+#endif // Q_OS_ANDROID
 }
 
 void Config::SaveConfig()

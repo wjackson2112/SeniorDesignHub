@@ -5,7 +5,12 @@
 #include <QtCore/QSettings>
 #include <QtCore/QMapIterator>
 
+#ifdef Q_OS_ANDROID
+#include <QtCore/QStandardPaths>
+#endif // Q_OS_ANDROID
+
 #include <QWidget>
+#include <QDebug>
 
 static SensorHubService *g_service = 0;
 
@@ -89,9 +94,16 @@ void SensorHubService::LoadConfig()
 {
 	mRegisteredHubs.clear();
 
+#ifdef Q_OS_ANDROID
+	QSettings settings(QStandardPaths::writableLocation(
+		QStandardPaths::GenericDataLocation) + "/config.ini",
+		QSettings::IniFormat);
+#else // Q_OS_LINUX
 	QSettings settings;
+#endif // Q_OS_ANDROID
 
 	QList<QVariant> config = settings.value("devices").toList();
+	qDebug() << "Num devices in config:" << config.count();
 
 	foreach(QVariant data, config)
 	{
@@ -149,7 +161,14 @@ void SensorHubService::SaveConfig()
 	foreach(SensorHubConfigPtr c, mRegisteredHubs)
 		config.append(c->ToVariant());
 
+#ifdef Q_OS_ANDROID
+	QSettings settings(QStandardPaths::writableLocation(
+		QStandardPaths::GenericDataLocation) + "/config.ini",
+		QSettings::IniFormat);
+#else // Q_OS_LINUX
 	QSettings settings;
+#endif // Q_OS_ANDROID
+
 	settings.setValue("devices", config);
 }
 

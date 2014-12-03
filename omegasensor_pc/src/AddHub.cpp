@@ -18,6 +18,10 @@ AddHub::AddHub(QWidget *p) : QDialog(p)
 		const QItemSelection&, const QItemSelection&)), this,
 		SLOT(selectionChanged(const QItemSelection&,
 		const QItemSelection&)));
+
+#ifdef Q_OS_ANDROID
+	setWindowState(Qt::WindowMaximized);
+#endif // Q_OS_ANDROID
 }
 
 AddHub::~AddHub()

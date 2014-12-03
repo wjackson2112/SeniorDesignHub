@@ -4,6 +4,10 @@
 #include "AddHub.h"
 #include "Config.h"
 
+#ifdef Q_OS_ANDROID
+#include "SensorHubAndroidService.h"
+#endif // Q_OS_ANDROID
+
 #include <QMessageBox>
 
 HubList::HubList() : QMainWindow()
@@ -29,6 +33,11 @@ HubList::HubList() : QMainWindow()
 
 void HubList::doubleClicked(const QModelIndex& index)
 {
+#ifdef Q_OS_ANDROID
+	dynamic_cast<SensorHubAndroidService*>(SensorHubService::GetSingletonPtr()
+		)->CreateEmitters();
+#endif // Q_OS_ANDROID
+
 	SensorHubPtr hub = mModel->DeviceByRow(index.row());
 	if(hub.isNull()) // Should never happen.
 		return;

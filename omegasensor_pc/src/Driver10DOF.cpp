@@ -82,6 +82,10 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_CONFIG,
 		QByteArray((char*)&config, sizeof(config)));
 
+	QTime dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime);
+	//QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	I2COperationChain op;
 	op.SetTransactionID(255);
 	op.SetTransactionIDEnabled(true);
@@ -94,6 +98,11 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 	//op.AddRegisterRead(ACCEL_ADDR, 0x23); // Check range
 
 	Send(op);
+
+	dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	op.Clear();
 	op.SetTransactionID(254);
 	op.SetTransactionIDEnabled(true);
@@ -109,6 +118,10 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 
 	Send(op);
 
+	dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	op.Clear();
 	op.SetTransactionID(4);
 	op.SetTransactionIDEnabled(true);
@@ -116,12 +129,20 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 
 	Send(op);
 
+	dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	op.Clear();
 	op.SetTransactionID(5);
 	op.SetTransactionIDEnabled(true);
 	op.AddRegisterRead(BMP180_SLAVE_ADDR, BMP180_REG_OUT_CALIB0 + 12, 10);
 
 	Send(op);
+
+	dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	SamplePressTemp();
 }
@@ -158,6 +179,10 @@ void Driver10DOF::SamplePressTemp()
 
 	Send(op);
 
+	QTime dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	op.Clear();
 	op.SetTransactionIDEnabled(true);
 	op.SetTransactionID(2);
@@ -170,6 +195,10 @@ void Driver10DOF::SamplePressTemp()
 		BMP180_CTRL_MEAS_PRESS(_bmp085Mode));
 
 	Send(op);
+
+	dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime)
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	op.Clear();
 	op.SetTransactionIDEnabled(true);
