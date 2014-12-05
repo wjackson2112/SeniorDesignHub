@@ -42,11 +42,15 @@ public:
 
 	QStringList DriverList() const;
 
+	QString Password() const;
+	void SetPassword(const QString& pass);
+
 private:
 	QString mAddress;
 	QString mName, mHardwareName;
 	QString mDriverUART, mDriverI2C, mDriverSPI;
 	QString mDriverAnalog, mDriverDigital;
+	QString mPassword;
 };
 
 typedef QSharedPointer<SensorHubConfig> SensorHubConfigPtr;

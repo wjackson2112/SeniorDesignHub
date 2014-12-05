@@ -13,6 +13,7 @@ Config::Config(const SensorHubPtr& hub, QWidget *p) : QDialog(p)
 	ui.name->setText(mConfig->Name());
 	ui.hwName->setText(mConfig->HardwareName());
 	ui.hwAddress->setText(mConfig->GetAddress());
+	ui.password->setText(mConfig->Password());
 
 	connect(ui.okButton, SIGNAL(clicked(bool)),
 		this, SLOT(SaveConfig()));
@@ -77,6 +78,7 @@ Config::Config(const SensorHubPtr& hub, QWidget *p) : QDialog(p)
 void Config::SaveConfig()
 {
 	mConfig->SetName(ui.name->text());
+	mConfig->SetPassword(ui.password->text());
 
 	if(ui.uartDrivers->currentIndex() > 0)
 		mConfig->SetDriverUART(ui.uartDrivers->currentText());

@@ -118,20 +118,20 @@ void Driver10DOFView::Update()
 	ui.accelZPlot->SetData(accelZ);
 
 	ui.accelXLabel->setText(tr("X: %1g").arg(
-		mModel->AccelX(0)));
+		mModel->AccelX(0), 0, 'g', 4));
 
 	ui.accelYLabel->setText(tr("Y: %1g").arg(
-		mModel->AccelY(0)));
+		mModel->AccelY(0), 0, 'g', 4));
 
 	ui.accelZLabel->setText(tr("Z: %1g").arg(
-		mModel->AccelZ(0)));
+		mModel->AccelZ(0), 0, 'g', 4));
 
 	float accelMag = sqrt(mModel->AccelX(0) * mModel->AccelX(0) +
 		mModel->AccelY(0) * mModel->AccelY(0) +
 		mModel->AccelZ(0) * mModel->AccelZ(0));
 
 	ui.accelMagLabel->setText(tr("Mag: %1g").arg(
-		accelMag));
+		accelMag, 0, 'g', 4));
 
 	// Mag
 	QList<float> magX, magY, magZ;
@@ -174,20 +174,20 @@ void Driver10DOFView::Update()
 	ui.magZPlot->SetData(magZ);
 
 	ui.magXLabel->setText(tr("X: %1uT").arg(
-		mModel->MagX(0)));
+		mModel->MagX(0), 0, 'g', 4));
 
 	ui.magYLabel->setText(tr("Y: %1uT").arg(
-		mModel->MagY(0)));
+		mModel->MagY(0), 0, 'g', 4));
 
 	ui.magZLabel->setText(tr("Z: %1uT").arg(
-		mModel->MagZ(0)));
+		mModel->MagZ(0), 0, 'g', 4));
 
 	float magMag = sqrt(mModel->MagX(0) * mModel->MagX(0) +
 		mModel->MagY(0) * mModel->MagY(0) +
 		mModel->MagZ(0) * mModel->MagZ(0));
 
 	ui.magMagLabel->setText(tr("Mag: %1uT").arg(
-		magMag));
+		magMag, 0, 'g', 4));
 
 	// Gyro
 	QList<float> gyroX, gyroY, gyroZ;
@@ -230,20 +230,20 @@ void Driver10DOFView::Update()
 	ui.gyroZPlot->SetData(gyroZ);
 
 	ui.gyroXLabel->setText(tr("X: %1dps").arg(
-		mModel->GyroX(0)));
+		mModel->GyroX(0), 0, 'g', 4));
 
 	ui.gyroYLabel->setText(tr("Y: %1dps").arg(
-		mModel->GyroY(0)));
+		mModel->GyroY(0), 0, 'g', 4));
 
 	ui.gyroZLabel->setText(tr("Z: %1dps").arg(
-		mModel->GyroZ(0)));
+		mModel->GyroZ(0), 0, 'g', 4));
 
 	float gyroMag = sqrt(mModel->GyroX(0) * mModel->GyroX(0) +
 		mModel->GyroY(0) * mModel->GyroY(0) +
 		mModel->GyroZ(0) * mModel->GyroZ(0));
 
 	ui.gyroMagLabel->setText(tr("Mag: %1dps").arg(
-		gyroMag));
+		gyroMag, 0, 'g', 4));
 
 	/*ui.compassWidget->setDirection(
 		mModel->MagX(0), mModel->MagY(0));*/

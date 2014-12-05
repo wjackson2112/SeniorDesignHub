@@ -1,5 +1,7 @@
 #include "DriverI2C.h"
 #include "SensorHub.h"
+#include "SensorHubConfig.h"
+#include "SensorHubService.h"
 #include "I2COperationChain.h"
 
 #include <iostream>
@@ -28,10 +30,16 @@ void DriverI2C::Initialize(const SensorHubPtr& hub)
 	connect(mHub.data(), SIGNAL(Recv(uint16_t, const QByteArray&)),
 		this, SLOT(Recv(uint16_t, const QByteArray&)));
 
+	QByteArray passData = SensorHubService::GetSingletonPtr(
+		)->GetSensorHubConfig(hub)->Password().toUtf8();
+
 	uint8_t pass[20] = { 0 };
+	memcpy(pass, passData.constData(), passData.size() >= 20
+		? 19 : passData.size());
 
 	mHub->Write(OMEGA_CHAR_CONF_SERVICE, OMEGA_CHAR_CONF_ENTER_PASS,
 		QByteArray((char*)pass, sizeof(pass)));
+
 	//mHub->SetNotify(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_RX);
 }
 

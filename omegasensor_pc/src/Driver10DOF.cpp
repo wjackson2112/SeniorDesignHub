@@ -79,12 +79,16 @@ void Driver10DOF::Initialize(const SensorHubPtr& hub)
 
 	uint8_t config = 0x07;
 
+	QTime dieTime = QTime::currentTime().addMSecs(100);
+	while(QTime::currentTime() < dieTime);
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	mHub->Write(OMEGA_CHAR_I2C_SERVICE, OMEGA_CHAR_I2C_CONFIG,
 		QByteArray((char*)&config, sizeof(config)));
 
-	QTime dieTime = QTime::currentTime().addMSecs(100);
+	dieTime = QTime::currentTime().addMSecs(100);
 	while(QTime::currentTime() < dieTime);
-	//QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	I2COperationChain op;
 	op.SetTransactionID(255);

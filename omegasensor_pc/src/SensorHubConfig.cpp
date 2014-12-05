@@ -21,6 +21,7 @@ SensorHubConfig::SensorHubConfig(const QVariant& data)
 	mDriverSPI = dataMap.value("spi").toString();
 	mDriverAnalog = dataMap.value("analog").toString();
 	mDriverDigital = dataMap.value("digital").toString();
+	mPassword = dataMap.value("pass").toString();
 
 	// Load this last since it is required.
 	mAddress = dataMap.value("addr").toString();
@@ -124,6 +125,16 @@ QStringList SensorHubConfig::DriverList() const
 	return drivers;
 }
 
+QString SensorHubConfig::Password() const
+{
+	return mPassword;
+}
+
+void SensorHubConfig::SetPassword(const QString& pass)
+{
+	mPassword = pass;
+}
+
 QVariant SensorHubConfig::ToVariant() const
 {
 	QMap<QString, QVariant> dataMap;
@@ -135,6 +146,7 @@ QVariant SensorHubConfig::ToVariant() const
 	dataMap["spi"] = mDriverSPI;
 	dataMap["analog"] = mDriverAnalog;
 	dataMap["digital"] = mDriverDigital;
+	dataMap["pass"] = mPassword;
 
 	return dataMap;
 }
