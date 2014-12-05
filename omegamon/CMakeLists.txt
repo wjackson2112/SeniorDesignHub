@@ -77,6 +77,7 @@ ENDMACRO(RES_WRAP outfiles)
 SET(${PROJECT_NAME}_SRCS
 	src/main.cpp
 	src/DeviceConnection.cpp
+	src/DeviceConnectionModel.cpp
 	src/DiscoveredDevice.cpp
 	src/DiscoveredDeviceModel.cpp
 	src/MainWindow.cpp
@@ -84,6 +85,7 @@ SET(${PROJECT_NAME}_SRCS
 
 SET(${PROJECT_NAME}_HDRS
 	src/DeviceConnection.h
+	src/DeviceConnectionModel.h
 	src/DiscoveredDeviceModel.h
 	src/MainWindow.h
 )
@@ -91,6 +93,7 @@ QT4_WRAP_CPP(${PROJECT_NAME}_MOC_SRCS ${${PROJECT_NAME}_HDRS})
 
 SET(${PROJECT_NAME}_HDRS
 	src/DeviceConnection.h
+	src/DeviceConnectionModel.h
 	src/DiscoveredDevice.h
 	src/DiscoveredDeviceModel.h
 	src/MainWindow.h

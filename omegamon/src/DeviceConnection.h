@@ -3,6 +3,8 @@
 
 #include "ui_DeviceConnection.h"
 
+#include "DeviceConnectionModel.h"
+
 #include <QtGui/QWidget>
 
 #include <gato/gatoaddress.h>
@@ -19,9 +21,12 @@ public:
 protected slots:
 	void connected();
 	void servicesDiscovered();
+	void characteristicsDiscovered(const GatoService& serv);
+	void descriptorsDiscovered(const GatoCharacteristic& characteristic);
 
 protected:
 	GatoPeripheral mDevice;
+	DeviceConnectionModel mModel;
 
 	Ui::DeviceConnection ui;
 };
