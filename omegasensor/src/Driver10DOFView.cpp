@@ -15,9 +15,11 @@
 #include <iostream>
 #include <float.h>
 
-#define ACCEL_RANGE (1.0f)
-#define MAG_RANGE (70.0f)
-#define GYRO_RANGE (40.0f)
+#define ACCEL_RANGE (1.2f)
+//#define MAG_RANGE (1.3f * 100.0f) // 1.3 gauss = 130uT
+#define MAG_RANGE (40.0f)
+//#define GYRO_RANGE (245.0f)
+#define GYRO_RANGE (50.0f)
 
 Driver10DOFView::Driver10DOFView(QWidget *p) : QWidget(p),
 	mModel(0), mSpeed(0.0f)
@@ -116,16 +118,13 @@ void Driver10DOFView::Update()
 		accelZ.prepend(z);
 	}
 
-	//ui.accelXPlot->SetRange(minAccelX, maxAccelX);
-	ui.accelXPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelXPlot->SetRange(minAccelX, maxAccelX);
 	ui.accelXPlot->SetData(accelX);
 
-	//ui.accelYPlot->SetRange(minAccelY, maxAccelY);
-	ui.accelYPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelYPlot->SetRange(minAccelY, maxAccelY);
 	ui.accelYPlot->SetData(accelY);
 
-	//ui.accelZPlot->SetRange(minAccelZ, maxAccelZ);
-	ui.accelZPlot->SetRange(-ACCEL_RANGE, ACCEL_RANGE);
+	ui.accelZPlot->SetRange(minAccelZ, maxAccelZ);
 	ui.accelZPlot->SetData(accelZ);
 
 	ui.accelXLabel->setText(tr("X: %1g").arg(
@@ -172,16 +171,13 @@ void Driver10DOFView::Update()
 		magZ.append(z);
 	}
 
-	//ui.magXPlot->SetRange(minMagX, maxMagX);
-	ui.magXPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magXPlot->SetRange(minMagX, maxMagX);
 	ui.magXPlot->SetData(magX);
 
-	//ui.magYPlot->SetRange(minMagY, maxMagY);
-	ui.magYPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magYPlot->SetRange(minMagY, maxMagY);
 	ui.magYPlot->SetData(magY);
 
-	//ui.magZPlot->SetRange(minMagZ, maxMagZ);
-	ui.magZPlot->SetRange(-MAG_RANGE, MAG_RANGE);
+	ui.magZPlot->SetRange(minMagZ, maxMagZ);
 	ui.magZPlot->SetData(magZ);
 
 	ui.magXLabel->setText(tr("X: %1uT").arg(
@@ -228,16 +224,13 @@ void Driver10DOFView::Update()
 		gyroZ.append(z);
 	}
 
-	//ui.gyroXPlot->SetRange(minGyroX, maxGyroX);
-	ui.gyroXPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroXPlot->SetRange(minGyroX, maxGyroX);
 	ui.gyroXPlot->SetData(gyroX);
 
-	//ui.gyroYPlot->SetRange(minGyroY, maxGyroY);
-	ui.gyroYPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroYPlot->SetRange(minGyroY, maxGyroY);
 	ui.gyroYPlot->SetData(gyroY);
 
-	//ui.gyroZPlot->SetRange(minGyroZ, maxGyroZ);
-	ui.gyroZPlot->SetRange(-GYRO_RANGE, GYRO_RANGE);
+	ui.gyroZPlot->SetRange(minGyroZ, maxGyroZ);
 	ui.gyroZPlot->SetData(gyroZ);
 
 	ui.gyroXLabel->setText(tr("X: %1dps").arg(

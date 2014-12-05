@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-const int MAG_AVG_COUNT = 15;
+const int MAG_AVG_COUNT = 30;
 
 Driver10DOFModel::Driver10DOFModel(Driver10DOF *drv,
 	QObject * p) : QObject(p), mDriver(drv), mAccelCount(0),
