@@ -97,6 +97,9 @@ SET(${PROJECT_NAME}_SRCS
 	src/DriverDemoView.cpp
 	src/DriverUART.cpp
 	src/DriverI2C.cpp
+	src/DriverSPI.cpp
+	src/DriverAnalog.cpp
+	src/DriverDigital.cpp
 	src/Driver10DOF.cpp
 	src/Driver10DOFModel.cpp
 	src/Driver10DOFView.cpp
@@ -125,6 +128,9 @@ SET(${PROJECT_NAME}_HDRS
 	src/DriverDemoView.h
 	src/DriverUART.h
 	src/DriverI2C.h
+	src/DriverSPI.h
+	src/DriverAnalog.h
+	src/DriverDigital.h
 	src/Driver10DOF.h
 	src/Driver10DOFModel.h
 	src/Driver10DOFView.h
